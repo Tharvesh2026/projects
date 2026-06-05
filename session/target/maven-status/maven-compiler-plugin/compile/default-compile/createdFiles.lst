@@ -1,0 +1,5 @@
+com\example\session\dbConnection.class
+com\example\session\LoginServlet.class
+com\example\session\User.class
+com\example\session\LogoutServlet.class
+com\example\session\UserDAO.class
