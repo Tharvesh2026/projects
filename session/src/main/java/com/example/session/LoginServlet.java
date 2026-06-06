@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.Date;
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/login")
 
@@ -29,6 +30,15 @@ public class LoginServlet extends HttpServlet {
 
             System.err.println("SESSION USER = " + session.getAttribute("user"));
             res.sendRedirect("welcome.jsp");
+
+            // HttpSession session = request.getSession();
+
+            System.out.println("===== SESSION DETAILS =====");
+            System.out.println("Session ID : " + session.getId());
+            System.out.println("Creation Time : " + new Date(session.getCreationTime()));
+            System.out.println("Last Access Time : " + new Date(session.getLastAccessedTime()));
+            System.out.println("Timeout : " + session.getMaxInactiveInterval());
+            System.out.println("Is New : " + session.isNew());
 
         } else {
             res.sendRedirect("login.jsp?error=Invalid email or password");
