@@ -1,8 +1,6 @@
 package com.example.session;
 import java.sql.*;
 
-import com.example.session.dbConnection;
-import com.example.session.User;
 
 public class UserDAO {
     public User getUser(String mail, String pwd){
