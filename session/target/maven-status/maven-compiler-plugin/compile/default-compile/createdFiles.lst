@@ -1,5 +1,6 @@
-com\example\session\dbConnection.class
-com\example\session\LoginServlet.class
-com\example\session\User.class
-com\example\session\LogoutServlet.class
-com\example\session\UserDAO.class
+com\example\session\api\Cookies.class
+com\example\session\api\LoginServlet.class
+com\example\session\api\LogoutServlet.class
+com\example\session\DAO\UserDAO.class
+com\example\session\model\User.class
+com\example\session\util\dbConnection.class
