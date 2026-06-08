@@ -1,104 +1,106 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page isELIgnored="false" %>
+    <%@ page isELIgnored="false" %>
 
-<%
-HttpSession existingSession = request.getSession(false);
-
-if(existingSession == null || existingSession.getAttribute("user") == null){
-    response.sendRedirect("index.jsp?error=Session expired. Please login again.");
-    return;
-}
-%>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Session Settings</title>
-
-    <style>
-        * {
-            font-family: Arial, sans-serif;
+        <% HttpSession existingSession=request.getSession(false); 
+        if(existingSession==null || existingSession.getAttribute("user")==null){ 
+            response.sendRedirect("index.jsp?error=Session expired. Please login again."); 
+            return; 
         }
+        %>
 
-        body {
-            margin: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            background: #f4f4f4;
-        }
+            <!DOCTYPE html>
+            <html lang="en">
 
-        .box {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            width: 500px;
-            box-shadow: 0 0 10px #ccc;
-        }
+            <head>
+                <meta charset="UTF-8">
+                <title>Session Settings</title>
 
-        p {
-            font-size: 16px;
-        }
+                <style>
+                    * {
+                        font-family: Arial, sans-serif;
+                    }
 
-        a, button {
-            margin-top: 15px;
-        }
-    </style>
-</head>
-<body>
+                    body {
+                        margin: 20px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-direction: column;
+                        background: #f4f4f4;
+                    }
 
-<div class="box">
-    <h3>Session Details</h3>
+                    .box {
+                        background: white;
+                        padding: 25px;
+                        border-radius: 10px;
+                        width: 500px;
+                        box-shadow: 0 0 10px #ccc;
+                    }
 
-    <p>Name: ${sessionScope.user.name}</p>
-    <p>Session ID: ${pageContext.session.id}</p>
+                    p {
+                        font-size: 16px;
+                    }
 
-    <p id="creationTime">${pageContext.session.creationTime}</p>
-    <p id="lastAccessTime">${pageContext.session.lastAccessedTime}</p>
-    <p id="timeout">${pageContext.session.maxInactiveInterval}</p>
-    <p id="isNew">${pageContext.session.isNew()}</p>
+                    a,
+                    button {
+                        margin-top: 15px;
+                    }
+                </style>
+            </head>
 
-    <p style="color:red;opacity: 30%;">${sessionScope.user.X_Secret_Token}</p>
+            <body>
 
-    <a href="welcome.jsp">Back to Welcome</a>
-    <br><br>
-    <form action="logout" method="post">
-    <input type="hidden" name="csrfToken" value="${sessionScope.X_Secret_Token}">
-    <button type="submit">
-        Logout
-    </button>
-</form>
-</div>
+                <div class="box">
+                    <h3>Session Details</h3>
 
-<script>
-    const timeoutSeconds = Number("${pageContext.session.maxInactiveInterval}");
+                    <p>Name: ${sessionScope.user.name}</p>
+                    <p>Session ID: ${pageContext.session.id}</p>
 
-    const creationTime = document.getElementById("creationTime");
-    const lastAccessTime = document.getElementById("lastAccessTime");
-    const timeout = document.getElementById("timeout");
-    const isNew = document.getElementById("isNew");
+                    <p id="creationTime">${pageContext.session.creationTime}</p>
+                    <p id="lastAccessTime">${pageContext.session.lastAccessedTime}</p>
+                    <p id="timeout">${pageContext.session.maxInactiveInterval}</p>
+                    <p id="isNew">${pageContext.session.isNew()}</p>
 
-    creationTime.innerText =
-        "Creation Time: " +
-        new Date(Number(creationTime.innerText)).toLocaleString("en-IN");
+                    <p style="color:red;opacity: 30%;">${sessionScope.X_Secret_Token}</p>
 
-    lastAccessTime.innerText =
-        "Last Access Time: " +
-        new Date(Number(lastAccessTime.innerText)).toLocaleString("en-IN");
+                    <a href="welcome.jsp">Back to Welcome</a>
+                    <br><br>
+                    <form action="logout" method="post">
+                        <input type="hidden" name="csrfToken" value="${sessionScope.X_Secret_Token}">
+                        <button type="submit">
+                            Logout
+                        </button>
+                    </form>
+                </div>
 
-    timeout.innerText =
-        "Timeout In: " + timeoutSeconds + " seconds";
+                <script>
+                    const timeoutSeconds = Number("${pageContext.session.maxInactiveInterval}");
 
-    isNew.innerText =
-        "Is New Session?: " + isNew.innerText;
+                    const creationTime = document.getElementById("creationTime");
+                    const lastAccessTime = document.getElementById("lastAccessTime");
+                    const timeout = document.getElementById("timeout");
+                    const isNew = document.getElementById("isNew");
 
-    setTimeout(function () {
-        window.location.href =
-            "index.jsp?error=Session expired. Please login again.";
-    }, timeoutSeconds * 1000);
-</script>
+                    creationTime.innerText =
+                        "Creation Time: " +
+                        new Date(Number(creationTime.innerText)).toLocaleString("en-IN");
 
-</body>
-</html>
+                    lastAccessTime.innerText =
+                        "Last Access Time: " +
+                        new Date(Number(lastAccessTime.innerText)).toLocaleString("en-IN");
+
+                    timeout.innerText =
+                        "Timeout In: " + timeoutSeconds + " seconds";
+
+                    isNew.innerText =
+                        "Is New Session?: " + isNew.innerText;
+
+                    setTimeout(function () {
+                        window.location.href =
+                            "index.jsp?error=Session expired. Please login again.";
+                    }, timeoutSeconds * 1000);
+                </script>
+
+            </body>
+
+            </html>
