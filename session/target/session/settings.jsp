@@ -60,9 +60,16 @@ if(existingSession == null || existingSession.getAttribute("user") == null){
     <p id="timeout">${pageContext.session.maxInactiveInterval}</p>
     <p id="isNew">${pageContext.session.isNew()}</p>
 
+    <p style="color:red;opacity: 30%;">${sessionScope.user.X_Secret_Token}</p>
+
     <a href="welcome.jsp">Back to Welcome</a>
     <br><br>
-    <button onclick="location.href='logout'">Logout</button>
+    <form action="logout" method="post">
+    <input type="hidden" name="csrfToken" value="${sessionScope.X_Secret_Token}">
+    <button type="submit">
+        Logout
+    </button>
+</form>
 </div>
 
 <script>

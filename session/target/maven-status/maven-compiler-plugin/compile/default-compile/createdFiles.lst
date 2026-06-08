@@ -1,4 +1,5 @@
 com\example\session\api\RemCookie.class
+com\example\session\util\csrfValidator.class
 com\example\session\api\LoginServlet.class
 com\example\session\api\GetCookie.class
 com\example\session\api\SetCookies.class

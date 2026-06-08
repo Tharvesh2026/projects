@@ -5,34 +5,44 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.Cookie;
 
 import java.io.IOException;
+
+import com.example.session.util.csrfValidator;
 
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req,HttpServletResponse res)throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
 
         HttpSession session = req.getSession(false);
 
-        if(session != null && session.getAttribute("user") != null){
-            session.invalidate();
+        if (session == null) {
+            res.sendRedirect("index.jsp?error=Session_Expired-Login_Again");
+            return;
         }
-        
-        Cookie[] cookies = req.getCookies();
-        if(cookies != null){
-            for(Cookie cookie : cookies){
-                if(cookie.getName().equals("email")){
-                    cookie.setValue("");
-                    cookie.setMaxAge(0);
-                    cookie.setPath("/session");
-                    res.addCookie(cookie);
-                }
-            }
+
+        String sessionToken = session.getAttribute("X_Secret_Token").toString();
+        String RequestToken = req.getParameter("csrfToken");
+
+        boolean valid = csrfValidator.validateCSRF(sessionToken, RequestToken);
+
+        if (!valid) {
+            res.sendError(403,"Invalid CSRF Token");
+            return;
         }
+
+        session.invalidate();
+
+        res.sendRedirect("index.jsp?logout=SUCESS");
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res)
+            throws IOException {
 
         res.sendRedirect("index.jsp");
     }
+    
 }

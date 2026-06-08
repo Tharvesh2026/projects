@@ -9,6 +9,7 @@ import jakarta.servlet.http.Cookie;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.UUID;
 
 import com.example.session.DAO.UserDAO;
 import com.example.session.model.User;
@@ -30,11 +31,22 @@ public class LoginServlet extends HttpServlet {
             User user = userDAO.getUser(mail, pwd);
             System.err.println("USER OBJECT = " + user);
 
+            HttpSession oldSession = req.getSession(false);
+            if(oldSession != null){
+                oldSession.invalidate();
+            }
+
             HttpSession session = req.getSession();
             session.setAttribute("user", user);
+            session.setAttribute("X_Secret_Token", generateCSRF());
+            session.setMaxInactiveInterval(600);
+
             if(remMe){
-                Cookie cookieValue = CreateCookie("email", mail, 60);
-                res.addCookie(cookieValue);       
+                Cookie emailCookie = createCookie("email", mail, 7 * 24 * 60 * 60, req);
+                res.addCookie(emailCookie);
+            } else {
+                Cookie emailCookie = createCookie("email", "", 0, req);
+                res.addCookie(emailCookie);
             }
             System.err.println("SESSION ID = " + session.getId());
 
@@ -55,11 +67,15 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
-    public Cookie CreateCookie(String name, String value, int maxAge) {
+    private Cookie createCookie(String name, String value, int maxAge, HttpServletRequest req) {
         Cookie cookie = new Cookie(name, value);
         cookie.setMaxAge(maxAge);
-        cookie.setPath("/session");
+        cookie.setPath(req.getContextPath());
         return cookie;
+    }
+
+    private String generateCSRF(){
+        return UUID.randomUUID().toString();
     }
 
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {

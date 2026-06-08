@@ -1,6 +1,7 @@
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\SetCookies.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\model\User.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\LogoutServlet.java
+C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\util\csrfValidator.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\RemCookie.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\util\dbConnection.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\LoginServlet.java
