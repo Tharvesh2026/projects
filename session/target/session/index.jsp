@@ -1,5 +1,18 @@
 <!-- "Simple Form register / login page" -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+String mail = "";
+Cookie[] cookies = request.getCookies();
+
+if(cookies != null){
+    for(Cookie cookie : cookies){
+        if(cookie.getName().equals("email")){
+            mail = cookie.getValue();
+            break;
+        }
+    }
+}
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,9 +61,12 @@
         <h2>Login</h2>
         <form action="login" method="post">
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required><br><br>
+            <input type="email" id="email" name="email" value="<%= mail %>" required><br><br>
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required><br><br>
+            <input type="checkbox" id="rememberMe" name="rememberMe" value="true"
+<%= mail.isEmpty() ? "" : "checked" %>>
+            <label for="rememberMe">Remember Me</label><br><br>
             <input type="submit" value="Login">
         </form>
         don't have an account? <a id="switchToRegister">Register here</a>
