@@ -1,41 +1,41 @@
 package com.example.session.api;
 
+import com.example.session.util.csrfValidator;
+
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
-
-import com.example.session.util.csrfValidator;
 
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse res)
+            throws IOException {
 
         HttpSession session = req.getSession(false);
 
-        if (session == null) {
+        if (session == null || session.getAttribute("user") == null) {
             res.sendRedirect("index.jsp?error=Session_Expired-Login_Again");
             return;
         }
 
-        String sessionToken = session.getAttribute("X_Secret_Token").toString();
-        String RequestToken = req.getParameter("csrfToken");
+        String sessionToken = session.getAttribute("csrfToken").toString();
 
-        boolean valid = csrfValidator.validateCSRF(sessionToken, RequestToken);
+        String cookieToken = getCookieValue(req, "CSRF_TOKEN");
+
+        boolean valid = csrfValidator.validateCSRF(sessionToken, cookieToken);
 
         if (!valid) {
-            res.sendError(403,"Invalid CSRF Token");
+            res.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid CSRF Token");
             return;
         }
 
         session.invalidate();
+        deleteCsrfCookie(req, res);
 
-        res.sendRedirect("index.jsp?logout=SUCESS");
+        res.sendRedirect("index.jsp?logout=SUCCESS");
     }
 
     @Override
@@ -44,5 +44,35 @@ public class LogoutServlet extends HttpServlet {
 
         res.sendRedirect("index.jsp");
     }
-    
+
+    private String getCookieValue(HttpServletRequest req, String name) {
+
+        Cookie[] cookies = req.getCookies();
+        String value;
+
+        if (cookies == null) {
+            return null;
+        }
+
+        for (Cookie cookie : cookies) {
+            if (name.equals(cookie.getName())) {
+                value = cookie.getValue();
+                return value;
+            }
+        }
+
+        return null;
+    }
+
+    private void deleteCsrfCookie(HttpServletRequest req, HttpServletResponse res) {
+
+        String cookieHeader =
+                "CSRF_TOKEN=" +
+                "; Path=" + req.getContextPath() +
+                "; Max-Age=0" +
+                "; HttpOnly" +
+                "; SameSite=Strict";
+
+        res.addHeader("Set-Cookie", cookieHeader);
+    }
 }

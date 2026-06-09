@@ -26,25 +26,69 @@ public class LoginServlet extends HttpServlet {
 
         String mail = req.getParameter("email");
         String password = req.getParameter("password");
-        boolean rememberMe = isRememberMeChecked(req);
+
+        boolean rememberMe = req.getParameter("rememberMe") != null && req.getParameter("rememberMe").equals("true");
+
+        System.out.println("Received login request with email: " + mail);
 
         UserDAO userDAO = new UserDAO();
 
-        if (!userDAO.validateUser(mail, password)) {
-            redirectToLoginWithError(res);
-            return;
+        if (userDAO.validateUser(mail, password)) {
+
+            User user = userDAO.getUser(mail);
+
+            HttpSession oldSession = req.getSession(false);
+
+            if (oldSession != null) {
+                oldSession.invalidate();
+            }
+
+            HttpSession session = req.getSession(true);
+
+            String csrfToken = UUID.randomUUID().toString();
+
+            session.setAttribute("user", user);
+            session.setAttribute("csrfToken", csrfToken);
+            session.setMaxInactiveInterval(SESSION_TIMEOUT_SECONDS);
+
+            String csrfCookie =
+                    "CSRF_TOKEN=" + csrfToken +
+                    "; Path=" + req.getContextPath() +
+                    "; Max-Age=" + SESSION_TIMEOUT_SECONDS +
+                    "; HttpOnly" +
+                    "; SameSite=Strict";
+
+            res.addHeader("Set-Cookie", csrfCookie);
+
+            Cookie emailCookie;
+
+            if (rememberMe) {
+                emailCookie = new Cookie("email", mail);
+                emailCookie.setMaxAge(REMEMBER_ME_COOKIE_AGE);
+            } else {
+                emailCookie = new Cookie("email", "");
+                emailCookie.setMaxAge(0);
+            }
+
+            emailCookie.setPath(req.getContextPath());
+            emailCookie.setHttpOnly(true);
+
+            res.addCookie(emailCookie);
+
+            System.out.println("===== SESSION DETAILS =====");
+            System.out.println("Session ID : " + session.getId());
+            System.out.println("Creation Time : " + new Date(session.getCreationTime()));
+            System.out.println("Last Access Time : " + new Date(session.getLastAccessedTime()));
+            System.out.println("Timeout : " + session.getMaxInactiveInterval());
+            System.out.println("Is New : " + session.isNew());
+            System.out.println("Session User : " + session.getAttribute("user"));
+
+            res.sendRedirect("welcome.jsp");
+
+        } else {
+
+            res.sendRedirect("index.jsp?error=Invalid email or password");
         }
-
-        User user = userDAO.getUser(mail);
-
-        HttpSession session = createFreshSession(req);
-        configureSession(session, user);
-
-        handleRememberMeCookie(req, res, mail, rememberMe);
-
-        logSessionDetails(session);
-
-        res.sendRedirect("welcome.jsp");
     }
 
     @Override
@@ -52,86 +96,5 @@ public class LoginServlet extends HttpServlet {
             throws IOException {
 
         res.sendRedirect("index.jsp");
-    }
-
-    private boolean isRememberMeChecked(HttpServletRequest req) {
-        String rememberMeValue = req.getParameter("rememberMe");
-
-        return rememberMeValue != null &&
-                rememberMeValue.equals("true");
-    }
-
-    private HttpSession createFreshSession(HttpServletRequest req) {
-        HttpSession oldSession = req.getSession(false);
-
-        if (oldSession != null) {
-            oldSession.invalidate();
-        }
-
-        return req.getSession(true);
-    }
-
-    private void configureSession(HttpSession session, User user) {
-        session.setAttribute("user", user);
-        session.setAttribute("csrfToken", generateCSRFToken());
-        session.setMaxInactiveInterval(SESSION_TIMEOUT_SECONDS);
-    }
-
-    private void handleRememberMeCookie(HttpServletRequest req,
-            HttpServletResponse res,
-            String mail,
-            boolean rememberMe) {
-
-        Cookie emailCookie;
-
-        if (rememberMe) {
-            emailCookie = createCookie(
-                    "email",
-                    mail,
-                    REMEMBER_ME_COOKIE_AGE,
-                    req);
-        } else {
-            emailCookie = createCookie(
-                    "email",
-                    "",
-                    0,
-                    req);
-        }
-
-        res.addCookie(emailCookie);
-    }
-
-    private Cookie createCookie(String name,
-            String value,
-            int maxAge,
-            HttpServletRequest req) {
-
-        Cookie cookie = new Cookie(name, value);
-
-        cookie.setMaxAge(maxAge);
-        cookie.setPath(req.getContextPath());
-        cookie.setHttpOnly(true);
-
-        return cookie;
-    }
-
-    private String generateCSRFToken() {
-        return UUID.randomUUID().toString();
-    }
-
-    private void redirectToLoginWithError(HttpServletResponse res)
-            throws IOException {
-
-        res.sendRedirect("index.jsp?error=Invalid email or password");
-    }
-
-    private void logSessionDetails(HttpSession session) {
-        System.out.println("===== SESSION DETAILS =====");
-        System.out.println("Session ID : " + session.getId());
-        System.out.println("Creation Time : " + new Date(session.getCreationTime()));
-        System.out.println("Last Access Time : " + new Date(session.getLastAccessedTime()));
-        System.out.println("Timeout : " + session.getMaxInactiveInterval());
-        System.out.println("Is New : " + session.isNew());
-        System.out.println("Session User : " + session.getAttribute("user"));
     }
 }
