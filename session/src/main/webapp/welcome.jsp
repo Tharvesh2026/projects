@@ -222,65 +222,92 @@
 </div>
 
 <script>
-    let timeout = Number("${pageContext.session.maxInactiveInterval}");
 
-    const countdown = document.getElementById("countdown");
+    let timeout =
+        Number("${pageContext.session.maxInactiveInterval}");
+
+    const sessionTimeoutSeconds = timeout;
+
+    const countdown =
+        document.getElementById("countdown");
+
+    let userActive = false;
+
+    ["mousemove", "keydown", "click", "input", "scroll"]
+        .forEach(function (eventName) {
+
+            document.addEventListener(eventName, function () {
+                userActive = true;
+            });
+
+        });
 
     function updateCountdown() {
-        countdown.innerText = timeout + " seconds";
+
+        countdown.innerText =
+            timeout + " seconds";
 
         if (timeout <= 0) {
+
+            clearInterval(timer);
+
             window.location.href =
                 "index.jsp?error=Session expired. Please login again.";
+
+            return;
         }
 
         timeout--;
     }
 
     updateCountdown();
-    setInterval(updateCountdown, 1000);
-</script>
 
-<script>
-    const timeoutSeconds = Number("${pageContext.session.maxInactiveInterval}");
+    const timer =
+        setInterval(updateCountdown, 1000);
 
-    setTimeout(function () {
-        window.location.href =
-            "index.jsp?error=Session expired. Please login again.";
-    }, timeoutSeconds * 1000);
-</script>
-
-<script>
-    let userActive = false;
-
-    ["mousemove", "keydown", "click", "input", "scroll"].forEach(function (eventName) {
-        document.addEventListener(eventName, function () {
-            userActive = true;
-        });
-    });
-
-    const sessionTimeoutSeconds = Number("${pageContext.session.maxInactiveInterval}");
     const refreshBeforeSeconds = 60;
 
     setInterval(function () {
-        if (userActive) {
-            fetch("refresh-session", {
-                method: "POST"
-            })
-            .then(function (response) {
-                if (response.status === 200) {
-                    console.log("Session refreshed");
-                    userActive = false;
-                    timeout = sessionTimeoutSeconds;
-                }
 
-                if (response.status === 401) {
-                    window.location.href =
-                        "index.jsp?error=Session expired. Please login again.";
-                }
-            });
+        if (!userActive) {
+            return;
         }
+
+        fetch("refresh-session", {
+            method: "POST"
+        })
+
+        .then(function (response) {
+
+            if (response.status === 200) {
+
+                console.log("Session refreshed");
+
+                userActive = false;
+
+                timeout = sessionTimeoutSeconds;
+            }
+
+            if (response.status === 401) {
+
+                clearInterval(timer);
+
+                window.location.href =
+                    "index.jsp?error=Session expired. Please login again.";
+            }
+        })
+
+        .catch(function (error) {
+
+            console.error(
+                "Session refresh failed",
+                error
+            );
+
+        });
+
     }, (sessionTimeoutSeconds - refreshBeforeSeconds) * 1000);
+
 </script>
 
 </body>
