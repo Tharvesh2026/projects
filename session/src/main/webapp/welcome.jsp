@@ -100,6 +100,37 @@
                             "index.jsp?error=Session expired. Please login again.";
                     }, timeoutSeconds * 1000);
                 </script>
+                <script>
+                    let userActive = false;
+
+                    ["mousemove", "keydown", "click", "input", "scroll"].forEach(function (eventName) {
+                        document.addEventListener(eventName, function () {
+                            userActive = true;
+                        });
+                    });
+
+                    const sessionTimeoutSeconds = Number("${pageContext.session.maxInactiveInterval}");
+                    const refreshBeforeSeconds = 60;
+
+                    setInterval(function () {
+                        if (userActive) {
+                            fetch("refresh-session", {
+                                method: "POST"
+                            })
+                                .then(function (response) {
+                                    if (response.status === 200) {
+                                        console.log("Session refreshed");
+                                        userActive = false;
+                                    }
+
+                                    if (response.status === 401) {
+                                        window.location.href =
+                                            "index.jsp?error=Session expired. Please login again.";
+                                    }
+                                });
+                        }
+                    }, (sessionTimeoutSeconds - refreshBeforeSeconds) * 1000);
+                </script>
 
         </body>
 

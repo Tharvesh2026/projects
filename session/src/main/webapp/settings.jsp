@@ -44,19 +44,21 @@
                                     ${pageContext.session.id}
                                 </li>
 
-                                <li class="list-group-item" id="creationTime"></li>
-
-                                <li class="list-group-item" id="lastAccessTime"></li>
-
-                                <li class="list-group-item" id="timeout"></li>
-
-                                <li class="list-group-item">
-                                    Remaining Time :
-                                    <span class="badge bg-danger" id="countdown"></span>
+                                <li class="list-group-item" id="creationTime">
+                                    ${pageContext.session.creationTime}
                                 </li>
 
-                                <li class="list-group-item" id="isNew"></li>
+                                <li class="list-group-item" id="lastAccessTime">
+                                    ${pageContext.session.lastAccessedTime}
+                                </li>
 
+                                <li class="list-group-item" id="timeout">
+                                    ${pageContext.session.maxInactiveInterval}
+                                </li>
+
+                                <li class="list-group-item" id="isNew">
+                                    ${pageContext.session.isNew()}
+                                </li>
                             </ul>
 
                         </div>
@@ -70,7 +72,7 @@
 
                     const creationTime = document.getElementById("creationTime");
                     const lastAccessTime = document.getElementById("lastAccessTime");
-                    const timeout = document.getElementById("timeout");
+                    const timeoutText = document.getElementById("timeout");
                     const isNew = document.getElementById("isNew");
 
                     creationTime.innerText =
@@ -81,36 +83,62 @@
                         "Last Access Time: " +
                         new Date(Number(lastAccessTime.innerText)).toLocaleString("en-IN");
 
-                    timeout.innerText =
+                    timeoutText.innerText =
                         "Timeout In: " + timeoutSeconds + " seconds";
 
                     isNew.innerText =
                         "Is New Session?: " + isNew.innerText;
-
-                    setTimeout(function () {
-                        window.location.href =
-                            "index.jsp?error=Session expired. Please login again.";
-                    }, timeoutSeconds * 1000);
                 </script>
 
                 <script>
-                    let timeout = Number("${pageContext.session.maxInactiveInterval}");
+                    let remainingSeconds = Number("${pageContext.session.maxInactiveInterval}");
 
                     const countdown = document.getElementById("countdown");
 
                     function updateCountdown() {
-                        countdown.innerText = timeout + " seconds";
+                        countdown.innerText = remainingSeconds + " seconds";
 
-                        if (timeout <= 0) {
+                        if (remainingSeconds <= 0) {
                             window.location.href =
                                 "index.jsp?error=Session expired. Please login again.";
                         }
 
-                        timeout--;
+                        remainingSeconds--;
                     }
 
                     updateCountdown();
                     setInterval(updateCountdown, 1000);
+                </script>
+                <script>
+                    let userActive = false;
+
+                    ["mousemove", "keydown", "click", "input", "scroll"].forEach(function (eventName) {
+                        document.addEventListener(eventName, function () {
+                            userActive = true;
+                        });
+                    });
+
+                    const sessionTimeoutSeconds = Number("${pageContext.session.maxInactiveInterval}");
+                    const refreshBeforeSeconds = 60;
+
+                    setInterval(function () {
+                        if (userActive) {
+                            fetch("refresh-session", {
+                                method: "POST"
+                            })
+                                .then(function (response) {
+                                    if (response.status === 200) {
+                                        console.log("Session refreshed");
+                                        userActive = false;
+                                    }
+
+                                    if (response.status === 401) {
+                                        window.location.href =
+                                            "index.jsp?error=Session expired. Please login again.";
+                                    }
+                                });
+                        }
+                    }, (sessionTimeoutSeconds - refreshBeforeSeconds) * 1000);
                 </script>
 
         </body>

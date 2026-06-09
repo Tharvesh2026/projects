@@ -20,6 +20,10 @@
                     min-height: 100vh;
                 }
 
+                .registerFrom {
+                    display: none;
+                }
+
                 .card {
                     border: none;
                     border-radius: 15px;
@@ -57,14 +61,15 @@
 
                                                     <div class="mb-3">
                                                         <label class="form-label">Email</label>
-                                                        <input type="email" class="form-control" name="email"
+                                                        <input type="email" class="form-control" id="email" name="email"
                                                             value="<%= mail %>" required>
+
                                                     </div>
 
                                                     <div class="mb-3">
                                                         <label class="form-label">Password</label>
-                                                        <input type="password" class="form-control" name="password"
-                                                            required>
+                                                        <input type="password" class="form-control" id="password"
+                                                            name="password" required>
                                                     </div>
 
                                                     <div class="form-check mb-3">
@@ -113,12 +118,13 @@
 
                                     <div class="mb-3">
                                         <label class="form-label">Email</label>
-                                        <input type="email" class="form-control" name="email" required>
+                                        <input type="email" class="form-control" id="email" name="email" required>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label">Password</label>
-                                        <input type="password" class="form-control" name="password" required>
+                                        <input type="password" class="form-control" id="password" name="password"
+                                            required>
                                     </div>
 
                                     <button class="btn btn-success w-100">
