@@ -5,6 +5,8 @@ C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\Log
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\util\csrfValidator.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\util\dbConnection.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\LoginServlet.java
+C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\util\PasswordHasher.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\DAO\UserDAO.java
+C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\RegisterServlet.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\temp\SetCookies.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\filters\AuthFilter.java

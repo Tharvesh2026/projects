@@ -8,3 +8,5 @@ com\example\session\filters\AuthFilter.class
 com\example\session\api\temp\SetCookies.class
 com\example\session\api\LogoutServlet.class
 com\example\session\model\User.class
+com\example\session\api\RegisterServlet.class
+com\example\session\util\PasswordHasher.class
