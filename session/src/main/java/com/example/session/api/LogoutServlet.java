@@ -42,7 +42,7 @@ public class LogoutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws IOException {
 
-        res.sendRedirect("index.jsp");
+        res.sendRedirect(req.getContextPath()+"?error=InvalidMethod");
     }
 
     private String getCookieValue(HttpServletRequest req, String name) {

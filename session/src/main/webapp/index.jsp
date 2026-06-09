@@ -10,110 +10,135 @@
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Session Management</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
             <style>
-                .loginForm,
-                .registerFrom {
-                    width: 300px;
-                    margin: 50px auto;
-                    padding: 20px;
-                    border: 1px solid #ccc;
-                    border-radius: 5px;
+                body {
+                    background: linear-gradient(135deg,
+                            #667eea 0%,
+                            #764ba2 100%);
+                    min-height: 100vh;
                 }
 
-                .registerFrom {
-                    display: none;
-                }
-
-                label {
-                    display: block;
-                    margin-bottom: 5px;
-                }
-
-                .error-box {
-                    background: #ffe0e0;
-                    color: #b00020;
-                    padding: 10px;
-                    border-radius: 5px;
-                    margin-bottom: 10px;
-                }
-
-                .success-box {
-                    background: #e0ffe5;
-                    color: #087b22;
-                    padding: 10px;
-                    border-radius: 5px;
-                    margin-bottom: 10px;
-                }
-
-                input[type="email"],
-                input[type="password"],
-                input[type="text"] {
-                    width: 100%;
-                    padding: 8px;
-                    margin-bottom: 10px;
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                }
-
-                input[type="submit"] {
-                    width: 100%;
-                    padding: 10px;
-                    background-color: #4CAF50;
-                    color: white;
+                .card {
                     border: none;
-                    border-radius: 4px;
-                    cursor: pointer;
-                }
-
-                input[type="submit"]:hover {
-                    background-color: #45a049;
+                    border-radius: 15px;
                 }
             </style>
 
         </head>
 
-        <body>
-            <div class="loginForm">
-                <h2>Login</h2>
-                <% if(request.getParameter("error") !=null){ %>
-                    <div class="error-box">
-                        <%= request.getParameter("error") %>
-                    </div>
-                    <% } %>
+        <body class="bg-light">
 
-                        <% if(request.getParameter("logout") !=null){ %>
-                            <div class="success-box">
-                                Logged out successfully.
+            <div class="container py-5">
+
+                <div class="row justify-content-center">
+
+                    <!-- Login -->
+                    <div class="col-md-5">
+                        <div class="card shadow loginForm">
+                            <div class="card-body">
+
+                                <h3 class="text-center mb-4">Login</h3>
+
+                                <% if(request.getParameter("error") !=null){ %>
+                                    <div class="alert alert-danger">
+                                        <%= request.getParameter("error") %>
+                                    </div>
+                                    <% } %>
+
+                                        <% if(request.getParameter("logout") !=null){ %>
+                                            <div class="alert alert-success">
+                                                Logged out successfully.
+                                            </div>
+                                            <% } %>
+
+                                                <form action="login" method="post">
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Email</label>
+                                                        <input type="email" class="form-control" name="email"
+                                                            value="<%= mail %>" required>
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Password</label>
+                                                        <input type="password" class="form-control" name="password"
+                                                            required>
+                                                    </div>
+
+                                                    <div class="form-check mb-3">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="rememberMe" value="true" <%=mail.isEmpty() ? ""
+                                                            : "checked" %>>
+
+                                                        <label class="form-check-label">
+                                                            Remember Me
+                                                        </label>
+                                                    </div>
+
+                                                    <button class="btn btn-primary w-100">
+                                                        Login
+                                                    </button>
+
+                                                </form>
+
+                                                <p class="text-center mt-3">
+                                                    Don't have an account?
+                                                    <a href="#" id="switchToRegister">Register here</a>
+                                                </p>
+
                             </div>
-                            <% } %>
-                                <form action="login" method="post">
-                                    <label for="email">Email:</label>
-                                    <input type="email" id="email" name="email" value="<%= mail %>" required><br><br>
-                                    <label for="password">Password:</label>
-                                    <input type="password" id="password" name="password" required><br><br>
-                                    <input type="checkbox" id="rememberMe" name="rememberMe" value="true"
-                                        <%=mail.isEmpty() ? "" : "checked" %>>
-                                    <label for="rememberMe">Remember Me</label>
-                                    <input type="submit" value="Login">
+                        </div>
+                    </div>
+
+                    <!-- Register -->
+                    <div class="col-md-5">
+                        <div class="card shadow registerFrom">
+                            <div class="card-body">
+
+                                <h3 class="text-center mb-4">Register</h3>
+
+                                <form action="register" method="post">
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="name" name="name" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Username</label>
+                                        <input type="text" class="form-control" name="username" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="email" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input type="password" class="form-control" name="password" required>
+                                    </div>
+
+                                    <button class="btn btn-success w-100">
+                                        Register
+                                    </button>
+
                                 </form>
-                                don't have an account? <a id="switchToRegister">Register here</a>
+
+                                <p class="text-center mt-3">
+                                    Already have an account?
+                                    <a href="#" id="switchToLogin">Login here</a>
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
-            <div class="registerFrom">
-                <h2>Register</h2>
-                <form action="register" method="post">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required><br><br>
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required><br><br>
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required><br><br>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required><br><br>
-                    <input type="submit" value="Register">
-                </form>
-                already have an account? <a id="switchToLogin">Login here</a>
-            </div>
 
             <script>
                 // Default javascript form switching

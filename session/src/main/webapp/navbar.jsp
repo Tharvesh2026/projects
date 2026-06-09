@@ -1,74 +1,28 @@
-<style>
-    .navbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #2c3e50;
-        padding: 12px 25px;
-        color: white;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    }
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+    <div class="container">
 
+        <a class="navbar-brand fw-bold" href="#">
+            Session App
+        </a>
 
-    .navbar strong {
-        font-size: 1.4rem;
-        font-weight: 600;
-    }
+        <div class="d-flex align-items-center gap-2">
 
-    .navbar div:last-child {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
+            <a href="welcome.jsp" class="btn btn-outline-light">
+                Home
+            </a>
 
+            <a href="settings.jsp" class="btn btn-outline-info">
+                Settings
+            </a>
 
-    .navbar a {
-        color: white;
-        text-decoration: none;
-        padding: 8px 14px;
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-    }
+            <form action="logout" method="post">
+                <button class="btn btn-danger"
+                        onclick="return confirmLogout()">
+                    Logout
+                </button>
+            </form>
 
-    .navbar a:hover {
-        background-color: #34495e;
-    }
+        </div>
 
-    .navbar button {
-        background-color: #e74c3c;
-        color: white;
-        border: none;
-        padding: 8px 14px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 0.95rem;
-        transition: background-color 0.3s ease;
-    }
-
-    .navbar button:hover {
-        background-color: #c0392b;
-    }
-</style>
-
-<nav class="navbar">
-    <div>
-        <strong>Session App</strong>
-    </div>
-
-    <div>
-        <a href="welcome.jsp">Home</a>
-        <a href="settings.jsp">Settings</a>
-
-        <form action="logout" method="post" style="display:inline;">
-            <button type="submit" onclick="return confirmLogout();">
-                Logout
-            </button>
-        </form>
     </div>
 </nav>
-
-<script>
-    function confirmLogout() {
-        return confirm("Are you Sure to Logout?")
-    }
-</script>

@@ -7,56 +7,62 @@
         <head>
             <meta charset="UTF-8">
             <title>Session Settings</title>
-
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
             <style>
-                * {
-                    font-family: Arial, sans-serif;
-                }
-
                 body {
-                    margin: 20px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    flex-direction: column;
-                    background: #f4f4f4;
-                }
-
-                .box {
-                    background: white;
-                    padding: 25px;
-                    border-radius: 10px;
-                    width: 500px;
-                    box-shadow: 0 0 10px #ccc;
-                }
-
-                p {
-                    font-size: 16px;
-                }
-
-                a,
-                button {
-                    margin-top: 15px;
+                    background: linear-gradient(135deg,
+                            #667eea 0%,
+                            #764ba2 100%);
+                    min-height: 100vh;
                 }
             </style>
+
         </head>
 
         <body>
             <%@ include file="navbar.jsp" %>
 
-                <div class="box">
-                    <h3>Session Details</h3>
+                <div class="container mt-4">
 
-                    <p>Name: ${sessionScope.user.name}</p>
-                    <p>Session ID: ${pageContext.session.id}</p>
+                    <div class="card shadow">
 
-                    <p id="creationTime">${pageContext.session.creationTime}</p>
-                    <p id="lastAccessTime">${pageContext.session.lastAccessedTime}</p>
-                    <p id="timeout">${pageContext.session.maxInactiveInterval}</p>
-                    TimeOut IN: <span id="countdown"></span>
-                    <p id="isNew">${pageContext.session.isNew()}</p>
+                        <div class="card-header bg-primary text-white">
+                            Session Details
+                        </div>
 
-                    <p style="color:red;opacity: 30%;">${sessionScope.X_Secret_Token}</p>
+                        <div class="card-body">
+
+                            <ul class="list-group">
+
+                                <li class="list-group-item">
+                                    <strong>Name:</strong>
+                                    ${sessionScope.user.name}
+                                </li>
+
+                                <li class="list-group-item">
+                                    <strong>Session ID:</strong>
+                                    ${pageContext.session.id}
+                                </li>
+
+                                <li class="list-group-item" id="creationTime"></li>
+
+                                <li class="list-group-item" id="lastAccessTime"></li>
+
+                                <li class="list-group-item" id="timeout"></li>
+
+                                <li class="list-group-item">
+                                    Remaining Time :
+                                    <span class="badge bg-danger" id="countdown"></span>
+                                </li>
+
+                                <li class="list-group-item" id="isNew"></li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
                 <script>
