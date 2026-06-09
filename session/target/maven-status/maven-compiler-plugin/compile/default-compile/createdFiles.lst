@@ -1,9 +1,10 @@
-com\example\session\api\RemCookie.class
 com\example\session\util\csrfValidator.class
 com\example\session\api\LoginServlet.class
-com\example\session\api\GetCookie.class
-com\example\session\api\SetCookies.class
+com\example\session\api\temp\RemCookie.class
 com\example\session\DAO\UserDAO.class
 com\example\session\util\dbConnection.class
+com\example\session\api\temp\GetCookie.class
+com\example\session\filters\AuthFilter.class
+com\example\session\api\temp\SetCookies.class
 com\example\session\api\LogoutServlet.class
 com\example\session\model\User.class

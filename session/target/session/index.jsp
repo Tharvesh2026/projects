@@ -29,6 +29,22 @@
                     margin-bottom: 5px;
                 }
 
+                .error-box {
+                    background: #ffe0e0;
+                    color: #b00020;
+                    padding: 10px;
+                    border-radius: 5px;
+                    margin-bottom: 10px;
+                }
+
+                .success-box {
+                    background: #e0ffe5;
+                    color: #087b22;
+                    padding: 10px;
+                    border-radius: 5px;
+                    margin-bottom: 10px;
+                }
+
                 input[type="email"],
                 input[type="password"],
                 input[type="text"] {
@@ -59,17 +75,28 @@
         <body>
             <div class="loginForm">
                 <h2>Login</h2>
-                <form action="login" method="post">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" value="<%= mail %>" required><br><br>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required><br><br>
-                    <input type="checkbox" id="rememberMe" name="rememberMe" value="true" <%=mail.isEmpty() ? ""
-                        : "checked" %>>
-                    <label for="rememberMe">Remember Me</label>
-                    <input type="submit" value="Login">
-                </form>
-                don't have an account? <a id="switchToRegister">Register here</a>
+                <% if(request.getParameter("error") !=null){ %>
+                    <div class="error-box">
+                        <%= request.getParameter("error") %>
+                    </div>
+                    <% } %>
+
+                        <% if(request.getParameter("logout") !=null){ %>
+                            <div class="success-box">
+                                Logged out successfully.
+                            </div>
+                            <% } %>
+                                <form action="login" method="post">
+                                    <label for="email">Email:</label>
+                                    <input type="email" id="email" name="email" value="<%= mail %>" required><br><br>
+                                    <label for="password">Password:</label>
+                                    <input type="password" id="password" name="password" required><br><br>
+                                    <input type="checkbox" id="rememberMe" name="rememberMe" value="true"
+                                        <%=mail.isEmpty() ? "" : "checked" %>>
+                                    <label for="rememberMe">Remember Me</label>
+                                    <input type="submit" value="Login">
+                                </form>
+                                don't have an account? <a id="switchToRegister">Register here</a>
             </div>
 
             <div class="registerFrom">
