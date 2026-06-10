@@ -1,6 +1,8 @@
 package com.example.session.DAO;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.example.session.exceptions.DatabaseException;
 import com.example.session.model.User;
@@ -27,8 +29,8 @@ public class UserDAO {
                         rs.getString("password"),
                         rs.getString("name"),
                         rs.getString("role"),
-                        rs.getInt("id")
-                    );
+                        rs.getString("status"),
+                        rs.getInt("id"));
             }
             return null;
 
@@ -39,7 +41,7 @@ public class UserDAO {
 
     public boolean registerUser(User user) throws DatabaseException {
 
-        String query = "INSERT INTO users(name, mailId, username, password, role VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO users(name, mailId, username, password, role, status) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection con = dbConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(query)) {
@@ -49,6 +51,7 @@ public class UserDAO {
             ps.setString(3, user.getUsername());
             ps.setString(4, user.getPasswordHash());
             ps.setString(5, user.getRole());
+            ps.setString(6, user.getStatus());
 
             return ps.executeUpdate() > 0;
 
@@ -78,5 +81,37 @@ public class UserDAO {
         }
 
         return false;
+    }
+
+    public List<User> getAllUsers() throws DatabaseException {
+
+        List<User> users = new ArrayList<>();
+
+        String query = "SELECT * FROM users ORDER BY id";
+
+        try (Connection con = dbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(query);
+                ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+
+                User user = new User(
+                        rs.getString("username"),
+                        rs.getString("mailId"),
+                        rs.getString("password"),
+                        rs.getString("name"),
+                        rs.getString("role"),
+                        rs.getString("status"),
+                        rs.getInt("id"));
+
+                users.add(user);
+            }
+
+            return users;
+
+        } catch (SQLException e) {
+            throw new DatabaseException(
+                    "Unable to fetch users");
+        }
     }
 }

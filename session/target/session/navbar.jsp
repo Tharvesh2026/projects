@@ -72,18 +72,21 @@
 <nav class="app-navbar">
     <div class="container d-flex justify-content-between align-items-center">
 
-        <a class="navbar-brand text-decoration-none" href="welcome.jsp">
+        <a class="navbar-brand text-decoration-none" href="welcome">
             Session App
         </a>
 
         <div class="nav-actions">
 
-            <a href="welcome.jsp" class="nav-link-btn">
+            <a href="welcome" class="nav-link-btn">
                 Home
             </a>
 
-            <a href="settings.jsp" class="nav-link-btn">
+            <a href="settings" class="nav-link-btn">
                 Settings
+            </a>
+            <a href="users" class="nav-link-btn">
+                Users
             </a>
 
             <form action="logout" method="post" style="margin:0;">

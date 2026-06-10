@@ -6,6 +6,7 @@ import com.example.session.util.PasswordHasher;
 import com.example.session.exceptions.ApplicationException;
 import com.example.session.exceptions.ValidationException;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
@@ -17,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 public class RegisterServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         try {
 
             String name = req.getParameter("name");
@@ -34,11 +35,13 @@ public class RegisterServlet extends HttpServlet {
                     email,
                     hashedPassword,
                     name,
-                    "USER");
+                    "USER",
+                    "ACTIVE");
 
             UserDAO userDAO = new UserDAO();
 
             boolean registered = userDAO.registerUser(user);
+
 
             if (registered) {
                 String msg = URLEncoder.encode(
@@ -56,10 +59,11 @@ public class RegisterServlet extends HttpServlet {
             res.sendRedirect("index.jsp?error=" + msg);
         }
     }
- private void validateRegisterInput(String name,
-                                       String email,
-                                       String username,
-                                       String password)
+
+    private void validateRegisterInput(String name,
+            String email,
+            String username,
+            String password)
             throws ValidationException {
 
         if (name == null || name.isBlank()) {

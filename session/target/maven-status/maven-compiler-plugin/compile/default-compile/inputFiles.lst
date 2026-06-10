@@ -3,6 +3,7 @@ C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\noA
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\temp\GetCookie.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\util\csrfValidator.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\auth\LogoutServlet.java
+C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\auth\ManageUserServlet.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\util\dbConnection.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\exceptions\DatabaseException.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\temp\SetCookies.java
@@ -11,10 +12,13 @@ C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\excepti
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\model\User.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\temp\RemCookie.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\auth\LoginServlet.java
+C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\auth\UsersServlet.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\auth\RegisterServlet.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\noAuth\ConfigServlet.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\noAuth\ThemeServlet.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\exceptions\ValidationException.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\util\PasswordHasher.java
+C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\page\SettingsServlet.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\DAO\UserDAO.java
+C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\page\WelcomeServlet.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\filters\AuthFilter.java

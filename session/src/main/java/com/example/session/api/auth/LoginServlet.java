@@ -6,6 +6,7 @@ import com.example.session.exceptions.ApplicationException;
 import com.example.session.exceptions.AuthenticationException;
 import com.example.session.exceptions.ValidationException;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
@@ -27,12 +28,11 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
-            throws IOException {
+            throws IOException, ServletException {
 
         try {
             String mail = req.getParameter("email");
-            String password = req.getParameter("password");
-
+            String password = req.getParameter("password");            
             validateLoginInput(mail, password);
 
             boolean rememberMe = req.getParameter("rememberMe") != null
@@ -98,7 +98,7 @@ public class LoginServlet extends HttpServlet {
             System.out.println("Session User : " + session.getAttribute("user"));
             System.out.println("\n\n\n");
 
-            res.sendRedirect("welcome.jsp");
+            res.sendRedirect("welcome");
 
         } catch (ApplicationException e) {
             redirectWithError(res, e.getMessage());

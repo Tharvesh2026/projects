@@ -16,7 +16,6 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         String path = req.getServletPath();
-        
 
         if (isPublicPath(path)) {
             chain.doFilter(request, response);
@@ -25,21 +24,35 @@ public class AuthFilter implements Filter {
 
         HttpSession session = req.getSession(false);
 
-        if (session == null || session.getAttribute("user") == null) {
+        if ((path.equals("/welcome") || path.equals("/welcome.jsp") ||
+                path.equals("/settings") || path.equals("/settings.jsp")) &&
+                (session == null || session.getAttribute("user") == null)) {
             res.sendRedirect(req.getContextPath() + "/index.jsp?error=loginRequired");
             return;
         }
 
         User user = (User) session.getAttribute("user");
-        
-        if(path.equals("/settings.jsp") && !"ADMIN".equals(user.getRole())){
+
+        if (path.equals("/users") &&
+                !("ADMIN".equals(user.getRole()) ||
+                        "SYS_ADMIN".equals(user.getRole()))) {
+
             res.sendError(403, "Access Denied");
             return;
         }
+
+        if ((path.equals("/manage-user") ||
+                path.equals("/manage-user.jsp")) &&
+                !"SYS_ADMIN".equals(user.getRole())) {
+
+            res.sendError(403, "Access Denied");
+            return;
+        }
+
         
+
         chain.doFilter(request, response);
     }
-
 
     private boolean isPublicPath(String path) {
 
