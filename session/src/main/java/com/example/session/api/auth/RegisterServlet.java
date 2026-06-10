@@ -9,6 +9,8 @@ import com.example.session.exceptions.ValidationException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -16,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
+    private static final Logger logger = LogManager.getLogger(RegisterServlet.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
@@ -42,13 +45,18 @@ public class RegisterServlet extends HttpServlet {
 
             boolean registered = userDAO.registerUser(user);
 
-
             if (registered) {
                 String msg = URLEncoder.encode(
                         "Registration successful. Please login.",
                         StandardCharsets.UTF_8);
                 res.sendRedirect("index.jsp?success=" + msg);
+                logger.info("Received register request with email: {}", email);
+                logger.info("User Role : {}", user.getRole());
+                logger.info("User {} registered successfully", user.getUsername());
             } else {
+                logger.info("Received register request with email: {}", email);
+                logger.info("User Role : {}", user.getRole());
+                logger.info("User {} registered Failed", user.getUsername());
                 throw new ValidationException("Registration failed");
             }
         } catch (ApplicationException e) {

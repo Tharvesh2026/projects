@@ -2,13 +2,17 @@ package com.example.session.api.auth;
 
 import com.example.session.util.csrfValidator;
 import com.example.session.model.User;
+
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
+    private static final Logger logger = LogManager.getLogger(LogoutServlet.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
@@ -38,7 +42,7 @@ public class LogoutServlet extends HttpServlet {
         deleteCsrfCookie(req, res);
         res.sendRedirect("index.jsp?logout=SUCCESS");
         
-        System.out.println("User " + user.getUsername() + " Logged out");
+        logger.info("User {} logged out", user.getUsername());
     }
 
     @Override

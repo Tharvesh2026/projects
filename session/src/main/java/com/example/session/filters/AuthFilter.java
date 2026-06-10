@@ -23,6 +23,7 @@ public class AuthFilter implements Filter {
         }
 
         HttpSession session = req.getSession(false);
+        User user = (User) session.getAttribute("user");
 
         if ((path.equals("/welcome") || path.equals("/welcome.jsp") ||
                 path.equals("/settings") || path.equals("/settings.jsp")) &&
@@ -31,7 +32,14 @@ public class AuthFilter implements Filter {
             return;
         }
 
-        User user = (User) session.getAttribute("user");
+        if (path.equals("/logs") &&
+                !("ADMIN".equals(user.getRole()) || "SYS_ADMIN".equals(user.getRole()))) {
+
+            res.sendError(
+                    HttpServletResponse.SC_FORBIDDEN,
+                    "Access Denied");
+            return;
+        }
 
         if (path.equals("/users") &&
                 !("ADMIN".equals(user.getRole()) ||
@@ -48,8 +56,6 @@ public class AuthFilter implements Filter {
             res.sendError(403, "Access Denied");
             return;
         }
-
-        
 
         chain.doFilter(request, response);
     }

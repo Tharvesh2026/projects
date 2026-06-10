@@ -14,6 +14,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
@@ -23,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 @WebServlet(name = "LoginServlet", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
 
+    private static final Logger logger = LogManager.getLogger(LoginServlet.class);
     private static final int SESSION_TIMEOUT_SECONDS = 600;
     private static final int REMEMBER_ME_COOKIE_AGE = 7 * 24 * 60 * 60;
 
@@ -32,7 +36,7 @@ public class LoginServlet extends HttpServlet {
 
         try {
             String mail = req.getParameter("email");
-            String password = req.getParameter("password");            
+            String password = req.getParameter("password");
             validateLoginInput(mail, password);
 
             boolean rememberMe = req.getParameter("rememberMe") != null
@@ -87,15 +91,16 @@ public class LoginServlet extends HttpServlet {
 
             res.addCookie(emailCookie);
 
-            System.out.println("Received login request with email: " + mail);
-            System.out.println("User Role : " + user.getRole());
-            System.out.println("===== SESSION DETAILS =====");
-            System.out.println("Session ID : " + session.getId());
-            System.out.println("Creation Time : " + new Date(session.getCreationTime()));
-            System.out.println("Last Access Time : " + new Date(session.getLastAccessedTime()));
-            System.out.println("Timeout : " + session.getMaxInactiveInterval());
-            System.out.println("Is New : " + session.isNew());
-            System.out.println("Session User : " + session.getAttribute("user"));
+            logger.info("Received login request with email: {}", mail);
+            logger.info("User Role : {}", user.getRole());
+
+            logger.info("===== SESSION DETAILS =====");
+            logger.info("Session ID : {}", session.getId());
+            logger.info("Creation Time : {}", new Date(session.getCreationTime()));
+            logger.info("Last Access Time : {}", new Date(session.getLastAccessedTime()));
+            logger.info("Timeout : {}", session.getMaxInactiveInterval());
+            logger.info("Is New : {}", session.isNew());
+            logger.info("Session User : {}", session.getAttribute("user"));
             System.out.println("\n\n\n");
 
             res.sendRedirect("welcome");
