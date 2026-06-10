@@ -2,6 +2,9 @@ package com.example.session.api.auth;
 
 import com.example.session.DAO.UserDAO;
 import com.example.session.model.User;
+import com.example.session.exceptions.ApplicationException;
+import com.example.session.exceptions.AuthenticationException;
+import com.example.session.exceptions.ValidationException;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
@@ -13,6 +16,8 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
@@ -24,15 +29,26 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws IOException {
 
-        String mail = req.getParameter("email");
-        String password = req.getParameter("password");
+        try {
+            String mail = req.getParameter("email");
+            String password = req.getParameter("password");
 
-        boolean rememberMe = req.getParameter("rememberMe") != null && req.getParameter("rememberMe").equals("true");
+            validateLoginInput(mail, password);
 
-        UserDAO userDAO = new UserDAO();
-        if (userDAO.validateUser(mail, password)) {
+            boolean rememberMe = req.getParameter("rememberMe") != null
+                    && req.getParameter("rememberMe").equals("true");
+
+            UserDAO userDAO = new UserDAO();
+
+            if (!userDAO.validateUser(mail, password)) {
+                throw new AuthenticationException("Invalid email or password");
+            }
 
             User user = userDAO.getUser(mail);
+
+            if (user == null) {
+                throw new AuthenticationException("User not found");
+            }
 
             HttpSession oldSession = req.getSession(false);
 
@@ -84,10 +100,33 @@ public class LoginServlet extends HttpServlet {
 
             res.sendRedirect("welcome.jsp");
 
-        } else {
-
-            res.sendRedirect("index.jsp?error=Invalid email or password");
+        } catch (ApplicationException e) {
+            redirectWithError(res, e.getMessage());
         }
+    }
+
+    private void validateLoginInput(String mail, String password)
+            throws ValidationException {
+
+        if (mail == null || mail.isBlank()) {
+            throw new ValidationException("Email is required");
+        }
+
+        if (password == null || password.isBlank()) {
+            throw new ValidationException("Password is required");
+        }
+
+        if (!mail.contains("@")) {
+            throw new ValidationException("Invalid email format");
+        }
+    }
+
+    private void redirectWithError(HttpServletResponse res, String message)
+            throws IOException {
+
+        String encodedMessage = URLEncoder.encode(message, StandardCharsets.UTF_8);
+
+        res.sendRedirect("index.jsp?error=" + encodedMessage);
     }
 
     @Override
