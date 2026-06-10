@@ -25,6 +25,7 @@ public class UserDAO {
                         rs.getString("mailId"),
                         rs.getString("password"),
                         rs.getString("name"),
+                        rs.getString("role"),
                         rs.getInt("id")
                 );
             }
@@ -39,15 +40,16 @@ public class UserDAO {
     public boolean registerUser(User user) {
 
         String query =
-                "INSERT INTO users(name, mailId, username, password) VALUES (?, ?, ?, ?)";
+                "INSERT INTO users(name, mailId, username, password, role VALUES (?, ?, ?, ?, ?)";
 
         try (Connection con = dbConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
 
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
-            ps.setString(3, user.getUname());
-            ps.setString(4, user.getPassword());
+            ps.setString(3, user.getUsername());
+            ps.setString(4, user.getPasswordHash());
+            ps.setString(5, user.getRole());
 
             return ps.executeUpdate() > 0;
 

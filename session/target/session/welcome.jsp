@@ -204,7 +204,7 @@
 
             <div class="info-row">
                 <strong>Username</strong>
-                <span>${sessionScope.user.uname}</span>
+                <span>${sessionScope.user.username}</span>
             </div>
 
             <div class="info-row">

@@ -29,10 +29,7 @@ public class LoginServlet extends HttpServlet {
 
         boolean rememberMe = req.getParameter("rememberMe") != null && req.getParameter("rememberMe").equals("true");
 
-        System.out.println("Received login request with email: " + mail);
-
         UserDAO userDAO = new UserDAO();
-
         if (userDAO.validateUser(mail, password)) {
 
             User user = userDAO.getUser(mail);
@@ -51,8 +48,7 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("csrfToken", csrfToken);
             session.setMaxInactiveInterval(SESSION_TIMEOUT_SECONDS);
 
-            String csrfCookie =
-                    "CSRF_TOKEN=" + csrfToken +
+            String csrfCookie = "CSRF_TOKEN=" + csrfToken +
                     "; Path=" + req.getContextPath() +
                     "; Max-Age=" + SESSION_TIMEOUT_SECONDS +
                     "; HttpOnly" +
@@ -75,6 +71,8 @@ public class LoginServlet extends HttpServlet {
 
             res.addCookie(emailCookie);
 
+            System.out.println("Received login request with email: " + mail);
+            System.out.println("User Role : " + user.getRole());
             System.out.println("===== SESSION DETAILS =====");
             System.out.println("Session ID : " + session.getId());
             System.out.println("Creation Time : " + new Date(session.getCreationTime()));
@@ -82,6 +80,7 @@ public class LoginServlet extends HttpServlet {
             System.out.println("Timeout : " + session.getMaxInactiveInterval());
             System.out.println("Is New : " + session.isNew());
             System.out.println("Session User : " + session.getAttribute("user"));
+            System.out.println("\n\n\n");
 
             res.sendRedirect("welcome.jsp");
 

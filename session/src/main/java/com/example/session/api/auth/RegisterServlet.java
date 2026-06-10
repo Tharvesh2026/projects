@@ -27,7 +27,8 @@ public class RegisterServlet extends HttpServlet {
                 username,
                 email,
                 hashedPassword,
-                name);
+                name,
+            "USER");
 
         UserDAO userDAO = new UserDAO();
 
