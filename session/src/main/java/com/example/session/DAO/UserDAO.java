@@ -114,4 +114,85 @@ public class UserDAO {
                     "Unable to fetch users");
         }
     }
+
+    public User getUserById(int id) throws DatabaseException {
+
+    String query = "SELECT * FROM users WHERE id = ?";
+
+    try (Connection con = dbConnection.getConnection();
+         PreparedStatement ps = con.prepareStatement(query)) {
+
+        ps.setInt(1, id);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return new User(
+                    rs.getString("username"),
+                    rs.getString("mailId"),
+                    rs.getString("password"),
+                    rs.getString("name"),
+                    rs.getString("role"),
+                    rs.getString("status"),
+                    rs.getInt("id")
+            );
+        }
+
+        return null;
+
+    } catch (SQLException e) {
+        throw new DatabaseException("Unable to fetch user by id");
+    }
+}
+
+    public boolean updateUserRole(int id, String role) throws DatabaseException {
+
+    String query = "UPDATE users SET role = ? WHERE id = ?";
+
+    try (Connection con = dbConnection.getConnection();
+         PreparedStatement ps = con.prepareStatement(query)) {
+
+        ps.setString(1, role);
+        ps.setInt(2, id);
+
+        return ps.executeUpdate() > 0;
+
+    } catch (SQLException e) {
+        throw new DatabaseException("Unable to update user role");
+    }
+}
+
+    public boolean updateUserStatus(int id, String status) throws DatabaseException {
+
+    String query = "UPDATE users SET status = ? WHERE id = ?";
+
+    try (Connection con = dbConnection.getConnection();
+         PreparedStatement ps = con.prepareStatement(query)) {
+
+        ps.setString(1, status);
+        ps.setInt(2, id);
+
+        return ps.executeUpdate() > 0;
+
+    } catch (SQLException e) {
+        throw new DatabaseException("Unable to update user status");
+    }
+}
+
+    public boolean resetPassword(int id, String hashedPassword) throws DatabaseException {
+
+    String query = "UPDATE users SET password = ? WHERE id = ?";
+
+    try (Connection con = dbConnection.getConnection();
+         PreparedStatement ps = con.prepareStatement(query)) {
+
+        ps.setString(1, hashedPassword);
+        ps.setInt(2, id);
+
+        return ps.executeUpdate() > 0;
+
+    } catch (SQLException e) {
+        throw new DatabaseException("Unable to reset password");
+    }
+}
 }

@@ -23,7 +23,6 @@ public class AuthFilter implements Filter {
         }
 
         HttpSession session = req.getSession(false);
-        User user = (User) session.getAttribute("user");
 
         if ((path.equals("/welcome") || path.equals("/welcome.jsp") ||
                 path.equals("/settings") || path.equals("/settings.jsp")) &&
@@ -31,6 +30,7 @@ public class AuthFilter implements Filter {
             res.sendRedirect(req.getContextPath() + "/index.jsp?error=loginRequired");
             return;
         }
+        User user = (User) session.getAttribute("user");
 
         if (path.equals("/logs") &&
                 !("ADMIN".equals(user.getRole()) || "SYS_ADMIN".equals(user.getRole()))) {

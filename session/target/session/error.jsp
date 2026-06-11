@@ -199,8 +199,8 @@
                 <%= errorMessage %>
             </div>
 
-            <a href="<%= request.getContextPath() %>/index.jsp" class="error-button">
-                Back to Login
+            <a href="<%= request.getContextPath() %>/welcome" class="error-button">
+                Back
             </a>
         </div>
 

@@ -102,5 +102,45 @@
         </plugin>
       </plugins>
     </pluginManagement>
+
+    <resources>
+
+        <resource>
+            <directory>src/main/resources</directory>
+            <filtering>true</filtering>
+        </resource>
+
+    </resources>
+    
   </build>
+
+
+  <profiles>
+
+    <profile>
+        <id>dev</id>
+
+        <properties>
+            <db.url>jdbc:mysql://localhost:3306/authentication</db.url>
+            <db.user>root</db.user>
+            <db.password>root</db.password>
+        </properties>
+    </profile>
+
+    <profile>
+        <id>prod</id>
+
+        <properties>
+            <db.url>
+                jdbc:mysql://127.0.0.1:3306/authentication?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC
+            </db.url>
+
+            <db.user>appuser</db.user>
+            <db.password>App@12345</db.password>
+        </properties>
+    </profile>
+
+</profiles>
+
+
 </project>
