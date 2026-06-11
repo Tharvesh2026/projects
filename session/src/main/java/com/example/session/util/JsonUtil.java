@@ -16,8 +16,7 @@ public class JsonUtil {
 
         return mapper.readValue(
                 req.getInputStream(),
-                clazz
-        );
+                clazz);
     }
 
     public static void writeJson(HttpServletResponse res, Object data)
@@ -28,7 +27,12 @@ public class JsonUtil {
 
         mapper.writeValue(
                 res.getWriter(),
-                data
-        );
+                data);
+    }
+
+    public static String toJson(Object object)
+            throws IOException {
+
+        return mapper.writeValueAsString(object);
     }
 }

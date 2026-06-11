@@ -14,6 +14,7 @@ C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\excepti
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\util\PasswordHasher.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\DTO\ErrorResponseDTO.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\page\WelcomeServlet.java
+C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\DTO\RegisterRequestDTO.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\util\RefreshSessionServlet.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\noAuth\LanguageServlet.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\util\csrfValidator.java

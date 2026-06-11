@@ -9,6 +9,7 @@ com\example\session\exceptions\ValidationException.class
 com\example\session\api\temp\GetCookie.class
 com\example\session\api\page\LogServlet.class
 com\example\session\api\noAuth\LanguageServlet.class
+com\example\session\DTO\RegisterRequestDTO.class
 com\example\session\exceptions\ApplicationException.class
 com\example\session\exceptions\AuthenticationException.class
 com\example\session\DTO\LoginRequestDTO.class
