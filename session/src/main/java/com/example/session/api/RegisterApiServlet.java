@@ -4,9 +4,9 @@ import com.example.session.model.User;
 import com.example.session.DAO.UserDAO;
 import com.example.session.DTO.RegisterRequestDTO;
 import com.example.session.DTO.ApiResponseDTO;
+import com.example.session.DTO.ErrorResponseDTO;
 import com.example.session.util.JsonUtil;
-import com.example.session.exceptions.ApplicationException;
-import com.example.session.exceptions.ValidationException;
+import com.example.session.exceptions.*;
 import com.example.session.util.PasswordHasher;
 
 import jakarta.servlet.ServletException;
@@ -44,11 +44,28 @@ public class RegisterApiServlet extends HttpServlet {
                 JsonUtil.writeJson(res, new ApiResponseDTO(true, "Registration  sucessful, Please Login"));
                 return;
             }
-            JsonUtil.writeJson(res, new ApiResponseDTO(false, "User Registration  failed"));
+            throw new ValidationException("Registration failed");
 
-        } catch (ApplicationException e) {
-            JsonUtil.writeJson(res, new ApiResponseDTO(false, e.getMessage()));
+        } catch (ValidationException e) {
 
+            res.setStatus(400);
+
+            JsonUtil.writeJson(
+                    res,
+                    new ErrorResponseDTO(
+                            400,
+                            "VALIDATION_ERROR",
+                            e.getMessage()));
+        } catch (DatabaseException e) {
+
+            res.setStatus(500);
+
+            JsonUtil.writeJson(
+                    res,
+                    new ErrorResponseDTO(
+                            500,
+                            "DATABASE_ERROR",
+                            e.getMessage()));
         }
     }
 

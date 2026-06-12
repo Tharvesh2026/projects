@@ -4,8 +4,11 @@ import com.example.session.model.User;
 import com.example.session.DAO.UserDAO;
 import com.example.session.DTO.LoginRequestDTO;
 import com.example.session.DTO.ApiResponseDTO;
+import com.example.session.DTO.ErrorResponseDTO;
 import com.example.session.util.JsonUtil;
+import com.example.session.exceptions.AuthenticationException;
 import com.example.session.exceptions.DatabaseException;
+import com.example.session.exceptions.ValidationException;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -29,16 +32,19 @@ public class LoginApiServlet extends HttpServlet {
             String email = dto.getEmail();
             String password = dto.getPassword();
 
-           validateInput(res,email,password);
+            validateInput(email, password);
 
             UserDAO userDAO = new UserDAO();
             boolean valid = userDAO.validateUser(email, password);
             if (!valid) {
-                JsonUtil.writeJson(res, new ApiResponseDTO(false, "Invalid Email Password"));
-                return;
+                throw new AuthenticationException(
+                        "Invalid Email or Password");
             }
 
             User user = userDAO.getUser(email);
+            if (user == null) {
+                throw new AuthenticationException("User not found");
+            }
             HttpSession session = req.getSession(false);
 
             if (session != null) {
@@ -49,14 +55,37 @@ public class LoginApiServlet extends HttpServlet {
             session.setAttribute("user", user);
             session.setAttribute("csrfToken", UUID.randomUUID().toString());
 
-            JsonUtil.writeJson(res, new ApiResponseDTO(true, "Login Sucessfull"));
+            JsonUtil.writeJson(res, new ApiResponseDTO(true, "Login Sucessful"));
 
         } catch (DatabaseException e) {
 
+            res.setStatus(500);
+
             JsonUtil.writeJson(
                     res,
-                    new ApiResponseDTO(
-                            false,
+                    new ErrorResponseDTO(
+                            500,
+                            "DATABASE_ERROR",
+                            e.getMessage()));
+        } catch (ValidationException e) {
+
+            res.setStatus(400);
+
+            JsonUtil.writeJson(
+                    res,
+                    new ErrorResponseDTO(
+                            400,
+                            "VALIDATION_ERROR",
+                            e.getMessage()));
+        } catch (AuthenticationException e) {
+
+            res.setStatus(401);
+
+            JsonUtil.writeJson(
+                    res,
+                    new ErrorResponseDTO(
+                            401,
+                            "AUTHENTICATION_ERROR",
                             e.getMessage()));
         }
 
@@ -70,21 +99,19 @@ public class LoginApiServlet extends HttpServlet {
         return matcher.matches();
     }
 
-    private void validateInput( HttpServletResponse res, String email, String password)throws IOException{
-         if (email == null || email.isBlank()) {
-                JsonUtil.writeJson(res, new ApiResponseDTO(false, "Email Required"));
-                return;
-            }
+    private void validateInput(String email, String password)
+            throws ValidationException {
 
-            if (!isValidEmail(email)) {
-                JsonUtil.writeJson(res, new ApiResponseDTO(false, "Enter Valid email address"));
-                return;
-            }
+        if (email == null || email.isBlank()) {
+            throw new ValidationException("Email is required");
+        }
 
+        if (!isValidEmail(email)) {
+            throw new ValidationException("Enter valid email address");
+        }
 
-            if (password == null || password.isBlank()) {
-                JsonUtil.writeJson(res, new ApiResponseDTO(false, "password Required"));
-                return;
-            }
+        if (password == null || password.isBlank()) {
+            throw new ValidationException("Password is required");
+        }
     }
 }
