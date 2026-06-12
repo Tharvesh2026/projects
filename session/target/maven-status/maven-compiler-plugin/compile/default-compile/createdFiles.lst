@@ -3,10 +3,12 @@ com\example\session\util\JsonUtil.class
 com\example\session\api\auth\LoginServlet.class
 com\example\session\util\RefreshSessionServlet.class
 com\example\session\model\User.class
+com\example\session\api\LoginApiServlet.class
 com\example\session\util\PasswordHasher.class
 com\example\session\api\auth\LogoutServlet.class
 com\example\session\exceptions\ValidationException.class
 com\example\session\api\temp\GetCookie.class
+com\example\session\api\RegisterApiServlet.class
 com\example\session\api\page\LogServlet.class
 com\example\session\api\noAuth\LanguageServlet.class
 com\example\session\DTO\RegisterRequestDTO.class
