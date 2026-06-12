@@ -2,9 +2,9 @@ package com.example.session.api;
 
 import com.example.session.model.User;
 import com.example.session.DAO.UserDAO;
-import com.example.session.DTO.RegisterRequestDTO;
-import com.example.session.DTO.ApiResponseDTO;
-import com.example.session.DTO.ErrorResponseDTO;
+import com.example.session.DTO.Req.RegisterRequestDTO;
+import com.example.session.DTO.Res.ApiResponseDTO;
+import com.example.session.DTO.Res.ErrorResponseDTO;
 import com.example.session.util.JsonUtil;
 import com.example.session.exceptions.*;
 import com.example.session.util.PasswordHasher;

@@ -2,9 +2,9 @@ package com.example.session.api;
 
 import com.example.session.model.User;
 import com.example.session.DAO.UserDAO;
-import com.example.session.DTO.LoginRequestDTO;
-import com.example.session.DTO.ApiResponseDTO;
-import com.example.session.DTO.ErrorResponseDTO;
+import com.example.session.DTO.Req.LoginRequestDTO;
+import com.example.session.DTO.Res.ApiResponseDTO;
+import com.example.session.DTO.Res.ErrorResponseDTO;
 import com.example.session.util.JsonUtil;
 import com.example.session.exceptions.AuthenticationException;
 import com.example.session.exceptions.DatabaseException;
@@ -52,10 +52,20 @@ public class LoginApiServlet extends HttpServlet {
             }
 
             session = req.getSession(true);
-            session.setAttribute("user", user);
-            session.setAttribute("csrfToken", UUID.randomUUID().toString());
+            String csrfToken = UUID.randomUUID().toString();
 
-            JsonUtil.writeJson(res, new ApiResponseDTO(true, "Login Sucessful"));
+            session.setAttribute("user", user);
+            session.setAttribute("csrfToken", csrfToken);
+
+            String csrfCookie = "CSRF_TOKEN=" + csrfToken +
+                    "; Path=" + req.getContextPath() +
+                    "; Max-Age=600" +
+                    "; HttpOnly" +
+                    "; SameSite=Strict";
+
+            res.addHeader("Set-Cookie", csrfCookie);
+
+            JsonUtil.writeJson(res, new ApiResponseDTO(true, "Login Successful"));
 
         } catch (DatabaseException e) {
 
