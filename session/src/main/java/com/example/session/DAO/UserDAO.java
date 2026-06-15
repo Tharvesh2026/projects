@@ -13,7 +13,7 @@ public class UserDAO {
 
     public User getUser(String mail) throws DatabaseException {
 
-        String query = "SELECT * FROM users WHERE mailId = ?";
+        String query = "SELECT u.id, u.name, u.mailId, u.username, u.password, u.status, r.role_name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.mailID = ?";
 
         try (Connection con = dbConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(query)) {
@@ -28,7 +28,7 @@ public class UserDAO {
                         rs.getString("mailId"),
                         rs.getString("password"),
                         rs.getString("name"),
-                        rs.getString("role"),
+                        rs.getString("role_name"),
                         rs.getString("status"),
                         rs.getInt("id"));
             }
@@ -41,7 +41,7 @@ public class UserDAO {
 
     public boolean registerUser(User user) throws DatabaseException {
 
-        String query = "INSERT INTO users(name, mailId, username, password, role, status) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO users(name, mailId, username, password, role_id, status) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection con = dbConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(query)) {
@@ -50,7 +50,7 @@ public class UserDAO {
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getUsername());
             ps.setString(4, user.getPasswordHash());
-            ps.setString(5, user.getRole());
+            ps.setInt(5, 1);
             ps.setString(6, user.getStatus());
 
             return ps.executeUpdate() > 0;
@@ -87,7 +87,7 @@ public class UserDAO {
 
         List<User> users = new ArrayList<>();
 
-        String query = "SELECT * FROM users ORDER BY id";
+        String query = "SELECT u.id, u.name, u.mailId, u.username, u.password, u.status, r.role_name FROM users u JOINS roles r ON u.role_id = r_id ORDER BY u.id";
 
         try (Connection con = dbConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(query);
@@ -100,7 +100,7 @@ public class UserDAO {
                         rs.getString("mailId"),
                         rs.getString("password"),
                         rs.getString("name"),
-                        rs.getString("role"),
+                        rs.getString("role_name"),
                         rs.getString("status"),
                         rs.getInt("id"));
 
@@ -116,83 +116,81 @@ public class UserDAO {
     }
 
     public User getUserById(int id) throws DatabaseException {
+        String query = "SELECT u.id, u.name, u.mailId, u.username, u.password, u.status, r.role_name FROM users u JOINS roles r ON u.role_id = r_id WHERE u.id = ?";
 
-    String query = "SELECT * FROM users WHERE id = ?";
+        try (Connection con = dbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)) {
 
-    try (Connection con = dbConnection.getConnection();
-         PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, id);
 
-        ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
 
-        ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new User(
+                        rs.getString("username"),
+                        rs.getString("mailId"),
+                        rs.getString("password"),
+                        rs.getString("name"),
+                        rs.getString("role_name"),
+                        rs.getString("status"),
+                        rs.getInt("id"));
+            }
 
-        if (rs.next()) {
-            return new User(
-                    rs.getString("username"),
-                    rs.getString("mailId"),
-                    rs.getString("password"),
-                    rs.getString("name"),
-                    rs.getString("role"),
-                    rs.getString("status"),
-                    rs.getInt("id")
-            );
+            return null;
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Unable to fetch user by id");
         }
-
-        return null;
-
-    } catch (SQLException e) {
-        throw new DatabaseException("Unable to fetch user by id");
     }
-}
 
-    public boolean updateUserRole(int id, String role) throws DatabaseException {
+    public boolean updateUserRole(int id, String roleName) throws DatabaseException {
 
-    String query = "UPDATE users SET role = ? WHERE id = ?";
+        String query =  "UPDATE users u " + "JOIN roles r ON r.role_name = ? " + "SET u.role_id = r.id, u.role = r.role_name " + "WHERE u.id = ?";
 
-    try (Connection con = dbConnection.getConnection();
-         PreparedStatement ps = con.prepareStatement(query)) {
+        try (Connection con = dbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)) {
 
-        ps.setString(1, role);
-        ps.setInt(2, id);
+            ps.setString(1, roleName);
+            ps.setInt(2, id);
 
-        return ps.executeUpdate() > 0;
+            return ps.executeUpdate() > 0;
 
-    } catch (SQLException e) {
-        throw new DatabaseException("Unable to update user role");
+        } catch (SQLException e) {
+            throw new DatabaseException("Unable to update user role");
+        }
     }
-}
 
     public boolean updateUserStatus(int id, String status) throws DatabaseException {
 
-    String query = "UPDATE users SET status = ? WHERE id = ?";
+        String query = "UPDATE users SET status = ? WHERE id = ?";
 
-    try (Connection con = dbConnection.getConnection();
-         PreparedStatement ps = con.prepareStatement(query)) {
+        try (Connection con = dbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)) {
 
-        ps.setString(1, status);
-        ps.setInt(2, id);
+            ps.setString(1, status);
+            ps.setInt(2, id);
 
-        return ps.executeUpdate() > 0;
+            return ps.executeUpdate() > 0;
 
-    } catch (SQLException e) {
-        throw new DatabaseException("Unable to update user status");
+        } catch (SQLException e) {
+            throw new DatabaseException("Unable to update user status");
+        }
     }
-}
 
     public boolean resetPassword(int id, String hashedPassword) throws DatabaseException {
 
-    String query = "UPDATE users SET password = ? WHERE id = ?";
+        String query = "UPDATE users SET password = ? WHERE id = ?";
 
-    try (Connection con = dbConnection.getConnection();
-         PreparedStatement ps = con.prepareStatement(query)) {
+        try (Connection con = dbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)) {
 
-        ps.setString(1, hashedPassword);
-        ps.setInt(2, id);
+            ps.setString(1, hashedPassword);
+            ps.setInt(2, id);
 
-        return ps.executeUpdate() > 0;
+            return ps.executeUpdate() > 0;
 
-    } catch (SQLException e) {
-        throw new DatabaseException("Unable to reset password");
+        } catch (SQLException e) {
+            throw new DatabaseException("Unable to reset password");
+        }
     }
-}
 }
