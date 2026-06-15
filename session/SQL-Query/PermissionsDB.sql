@@ -16,6 +16,7 @@ INSERT INTO permissions(permission_key, description) VALUES
 
 ('SETTINGS_UPDATE', 'Update application settings');
 
+
 INSERT INTO roles(role_name) VALUES
 ('USER'),
 ('ADMIN'),

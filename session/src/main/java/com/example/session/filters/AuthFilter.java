@@ -2,7 +2,9 @@ package com.example.session.filters;
 
 import java.io.IOException;
 
+import com.example.session.exceptions.DatabaseException;
 import com.example.session.model.User;
+import com.example.session.util.PermissionValidator;
 
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.*;
@@ -10,11 +12,14 @@ import jakarta.servlet.http.*;
 
 @WebFilter("/*")
 public class AuthFilter implements Filter {
+
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
+
         String path = req.getServletPath();
 
         if (isPublicPath(path)) {
@@ -24,37 +29,35 @@ public class AuthFilter implements Filter {
 
         HttpSession session = req.getSession(false);
 
-        if ((path.equals("/welcome") || path.equals("/welcome.jsp") ||
-                path.equals("/settings") || path.equals("/settings.jsp")) &&
-                (session == null || session.getAttribute("user") == null)) {
-            res.sendRedirect(req.getContextPath() + "/index.jsp?error=loginRequired");
+        if (session == null ||session.getAttribute("user") == null) {
+            res.sendRedirect( req.getContextPath() + "/index.jsp?error=loginRequired");
             return;
         }
+
         User user = (User) session.getAttribute("user");
 
-        if (path.equals("/logs") &&
-                !("ADMIN".equals(user.getRole()) || "SYS_ADMIN".equals(user.getRole()))) {
+        String requiredPermission = getRequiredPermission(path);
 
-            res.sendError(
-                    HttpServletResponse.SC_FORBIDDEN,
-                    "Access Denied");
-            return;
-        }
+        if (requiredPermission != null) {
 
-        if (path.equals("/users") &&
-                !("ADMIN".equals(user.getRole()) ||
-                        "SYS_ADMIN".equals(user.getRole()))) {
+            try {
+                boolean allowed =PermissionValidator.hasPermission( user.getId(), requiredPermission );
 
-            res.sendError(403, "Access Denied");
-            return;
-        }
+                if (!allowed) {
+                    res.sendError(
+                            HttpServletResponse.SC_FORBIDDEN,
+                            "Access Denied"
+                    );
+                    return;
+                }
 
-        if ((path.equals("/manage-user") ||
-                path.equals("/manage-user.jsp")) &&
-                !"SYS_ADMIN".equals(user.getRole())) {
-
-            res.sendError(403, "Access Denied");
-            return;
+            } catch (DatabaseException e) {
+                res.sendError(
+                        HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                        "Permission validation failed"
+                );
+                return;
+            }
         }
 
         chain.doFilter(request, response);
@@ -64,13 +67,63 @@ public class AuthFilter implements Filter {
 
         return path.equals("/") ||
                 path.equals("/index.jsp") ||
+
                 path.equals("/login") ||
                 path.equals("/register") ||
+
+                path.equals("/user/login") ||
+                path.equals("/user/register") ||
+
                 path.equals("/health") ||
-                path.startsWith("/api/*") ||
+
                 path.startsWith("/css/") ||
                 path.startsWith("/js/") ||
                 path.startsWith("/images/") ||
                 path.startsWith("/assets/");
+    }
+
+    private String getRequiredPermission(String path) {
+
+        if (path.equals("/welcome") ||
+                path.equals("/welcome.jsp") ||
+                path.equals("/api/profile")) {
+
+            return "PROFILE_READ";
+        }
+
+        if (path.equals("/settings") ||
+                path.equals("/settings.jsp")) {
+
+            return "PROFILE_READ";
+        }
+
+        if (path.equals("/users") ||
+                path.equals("/users.jsp") ||
+                path.equals("/auth/users") ||
+                path.equals("/auth/user")) {
+
+            return "USER_READ";
+        }
+
+        if (path.equals("/manage-user") ||
+                path.equals("/manage-user.jsp") ||
+                path.equals("/auth/update-status")) {
+
+            return "USER_UPDATE";
+        }
+
+        if (path.equals("/auth/reset-password")) {
+            return "USER_PASSWORD_RESET";
+        }
+
+        if (path.equals("/auth/update-role")) {
+            return "ROLE_UPDATE";
+        }
+
+        if (path.equals("/logs")) {
+            return "LOG_VIEW";
+        }
+
+        return null;
     }
 }
