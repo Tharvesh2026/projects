@@ -1,7 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
+
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.session.model.User" %>
+<%@ page import="com.example.session.util.PermissionValidator" %>
 
 <%
     List<User> users = (List<User>) request.getAttribute("users");
@@ -15,26 +17,51 @@
     int adminUsers = 0;
 
     for (User user : users) {
+
         if ("ACTIVE".equalsIgnoreCase(user.getStatus())) {
             activeUsers++;
         }
 
-        if ("ADMIN".equalsIgnoreCase(user.getRole()) ||
-                "SYS_ADMIN".equalsIgnoreCase(user.getRole())) {
+        if ("ADMIN".equalsIgnoreCase(user.getRole())
+                || "SYS_ADMIN".equalsIgnoreCase(user.getRole())) {
             adminUsers++;
         }
+    }
+
+    User currentUser =
+            (User) session.getAttribute("user");
+
+    boolean canManageUsers = false;
+
+    try {
+
+        if (currentUser != null) {
+
+            canManageUsers =
+                    PermissionValidator.hasPermission(
+                            currentUser.getId(),
+                            "USER_UPDATE"
+                    );
+        }
+
+    } catch (Exception e) {
+
+        canManageUsers = false;
     }
 %>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Users Management</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -57,7 +84,7 @@
             background: linear-gradient(135deg, #062b52, #00508f);
             border-radius: 18px;
             padding: 40px;
-            box-shadow: 0 18px 35px rgba(0,0,0,0.25);
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.25);
             position: relative;
             overflow: hidden;
         }
@@ -67,7 +94,7 @@
             position: absolute;
             width: 420px;
             height: 420px;
-            background: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 50%;
             left: -120px;
             top: -70px;
@@ -98,7 +125,7 @@
             border-radius: 16px;
             padding: 22px;
             text-align: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,.15);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, .15);
             height: 100%;
         }
 
@@ -132,7 +159,7 @@
             background: white;
             border-radius: 18px;
             overflow: hidden;
-            box-shadow: 0 12px 25px rgba(0,0,0,.15);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, .15);
         }
 
         .cloud-table {
@@ -326,7 +353,8 @@
                             </div>
                         </td>
 
-                        <td><%= user.getEmail() %></td>
+                        <td>                            <%= user.getEmail() %>
+                        </td>
 
                         <td>
                             <span class="role-badge">
@@ -340,13 +368,21 @@
                             </span>
                         </td>
 
-                        <td>#<%= user.getId() %></td>
+                        <td>
+                            #<%= user.getId() %>
+                        </td>
 
                         <td>
+                            <% if (canManageUsers) { %>
                             <a href="manage-user?id=<%= user.getId() %>"
                                class="manage-btn">
                                 Manage User
                             </a>
+                            <% } else { %>
+                            <span class="text-muted">
+                                View Only
+                            </span>
+                            <% } %>
                         </td>
 
                     </tr>
@@ -367,23 +403,23 @@
 </div>
 
 <script>
-    const searchInput = document.getElementById("searchUser");
-    const table = document.getElementById("usersTable");
+const searchInput = document.getElementById("searchUser");
+const table = document.getElementById("usersTable");
 
-    searchInput.addEventListener("keyup", function () {
-        const searchValue = this.value.toLowerCase();
-        const rows = table.querySelectorAll("tbody tr");
+searchInput.addEventListener("keyup", function () {
+    const searchValue = this.value.toLowerCase();
+    const rows = table.querySelectorAll("tbody tr");
 
-        rows.forEach(function (row) {
-            const rowText = row.innerText.toLowerCase();
+    rows.forEach(function (row) {
+        const rowText = row.innerText.toLowerCase();
 
-            if (rowText.includes(searchValue)) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
-        });
+        if (rowText.includes(searchValue)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
     });
+});
 </script>
 
 </body>
