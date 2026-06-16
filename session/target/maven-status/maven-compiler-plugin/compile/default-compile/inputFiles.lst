@@ -2,13 +2,17 @@ C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\Log
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\auth\LogoutServlet.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\LogoutApiServlet.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\ResetPasswordApiServlet.java
+C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\model\Role.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\RegisterApiServlet.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\UsersApiServlet.java
+C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\DAO\PermissionDAO.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\DTO\Res\ProfileResponseDTO.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\exceptions\DatabaseException.java
+C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\util\PermissionValidator.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\DTO\Req\LoginRequestDTO.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\constants\Constants.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\ProfileApiServlet.java
+C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\model\Permission.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\auth\LoginServlet.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\auth\UsersServlet.java
 C:\Users\DS\Documents\projects\session\src\main\java\com\example\session\api\auth\RegisterServlet.java

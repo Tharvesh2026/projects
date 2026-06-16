@@ -10,6 +10,20 @@
         response.sendRedirect(request.getContextPath() + "/users");
         return;
     }
+
+    int activeUsers = 0;
+    int adminUsers = 0;
+
+    for (User user : users) {
+        if ("ACTIVE".equalsIgnoreCase(user.getStatus())) {
+            activeUsers++;
+        }
+
+        if ("ADMIN".equalsIgnoreCase(user.getRole()) ||
+                "SYS_ADMIN".equalsIgnoreCase(user.getRole())) {
+            adminUsers++;
+        }
+    }
 %>
 
 <!DOCTYPE html>
@@ -30,19 +44,19 @@
         body {
             margin: 0;
             min-height: 100vh;
-            background: #f4f4f4;
+            background: #eef3f8;
         }
 
         .page-wrapper {
-            padding: 40px 15px;
+            padding: 35px 15px;
         }
 
         .users-box {
-            max-width: 1100px;
+            max-width: 1300px;
             margin: auto;
-            background: linear-gradient(135deg, #0399f5, #00508f);
+            background: linear-gradient(135deg, #062b52, #00508f);
             border-radius: 18px;
-            padding: 45px;
+            padding: 40px;
             box-shadow: 0 18px 35px rgba(0,0,0,0.25);
             position: relative;
             overflow: hidden;
@@ -60,9 +74,9 @@
         }
 
         .users-header {
-            color: white;
             position: relative;
             z-index: 1;
+            color: white;
             margin-bottom: 30px;
         }
 
@@ -73,52 +87,94 @@
         }
 
         .users-header p {
-            opacity: 0.95;
+            margin: 0;
+            opacity: .95;
+        }
+
+        .stat-card {
+            position: relative;
+            z-index: 1;
+            background: white;
+            border-radius: 16px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,.15);
+            height: 100%;
+        }
+
+        .stat-card h3 {
+            color: #00508f;
+            font-weight: 800;
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .stat-card span {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .search-box {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            border-radius: 12px;
+            padding: 12px 16px;
+            border: none;
+        }
+
+        .table-container {
+            position: relative;
+            z-index: 1;
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 12px 25px rgba(0,0,0,.15);
+        }
+
+        .cloud-table {
             margin: 0;
         }
 
-        .user-card {
-            background: white;
-            border-radius: 18px;
-            padding: 25px;
-            box-shadow: 0 12px 25px rgba(0,0,0,0.18);
-            height: 100%;
-            position: relative;
-            z-index: 1;
+        .cloud-table thead {
+            background: #004d88;
+            color: white;
         }
 
-        .avatar {
-            width: 78px;
-            height: 78px;
+        .cloud-table th {
+            padding: 18px;
+            border: none;
+            font-weight: 700;
+        }
+
+        .cloud-table td {
+            padding: 16px;
+            vertical-align: middle;
+        }
+
+        .cloud-table tbody tr:hover {
+            background: #f5faff;
+        }
+
+        .table-avatar {
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid #eaf7ff;
-            margin-bottom: 15px;
+            border: 3px solid #eaf7ff;
         }
 
-        .user-card h4 {
+        .user-name {
+            font-weight: 700;
             color: #04336b;
-            font-weight: 800;
-            margin-bottom: 5px;
         }
 
-        .user-card small {
+        .username {
             color: #777;
-            display: block;
-            margin-bottom: 18px;
-        }
-
-        .detail-item {
-            border: 1px solid #e5e5e5;
-            border-radius: 10px;
-            padding: 10px 12px;
-            margin-bottom: 10px;
-            font-size: 14px;
-            background: #fafafa;
-        }
-
-        .detail-item strong {
-            color: #04336b;
+            font-size: 13px;
         }
 
         .role-badge {
@@ -142,21 +198,33 @@
         }
 
         .manage-btn {
-            display: block;
-            width: 100%;
-            margin-top: 15px;
-            padding: 12px;
+            border: none;
+            padding: 10px 16px;
             border-radius: 10px;
-            background: linear-gradient(135deg, #0079d6, #00518d);
-            color: white;
-            text-align: center;
-            font-weight: 700;
             text-decoration: none;
+            color: white;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0079d6, #00518d);
+            display: inline-block;
         }
 
         .manage-btn:hover {
             color: white;
-            opacity: 0.95;
+            opacity: .95;
+        }
+
+        @media (max-width: 768px) {
+            .users-box {
+                padding: 25px;
+            }
+
+            .users-header h1 {
+                font-size: 28px;
+            }
+
+            .cloud-table {
+                min-width: 900px;
+            }
         }
     </style>
 </head>
@@ -170,74 +238,153 @@
     <div class="users-box">
 
         <div class="users-header">
-            <h1>Users</h1>
-            <p>View registered users, roles and account status.</p>
+            <h1>Users Management</h1>
+            <p>Manage registered users, roles and account access.</p>
         </div>
 
-        <div class="row g-4">
-
-            <%
-                for (User user : users) {
-                    String username = user.getUsername();
-                    String avatarUrl = "https://unavatar.io/github/" + username;
-
-                    String statusClass = "status-active";
-
-                    if (!"ACTIVE".equalsIgnoreCase(user.getStatus())) {
-                        statusClass = "status-inactive";
-                    }
-            %>
+        <div class="row g-3 mb-4">
 
             <div class="col-md-4">
-                <div class="user-card">
-
-                    <div class="text-center">
-                        <img class="avatar"
-                             src="<%= avatarUrl %>"
-                             alt="<%= username %>">
-
-                        <h4><%= user.getName() %></h4>
-                        <small>@<%= user.getUsername() %></small>
-                    </div>
-
-                    <div class="detail-item">
-                        <strong>ID:</strong>
-                        <%= user.getId() %>
-                    </div>
-
-                    <div class="detail-item">
-                        <strong>Email:</strong>
-                        <%= user.getEmail() %>
-                    </div>
-
-                    <div class="detail-item">
-                        <strong>Role:</strong>
-                        <span class="role-badge"><%= user.getRole() %></span>
-                    </div>
-
-                    <div class="detail-item">
-                        <strong>Status:</strong>
-                        <span class="role-badge <%= statusClass %>">
-                            <%= user.getStatus() %>
-                        </span>
-                    </div>
-
-                    <a href="manage-user?id=<%= user.getId() %>" class="manage-btn">
-                        Manage User
-                    </a>
-
+                <div class="stat-card">
+                    <h3><%= users.size() %></h3>
+                    <span>Total Users</span>
                 </div>
             </div>
 
-            <%
-                }
-            %>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <h3><%= activeUsers %></h3>
+                    <span>Active Accounts</span>
+                </div>
+            </div>
 
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <h3><%= adminUsers %></h3>
+                    <span>Administrative Accounts</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="search-box">
+            <input
+                    type="text"
+                    id="searchUser"
+                    class="form-control"
+                    placeholder="Search users by name, username or email...">
+        </div>
+
+        <div class="table-container">
+            <div class="table-responsive">
+
+                <table class="table cloud-table align-middle" id="usersTable">
+
+                    <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>User ID</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <%
+                        for (User user : users) {
+
+                            String username = user.getUsername();
+                            String avatarUrl = "https://unavatar.io/github/" + username;
+
+                            String statusClass = "status-active";
+
+                            if (!"ACTIVE".equalsIgnoreCase(user.getStatus())) {
+                                statusClass = "status-inactive";
+                            }
+                    %>
+
+                    <tr>
+
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="<%= avatarUrl %>"
+                                     class="table-avatar"
+                                     alt="<%= username %>">
+
+                                <div class="ms-3">
+                                    <div class="user-name">
+                                        <%= user.getName() %>
+                                    </div>
+
+                                    <div class="username">
+                                        @<%= user.getUsername() %>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td><%= user.getEmail() %></td>
+
+                        <td>
+                            <span class="role-badge">
+                                <%= user.getRole() %>
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="role-badge <%= statusClass %>">
+                                <%= user.getStatus() %>
+                            </span>
+                        </td>
+
+                        <td>#<%= user.getId() %></td>
+
+                        <td>
+                            <a href="manage-user?id=<%= user.getId() %>"
+                               class="manage-btn">
+                                Manage User
+                            </a>
+                        </td>
+
+                    </tr>
+
+                    <%
+                        }
+                    %>
+
+                    </tbody>
+
+                </table>
+
+            </div>
         </div>
 
     </div>
 
 </div>
+
+<script>
+    const searchInput = document.getElementById("searchUser");
+    const table = document.getElementById("usersTable");
+
+    searchInput.addEventListener("keyup", function () {
+        const searchValue = this.value.toLowerCase();
+        const rows = table.querySelectorAll("tbody tr");
+
+        rows.forEach(function (row) {
+            const rowText = row.innerText.toLowerCase();
+
+            if (rowText.includes(searchValue)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+</script>
 
 </body>
 </html>

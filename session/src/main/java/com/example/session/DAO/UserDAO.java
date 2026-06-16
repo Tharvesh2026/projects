@@ -87,7 +87,7 @@ public class UserDAO {
 
         List<User> users = new ArrayList<>();
 
-        String query = "SELECT u.id, u.name, u.mailId, u.username, u.password, u.status, r.role_name FROM users u JOINS roles r ON u.role_id = r_id ORDER BY u.id";
+        String query = "SELECT u.id, u.name, u.mailId, u.username, u.password, u.status, r.role_name FROM users u JOIN roles r ON u.role_id = r.id ORDER BY u.id";
 
         try (Connection con = dbConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(query);
@@ -116,7 +116,7 @@ public class UserDAO {
     }
 
     public User getUserById(int id) throws DatabaseException {
-        String query = "SELECT u.id, u.name, u.mailId, u.username, u.password, u.status, r.role_name FROM users u JOINS roles r ON u.role_id = r_id WHERE u.id = ?";
+        String query = "SELECT u.id, u.name, u.mailId, u.username, u.password, u.status, r.role_name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = ?";
 
         try (Connection con = dbConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(query)) {

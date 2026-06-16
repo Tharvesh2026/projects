@@ -9,6 +9,7 @@ import com.example.session.DTO.Res.ErrorResponseDTO;
 import com.example.session.exceptions.DatabaseException;
 import com.example.session.model.User;
 import com.example.session.util.JsonUtil;
+import com.example.session.util.PermissionValidator;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -28,9 +29,8 @@ public class UsersApiServlet extends HttpServlet {
                 return;
             }
             User you = (User) session.getAttribute("user");
-            String role = you.getRole();
 
-            if (!"ADMIN".equals(role) && !"SYS_ADMIN".equals(role)) {
+            if (!PermissionValidator.hasPermission(you.getId(),"USER_READ")){
                 res.setStatus(403);
                 JsonUtil.writeJson(res, new ErrorResponseDTO(403, "AUTHORIZATION_ERROR", "Access Denied"));
                 return;

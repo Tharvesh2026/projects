@@ -1,6 +1,8 @@
 package com.example.session.api.page;
 
+import com.example.session.exceptions.DatabaseException;
 import com.example.session.model.User;
+import com.example.session.util.PermissionValidator;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -16,7 +18,7 @@ public class LogServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req,
-                         HttpServletResponse res)
+            HttpServletResponse res)
             throws IOException {
 
         HttpSession session = req.getSession(false);
@@ -27,10 +29,25 @@ public class LogServlet extends HttpServlet {
         }
 
         User user = (User) session.getAttribute("user");
-        String role = user.getRole();
+        try {
 
-        if (!"ADMIN".equals(role) && !"SYS_ADMIN".equals(role)) {
-            res.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
+            if (!PermissionValidator.hasPermission(
+                    user.getId(),
+                    "LOG_VIEW")) {
+
+                res.sendError(
+                        HttpServletResponse.SC_FORBIDDEN,
+                        "Access Denied");
+
+                return;
+            }
+
+        } catch (DatabaseException e) {
+
+            res.sendError(
+                    HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "Permission validation failed");
+
             return;
         }
 
@@ -42,8 +59,11 @@ public class LogServlet extends HttpServlet {
 
         out.println("===== APPLICATION LOGS =====");
         out.println("Requested By : " + user.getUsername());
-        out.println("Role         : " + user.getRole());
-        out.println("----------------------------------------");
+        out.println("Mail Id      : " + user.getEmail());
+        out.println("Endpoint     : " + req.getServletPath());
+        out.println("Client IP    : " + req.getRemoteAddr());
+        out.println("Timestamp    : " + new java.util.Date());
+        out.println("----------------------------------------\n");
 
         if (!Files.exists(logPath)) {
             out.println("Log file not found: " + logPath.toAbsolutePath());

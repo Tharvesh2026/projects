@@ -11,6 +11,7 @@ com\example\session\exceptions\AuthenticationException.class
 com\example\session\api\UpdateRoleApiServlet.class
 com\example\session\DTO\Res\ProfileResponseDTO.class
 com\example\session\api\auth\ManageUserServlet.class
+com\example\session\DAO\PermissionDAO.class
 com\example\session\DTO\Req\RegisterRequestDTO.class
 com\example\session\api\noAuth\ThemeServlet.class
 com\example\session\constants\Constants.class
@@ -25,10 +26,13 @@ com\example\session\util\RefreshSessionServlet.class
 com\example\session\model\User.class
 com\example\session\util\PasswordHasher.class
 com\example\session\exceptions\ValidationException.class
+com\example\session\model\Role.class
 com\example\session\api\UserByIdApiServlet.class
+com\example\session\util\PermissionValidator.class
 com\example\session\api\RegisterApiServlet.class
 com\example\session\api\page\LogServlet.class
 com\example\session\api\UpdateStatusApiServlet.class
+com\example\session\model\Permission.class
 com\example\session\DTO\Req\UpdateStatusRequestDTO.class
 com\example\session\api\UsersApiServlet.class
 com\example\session\api\LogoutApiServlet.class

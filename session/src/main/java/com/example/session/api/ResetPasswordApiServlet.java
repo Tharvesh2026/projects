@@ -10,6 +10,7 @@ import com.example.session.exceptions.DatabaseException;
 import com.example.session.model.User;
 import com.example.session.util.JsonUtil;
 import com.example.session.util.PasswordHasher;
+import com.example.session.util.PermissionValidator;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -34,9 +35,9 @@ public class ResetPasswordApiServlet extends HttpServlet {
 
             User you = (User) session.getAttribute("user");
 
-            if (!"SYS_ADMIN".equals(you.getRole())) {
+            if (!PermissionValidator.hasPermission(you.getId(),"USER_PASSWORD_RESET")){
                 res.setStatus(403);
-                JsonUtil.writeJson(res, new ErrorResponseDTO(403, "AUTHORIZATION_ERROR", "Access denied"));
+                JsonUtil.writeJson(res, new ErrorResponseDTO(403, "AUTHORIZATION_ERROR", "Access Denied"));
                 return;
             }
 

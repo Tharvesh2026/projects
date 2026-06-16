@@ -1,6 +1,8 @@
 package com.example.session.filters;
 
 import java.io.IOException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.example.session.exceptions.DatabaseException;
 import com.example.session.model.User;
@@ -12,6 +14,7 @@ import jakarta.servlet.http.*;
 
 @WebFilter("/*")
 public class AuthFilter implements Filter {
+    private static final Logger logger = LogManager.getLogger(AuthFilter.class);
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -29,8 +32,13 @@ public class AuthFilter implements Filter {
 
         HttpSession session = req.getSession(false);
 
-        if (session == null ||session.getAttribute("user") == null) {
-            res.sendRedirect( req.getContextPath() + "/index.jsp?error=loginRequired");
+        if (session == null || session.getAttribute("user") == null) {
+            logger.warn(
+                    "AUTH_REQUIRED | method={} | endpoint={} | ip={}",
+                    req.getMethod(),
+                    path,
+                    req.getRemoteAddr());
+            res.sendRedirect(req.getContextPath() + "/index.jsp?error=loginRequired");
             return;
         }
 
@@ -41,21 +49,50 @@ public class AuthFilter implements Filter {
         if (requiredPermission != null) {
 
             try {
-                boolean allowed =PermissionValidator.hasPermission( user.getId(), requiredPermission );
+                boolean allowed = PermissionValidator.hasPermission(
+                        user.getId(),
+                        requiredPermission);
 
                 if (!allowed) {
+
+                    logger.warn(
+                            "ACCESS_DENIED | method={} | endpoint={} | user={} | userId={} | permission={} | ip={}",
+                            req.getMethod(),
+                            path,
+                            user.getUsername(),
+                            user.getId(),
+                            requiredPermission,
+                            req.getRemoteAddr());
+
                     res.sendError(
                             HttpServletResponse.SC_FORBIDDEN,
-                            "Access Denied"
-                    );
+                            "Access Denied");
                     return;
                 }
 
+                logger.info(
+                        "ACCESS_ALLOWED | method={} | endpoint={} | user={} | userId={} | permission={} | ip={}",
+                        req.getMethod(),
+                        path,
+                        user.getUsername(),
+                        user.getId(),
+                        requiredPermission,
+                        req.getRemoteAddr());
+
             } catch (DatabaseException e) {
+
+                logger.error(
+                        "PERMISSION_VALIDATION_FAILED | method={} | endpoint={} | user={} | userId={} | permission={} | message={}",
+                        req.getMethod(),
+                        path,
+                        user.getUsername(),
+                        user.getId(),
+                        requiredPermission,
+                        e.getMessage());
+
                 res.sendError(
                         HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                        "Permission validation failed"
-                );
+                        "Permission validation failed");
                 return;
             }
         }
