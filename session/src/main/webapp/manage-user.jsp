@@ -1,6 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
 <%@ page import="com.example.session.model.User" %>
+<%@ page import="com.example.session.model.Role" %>
+<%@ page import="java.util.*" %>
+
 
 <%
     User selectedUser = (User) request.getAttribute("selectedUser");
@@ -259,15 +262,31 @@
             </div>
 
             <div class="form-section">
+                <%
+                List<Role> roles =
+                        (List<Role>)
+                                request.getAttribute(
+                                        "roles"
+                                );
+                %>
                 <h5>Change Role</h5>
                 <form action="<%= request.getContextPath() %>/manage-user" method="post">
                     <input type="hidden" name="id" value="<%= selectedUser.getId() %>">
                     <input type="hidden" name="action" value="updateRole">
+                    <select name="roleId" class="form-control">
+                        <%
+                        for(Role role : roles){
+                        %>
+                        <option
+                            value="<%= role.getId() %>"
+                            <%= role.getRoleName().equals(selectedUser.getRole()) ? "selected": "" %>>
+                            <%= role.getRoleName() %>
+                        </option>
 
-                    <select name="role" class="form-control">
-                        <option value="USER" <%= "USER".equals(selectedUser.getRole()) ? "selected" : "" %>>USER</option>
-                        <option value="ADMIN" <%= "ADMIN".equals(selectedUser.getRole()) ? "selected" : "" %>>ADMIN</option>
-                        <option value="SYS_ADMIN" <%= "SYS_ADMIN".equals(selectedUser.getRole()) ? "selected" : "" %>>SYS_ADMIN</option>
+                            <%
+                            }
+                            %>
+
                     </select>
 
                     <button type="submit" class="btn-main">Update Role</button>

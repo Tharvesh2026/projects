@@ -160,7 +160,32 @@ public class AuthFilter implements Filter {
         if (path.equals("/logs")) {
             return "LOG_VIEW";
         }
+        if (path.equals("/roles")) {
+            return "ROLE_READ";
+        }
 
+        if (path.equals("/manage-role")) {
+            return "ROLE_PERMISSION_MANAGE";
+        }
+
+        if (path.equals("/auth/roles/create")) {
+            return "ROLE_CREATE";
+        }
+
+        if (path.equals("/auth/roles/update-status")) {
+            return "ROLE_UPDATE";
+        }
+
+        if (path.equals("/auth/roles/update-permissions")) {
+            return "ROLE_PERMISSION_MANAGE";
+        }
+        if (path.equals("/roles") ||
+                path.equals("/roles.jsp")) {
+            return "ROLE_READ";
+        }
+        if (path.equals("/auth/roles/create")) {
+            return "ROLE_CREATE";
+        }
         return null;
     }
 }

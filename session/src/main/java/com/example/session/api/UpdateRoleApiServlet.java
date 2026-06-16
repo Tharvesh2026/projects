@@ -2,12 +2,16 @@ package com.example.session.api;
 
 import java.io.IOException;
 
+import com.example.session.DAO.RoleDAO;
 import com.example.session.DAO.UserDAO;
 import com.example.session.DTO.Req.UpdateRoleRequestDTO;
 import com.example.session.DTO.Res.ApiResponseDTO;
 import com.example.session.DTO.Res.ErrorResponseDTO;
 import com.example.session.exceptions.DatabaseException;
+import com.example.session.exceptions.ResourceNotFoundException;
+import com.example.session.exceptions.ValidationException;
 import com.example.session.model.User;
+import com.example.session.model.Role;
 import com.example.session.util.JsonUtil;
 import com.example.session.util.PermissionValidator;
 
@@ -20,7 +24,7 @@ public class UpdateRoleApiServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req,
-                          HttpServletResponse res)
+            HttpServletResponse res)
             throws IOException, ServletException {
 
         try {
@@ -35,7 +39,7 @@ public class UpdateRoleApiServlet extends HttpServlet {
 
             User you = (User) session.getAttribute("user");
 
-            if (!PermissionValidator.hasPermission(you.getId(),"ROLE_UPDATE")){
+            if (!PermissionValidator.hasPermission(you.getId(), "ROLE_UPDATE")) {
                 res.setStatus(403);
                 JsonUtil.writeJson(res, new ErrorResponseDTO(403, "AUTHORIZATION_ERROR", "Access Denied"));
                 return;
@@ -50,22 +54,35 @@ public class UpdateRoleApiServlet extends HttpServlet {
                 return;
             }
 
-            if (!isValidRole(dto.getRole())) {
+            if (dto.getRoleId() <= 0) {
+
                 res.setStatus(400);
-                JsonUtil.writeJson(res,
-                        new ErrorResponseDTO(400, "VALIDATION_ERROR", "Invalid role"));
+
+                JsonUtil.writeJson(
+                        res,
+                        new ErrorResponseDTO(
+                                400,
+                                "VALIDATION_ERROR",
+                                "Invalid role id"));
+
                 return;
             }
 
             UserDAO dao = new UserDAO();
+            RoleDAO rdao = new RoleDAO();
+            Role role = rdao.getRoleById(dto.getRoleId());
 
-            boolean updated = dao.updateUserRole(dto.getId(), dto.getRole());
+            boolean updated = dao.updateUserRole(dto.getId(), dto.getRoleId());
 
             if (!updated) {
                 res.setStatus(404);
                 JsonUtil.writeJson(res,
                         new ErrorResponseDTO(404, "NOT_FOUND", "User not found"));
                 return;
+            }
+
+            if(role == null){
+                throw new ResourceNotFoundException("Role Not Found");
             }
 
             JsonUtil.writeJson(res,
@@ -76,11 +93,16 @@ public class UpdateRoleApiServlet extends HttpServlet {
             JsonUtil.writeJson(res,
                     new ErrorResponseDTO(500, "DATABASE_ERROR", e.getMessage()));
         }
-    }
+        catch (ResourceNotFoundException e) {
 
-    private boolean isValidRole(String role) {
-        return "USER".equals(role) ||
-                "ADMIN".equals(role) ||
-                "SYS_ADMIN".equals(role);
+            res.setStatus(404);
+
+            JsonUtil.writeJson(
+                    res,
+                    new ErrorResponseDTO(
+                            404,
+                            "RESOURCE_NOT_FOUND",
+                            e.getMessage()));
+        }
     }
 }

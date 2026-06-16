@@ -1,7 +1,9 @@
 package com.example.session.api.auth;
 
+import com.example.session.DAO.RoleDAO;
 import com.example.session.DAO.UserDAO;
 import com.example.session.exceptions.DatabaseException;
+import com.example.session.model.Role;
 import com.example.session.model.User;
 import com.example.session.util.PasswordHasher;
 
@@ -10,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,9 +29,11 @@ public class ManageUserServlet extends HttpServlet {
         try {
             int userId = Integer.parseInt(req.getParameter("id"));
 
-            UserDAO dao = new UserDAO();
+            UserDAO udao = new UserDAO();
+            RoleDAO rdao = new RoleDAO();
 
-            User selectedUser = dao.getUserById(userId);
+            User selectedUser = udao.getUserById(userId);
+            List<Role> roles = rdao.getAllRoles();
 
             if (selectedUser == null) {
                 res.sendError(404, "User not found");
@@ -36,8 +41,8 @@ public class ManageUserServlet extends HttpServlet {
             }
 
             req.setAttribute("selectedUser", selectedUser);
-
-            req.getRequestDispatcher("/manage-user.jsp") .forward(req, res);
+            req.setAttribute("roles", roles);
+            req.getRequestDispatcher("/manage-user.jsp").forward(req, res);
 
         } catch (NumberFormatException e) {
             res.sendError(400, "Invalid user id");
@@ -55,9 +60,9 @@ public class ManageUserServlet extends HttpServlet {
             int userId = Integer.parseInt(req.getParameter("id"));
             String action = req.getParameter("action");
 
-            UserDAO dao = new UserDAO();
+            UserDAO udao = new UserDAO();
 
-            User targetUser = dao.getUserById(userId);
+            User targetUser = udao.getUserById(userId);
 
             if (targetUser == null) {
                 res.sendError(404, "User not found");
@@ -69,21 +74,19 @@ public class ManageUserServlet extends HttpServlet {
 
             if ("updateRole".equals(action)) {
 
-                String newRole = req.getParameter("role");
+                userId = Integer.parseInt(req.getParameter("id"));
 
-                dao.updateUserRole(userId, newRole);
+                int roleId = Integer.parseInt(req.getParameter("roleId"));
 
-                logger.info(
-                        "ACTION=ROLE_UPDATE | INITIATED_BY={} | TARGET_USER={} | OLD_ROLE={} | NEW_ROLE={} | STATUS=SUCCESS",
-                        currentUser.getUsername(),
-                        targetUser.getUsername(),
-                        targetUser.getRole(),
-                        newRole
-                );
+                UserDAO dao = new UserDAO();
 
-                res.sendRedirect(req.getContextPath()
-                        + "/manage-user?id=" + userId
-                        + "&success=Role updated");
+                dao.updateUserRole(userId, roleId);
+
+                res.sendRedirect(
+                        req.getContextPath()
+                                + "/manage-user?id="
+                                + userId
+                                + "&success=roleUpdated");
 
                 return;
             }
@@ -92,15 +95,14 @@ public class ManageUserServlet extends HttpServlet {
 
                 String newStatus = req.getParameter("status");
 
-                dao.updateUserStatus(userId, newStatus);
+                udao.updateUserStatus(userId, newStatus);
 
                 logger.info(
                         "ACTION=STATUS_UPDATE | INITIATED_BY={} | TARGET_USER={} | OLD_STATUS={} | NEW_STATUS={} | STATUS=SUCCESS",
                         currentUser.getUsername(),
                         targetUser.getUsername(),
                         targetUser.getStatus(),
-                        newStatus
-                );
+                        newStatus);
 
                 res.sendRedirect(req.getContextPath()
                         + "/manage-user?id=" + userId
@@ -120,16 +122,14 @@ public class ManageUserServlet extends HttpServlet {
                     return;
                 }
 
-                String hashedPassword =
-                        PasswordHasher.hash(newPassword);
+                String hashedPassword = PasswordHasher.hash(newPassword);
 
-                dao.resetPassword(userId, hashedPassword);
+                udao.resetPassword(userId, hashedPassword);
 
                 logger.info(
                         "ACTION=PASSWORD_RESET | INITIATED_BY={} | TARGET_USER={} | STATUS=SUCCESS",
                         currentUser.getUsername(),
-                        targetUser.getUsername()
-                );
+                        targetUser.getUsername());
 
                 res.sendRedirect(req.getContextPath()
                         + "/manage-user?id=" + userId

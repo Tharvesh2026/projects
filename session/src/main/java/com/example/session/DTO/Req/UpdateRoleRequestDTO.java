@@ -3,7 +3,7 @@ package com.example.session.DTO.Req;
 public class UpdateRoleRequestDTO {
 
     private int id;
-    private String role;
+    private int roleId;
 
     public UpdateRoleRequestDTO() {
     }
@@ -12,7 +12,7 @@ public class UpdateRoleRequestDTO {
         return id;
     }
 
-    public String getRole() {
-        return role;
+    public int getRoleId() {
+        return roleId;
     }
 }

@@ -13,7 +13,7 @@ public class UserDAO {
 
     public User getUser(String mail) throws DatabaseException {
 
-        String query = "SELECT u.id, u.name, u.mailId, u.username, u.password, u.status, r.role_name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.mailID = ?";
+        String query = "SELECT u.id, u.name, u.mailId, u.username, u.password, u.status, r.role_name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.mailId = ?";
 
         try (Connection con = dbConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(query)) {
@@ -143,14 +143,17 @@ public class UserDAO {
         }
     }
 
-    public boolean updateUserRole(int id, String roleName) throws DatabaseException {
+    public boolean updateUserRole(int id, int roleId)
+            throws DatabaseException {
 
-        String query =  "UPDATE users u " + "JOIN roles r ON r.role_name = ? " + "SET u.role_id = r.id, u.role = r.role_name " + "WHERE u.id = ?";
+        String query = "UPDATE users " +
+                "SET role_id = ? " +
+                "WHERE id = ?";
 
         try (Connection con = dbConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(query)) {
 
-            ps.setString(1, roleName);
+            ps.setInt(1, roleId);
             ps.setInt(2, id);
 
             return ps.executeUpdate() > 0;
