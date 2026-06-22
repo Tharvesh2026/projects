@@ -1,0 +1,10 @@
+target/generated-source
+target/icore
+target/session
+target/maven-archiver
+target/maven/status
+target/classes
+
+.vscode
+.idea
+.github
