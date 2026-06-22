@@ -23,3 +23,7 @@ JOIN roles r ON rp.role_id = r.id
 JOIN permissions p ON rp.permission_id = p.id
 WHERE r.role_name = 'SYS_ADMIN'
 ORDER BY p.permission_key;
+
+ALTER TABLE roles
+ADD COLUMN status VARCHAR(20)
+DEFAULT 'ACTIVE';
