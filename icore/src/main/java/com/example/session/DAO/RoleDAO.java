@@ -38,18 +38,17 @@ public class RoleDAO {
 
         try (
                 Connection con = dbConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement(query)
-            ) {
-                ps.setInt(1, id);
-                ResultSet rs = ps.executeQuery();
+                PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
 
-                if (rs.next()) {
-                    return new Role(
-                            rs.getInt("id"),
-                            rs.getString("role_name"),
-                            rs.getString("status"));
-                }
-                return null;
+            if (rs.next()) {
+                return new Role(
+                        rs.getInt("id"),
+                        rs.getString("role_name"),
+                        rs.getString("status"));
+            }
+            return null;
         } catch (SQLException e) {
             throw new DatabaseException(
                     "Unable to fetch role");
@@ -71,25 +70,41 @@ public class RoleDAO {
                     "Unable to create role");
         }
     }
-public boolean updateRoleStatus(int roleId, String status)
-        throws DatabaseException {
 
-    String query =
-            "UPDATE roles SET status = ? WHERE id = ?";
+    public boolean updateRoleStatus(int roleId, String status)
+            throws DatabaseException {
 
-    try (
-            Connection con = dbConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(query)
-    ) {
-        ps.setString(1, status);
-        ps.setInt(2, roleId);
+        String query = "UPDATE roles SET status = ? WHERE id = ?";
 
-        return ps.executeUpdate() > 0;
+        try (
+                Connection con = dbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, status);
+            ps.setInt(2, roleId);
 
-    } catch (SQLException e) {
-        throw new DatabaseException(
-                "Unable to update role status"
-        );
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            throw new DatabaseException(
+                    "Unable to update role status");
+        }
     }
-}
+
+    public boolean renameRole(int roleId, String newRoleName)
+            throws DatabaseException {
+
+        String query = "UPDATE roles SET role_name = ? WHERE id = ?";
+
+        try (
+                Connection con = dbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, newRoleName);
+            ps.setInt(2, roleId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Unable to rename role");
+        }
+    }
 }

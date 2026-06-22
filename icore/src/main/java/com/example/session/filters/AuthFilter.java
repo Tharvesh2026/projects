@@ -160,9 +160,6 @@ public class AuthFilter implements Filter {
         if (path.equals("/logs")) {
             return "LOG_VIEW";
         }
-        if (path.equals("/roles")) {
-            return "ROLE_READ";
-        }
 
         if (path.equals("/manage-role")) {
             return "ROLE_PERMISSION_MANAGE";
@@ -185,6 +182,13 @@ public class AuthFilter implements Filter {
         }
         if (path.equals("/auth/roles/create")) {
             return "ROLE_CREATE";
+        }
+        if (path.equals("/auth/roles/rename")) {
+            return "ROLE_UPDATE";
+        }
+
+        if (path.equals("/auth/roles/status")) {
+            return "ROLE_UPDATE";
         }
         return null;
     }
