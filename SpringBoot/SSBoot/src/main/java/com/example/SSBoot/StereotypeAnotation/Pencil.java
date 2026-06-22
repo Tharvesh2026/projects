@@ -1,4 +1,4 @@
-package com.example.SSBoot;
+package com.example.SSBoot.StereotypeAnotation;
 
 import org.springframework.stereotype.Component;
 
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 public class Pencil {
     Pencil(){
         System.out.println("Having Pencil");
+
     }
 
     void write(){

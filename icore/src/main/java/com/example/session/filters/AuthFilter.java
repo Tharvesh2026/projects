@@ -190,6 +190,26 @@ public class AuthFilter implements Filter {
         if (path.equals("/auth/roles/status")) {
             return "ROLE_UPDATE";
         }
+
+        if (path.equals("/auth/roles/create")) {
+            return "ROLE_CREATE";
+        }
+
+        if (path.equals("/auth/roles/rename")) {
+            return "ROLE_UPDATE";
+        }
+
+        if (path.equals("/auth/roles/activate")) {
+            return "ROLE_UPDATE";
+        }
+
+        if (path.equals("/auth/roles/deactivate")) {
+            return "ROLE_UPDATE";
+        }
+
+        if (path.equals("/auth/roles/update-permissions")) {
+            return "ROLE_PERMISSION_MANAGE";
+        }
         return null;
     }
 }

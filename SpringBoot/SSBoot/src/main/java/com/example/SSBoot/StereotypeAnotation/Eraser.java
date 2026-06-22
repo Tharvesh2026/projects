@@ -1,4 +1,4 @@
-package com.example.SSBoot;
+package com.example.SSBoot.StereotypeAnotation;
 
 import org.springframework.stereotype.Component;
 

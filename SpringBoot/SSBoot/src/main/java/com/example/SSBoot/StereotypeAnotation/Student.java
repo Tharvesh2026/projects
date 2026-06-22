@@ -1,4 +1,4 @@
-package com.example.SSBoot;
+package com.example.SSBoot.StereotypeAnotation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -13,6 +13,10 @@ public class Student {
     private Pencil pencil;
     @Autowired
     private Pen pen;
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 
     public Student(Eraser eraser) {
         this.eraser = eraser;
