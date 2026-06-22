@@ -23,6 +23,7 @@ com\example\session\api\auth\RegisterServlet.class
 com\example\session\api\page\SettingsServlet.class
 com\example\session\util\JsonUtil.class
 com\example\session\DTO\Req\UpdateRoleRequestDTO.class
+com\example\session\api\page\UpdateRoleStatusServlet.class
 com\example\session\api\auth\LoginServlet.class
 com\example\session\util\RefreshSessionServlet.class
 com\example\session\model\User.class
@@ -37,6 +38,7 @@ com\example\session\api\page\LogServlet.class
 com\example\session\api\UpdateStatusApiServlet.class
 com\example\session\model\Permission.class
 com\example\session\DTO\Req\UpdateStatusRequestDTO.class
+com\example\session\api\page\RenameRoleServlet.class
 com\example\session\api\UsersApiServlet.class
 com\example\session\DTO\Req\CreateRoleRequestDTO.class
 com\example\session\api\LogoutApiServlet.class

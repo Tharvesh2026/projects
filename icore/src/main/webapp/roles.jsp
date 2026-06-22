@@ -20,8 +20,7 @@
     <meta charset="UTF-8">
     <title>Roles Management</title>
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
@@ -39,7 +38,7 @@
         }
 
         .roles-box {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: auto;
             background: linear-gradient(135deg, #062b52, #00508f);
             border-radius: 18px;
@@ -63,25 +62,21 @@
             opacity: .95;
         }
 
-        .role-card {
+        .create-box {
             background: white;
             border-radius: 16px;
             padding: 22px;
+            margin-bottom: 25px;
             box-shadow: 0 10px 20px rgba(0,0,0,.15);
-            height: 100%;
         }
 
-        .role-name {
-            color: #04336b;
-            font-weight: 800;
-            font-size: 20px;
-            margin-bottom: 8px;
-        }
-
-        .role-id {
-            color: #777;
-            font-size: 13px;
-            margin-bottom: 12px;
+        .btn-main {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0079d6, #00518d);
         }
 
         .status-badge {
@@ -104,8 +99,7 @@
 
         .manage-btn {
             display: inline-block;
-            margin-top: 16px;
-            padding: 10px 16px;
+            padding: 8px 12px;
             border-radius: 10px;
             text-decoration: none;
             color: white;
@@ -113,26 +107,30 @@
             background: linear-gradient(135deg, #0079d6, #00518d);
         }
 
-        .manage-btn:hover {
-            color: white;
-            opacity: .95;
-        }
-
-        .create-box {
+        .role-table {
             background: white;
-            border-radius: 16px;
-            padding: 22px;
-            margin-bottom: 25px;
+            border-radius: 12px;
+            overflow: hidden;
             box-shadow: 0 10px 20px rgba(0,0,0,.15);
         }
 
-        .btn-main {
-            border: none;
-            padding: 10px 16px;
-            border-radius: 10px;
-            color: white;
+        .role-table th {
+            color: #04336b;
             font-weight: 700;
-            background: linear-gradient(135deg, #0079d6, #00518d);
+        }
+
+        .role-table td {
+            vertical-align: middle;
+        }
+
+        .role-name {
+            font-weight: 800;
+            color: #04336b;
+        }
+
+        .role-id {
+            color: #777;
+            font-size: 13px;
         }
     </style>
 </head>
@@ -150,12 +148,13 @@
             <p>Create custom roles and manage role based permission groups.</p>
         </div>
 
+        <!-- CREATE ROLE -->
         <div class="create-box">
             <h5>Create Custom Role</h5>
 
             <form action="<%= request.getContextPath() %>/roles"
-      method="post"
-      class="row g-3">
+                  method="post"
+                  class="row g-3">
 
                 <div class="col-md-9">
                     <input type="text"
@@ -166,8 +165,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <button type="submit"
-                            class="btn-main w-100">
+                    <button type="submit" class="btn-main w-100">
                         Create Role
                     </button>
                 </div>
@@ -175,48 +173,120 @@
             </form>
         </div>
 
-        <div class="row g-4">
+        <!-- TABLE -->
+        <div class="table-responsive">
 
-            <%
-                for (Role role : roles) {
+            <table class="table role-table">
 
-                    String statusClass = "status-active";
+                <thead class="table-light">
+                <tr>
+                    <th>Role</th>
+                    <th>Role ID</th>
+                    <th>Status</th>
+                    <th>Manage</th>
+                    <th>Rename</th>
+                    <th>Update Status</th>
+                </tr>
+                </thead>
 
-                    if (!"ACTIVE".equalsIgnoreCase(role.getStatus())) {
-                        statusClass = "status-inactive";
-                    }
-            %>
+                <tbody>
 
-            <div class="col-md-4">
+                <%
+                    for (Role role : roles) {
 
-                <div class="role-card">
+                        String statusClass = "status-active";
 
-                    <div class="role-name">
+                        if (!"ACTIVE".equalsIgnoreCase(role.getStatus())) {
+                            statusClass = "status-inactive";
+                        }
+                %>
+
+                <tr>
+
+                    <td class="role-name">
                         <%= role.getRoleName() %>
-                    </div>
+                    </td>
 
-                    <div class="role-id">
-                        Role ID: #<%= role.getId() %>
-                    </div>
+                    <td class="role-id">
+                        #<%= role.getId() %>
+                    </td>
 
-                    <span class="status-badge <%= statusClass %>">
-                        <%= role.getStatus() %>
-                    </span>
+                    <td>
+                        <span class="status-badge <%= statusClass %>">
+                            <%= role.getStatus() %>
+                        </span>
+                    </td>
 
-                    <br>
+                    <td>
+                        <a class="manage-btn"
+                           href="<%= request.getContextPath() %>/manage-role?id=<%= role.getId() %>">
+                            Manage
+                        </a>
+                    </td>
 
-                    <a href="<%= request.getContextPath() %>/manage-role?id=<%= role.getId() %>"
-                       class="manage-btn">
-                        Manage Permissions
-                    </a>
+                    <!-- RENAME -->
+                    <td>
 
-                </div>
+                        <form action="<%= request.getContextPath() %>/roles/rename"
+                              method="post"
+                              class="d-flex flex-column gap-2">
 
-            </div>
+                            <input type="hidden" name="roleId" value="<%= role.getId() %>">
 
-            <%
-                }
-            %>
+                            <input type="text"
+                                   name="roleName"
+                                   class="form-control"
+                                   value="<%= role.getRoleName() %>"
+                                   required>
+
+                            <button type="submit" class="btn-main">
+                                Rename
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                    <!-- STATUS -->
+                    <td>
+
+                        <form action="<%= request.getContextPath() %>/roles/status"
+                              method="post"
+                              class="d-flex flex-column gap-2">
+
+                            <input type="hidden" name="roleId" value="<%= role.getId() %>">
+
+                            <select name="status" class="form-control">
+
+                                <option value="ACTIVE"
+                                        <%= "ACTIVE".equalsIgnoreCase(role.getStatus()) ? "selected" : "" %>>
+                                    ACTIVE
+                                </option>
+
+                                <option value="INACTIVE"
+                                        <%= "INACTIVE".equalsIgnoreCase(role.getStatus()) ? "selected" : "" %>>
+                                    INACTIVE
+                                </option>
+
+                            </select>
+
+                            <button type="submit" class="btn-main">
+                                Update
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                <%
+                    }
+                %>
+
+                </tbody>
+
+            </table>
 
         </div>
 
