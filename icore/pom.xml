@@ -58,6 +58,11 @@
     <version>2.25.4</version>
     <scope>compile</scope>
 </dependency>
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-layout-template-json</artifactId>
+    <version>2.24.3</version>
+</dependency>
     <!-- JSP API for view pages -->
     <dependency>
       <groupId>jakarta.servlet.jsp</groupId>
@@ -121,6 +126,7 @@
         <id>dev</id>
 
         <properties>
+        <app.env>dev</app.env>
             <db.url>jdbc:mysql://localhost:3306/authentication</db.url>
             <db.user>root</db.user>
             <db.password>root</db.password>
@@ -132,6 +138,7 @@
         <id>prod</id>
 
         <properties>
+        <app.env>prod</app.env>
             <db.url>
                 jdbc:mysql://127.0.0.1:3306/authentication?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC
             </db.url>

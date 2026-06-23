@@ -1,130 +1,121 @@
 <%@ page isELIgnored="false" %>
-    <%@ page import="com.example.session.model.User" %>
-        <%@ page import="com.example.session.util.PermissionValidator" %>
+<%@ page import="com.example.session.model.User" %>
+<%@ page import="com.example.session.util.PermissionValidator" %>
 
-            <% User navUser=(User) session.getAttribute("user"); 
-            boolean canViewUsers=false; 
-            boolean canViewLogs=false; 
-            boolean canManageRoles=false; 
-            if (navUser !=null) {
-                canViewUsers=PermissionValidator.hasPermission(navUser.getId(), "USER_READ" );
-                canViewLogs=PermissionValidator.hasPermission(navUser.getId(), "LOG_VIEW" );
-                canManageRoles=PermissionValidator.hasPermission(navUser.getId(), "ROLE_UPDATE" ); } %>
+<%
+    User navUser = (User) session.getAttribute("user");
+    boolean canViewUsers  = false;
+    boolean canViewLogs   = false;
+    boolean canManageRoles = false;
 
-                <style>
-                    .app-navbar {
-                        background: linear-gradient(135deg, #0399f5, #00508f);
-                        padding: 14px 0;
-                        box-shadow: 0 8px 20px rgba(0, 80, 143, 0.25);
-                        position: sticky;
-                        top: 0;
-                        z-index: 1000;
-                    }
+    if (navUser != null) {
+        canViewUsers   = PermissionValidator.hasPermission(navUser.getId(), "USER_READ");
+        canViewLogs    = PermissionValidator.hasPermission(navUser.getId(), "LOG_VIEW");
+        canManageRoles = PermissionValidator.hasPermission(navUser.getId(), "ROLE_UPDATE");
+    }
 
-                    .app-navbar .navbar-brand {
-                        color: white;
-                        font-weight: 800;
-                        letter-spacing: 0.5px;
-                        font-size: 22px;
-                    }
+    String currentPath = request.getServletPath();
+%>
 
-                    .app-navbar .nav-actions {
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-                    }
+<%-- Determine initials for avatar --%>
+<%
+    String navName = (navUser != null && navUser.getName() != null) ? navUser.getName() : "User";
+    String[] navParts = navName.trim().split("\\s+");
+    String navInitials = navParts.length >= 2
+        ? String.valueOf(navParts[0].charAt(0)) + String.valueOf(navParts[1].charAt(0))
+        : String.valueOf(navParts[0].charAt(0));
+    navInitials = navInitials.toUpperCase();
+%>
 
-                    .app-navbar .nav-link-btn {
-                        color: white;
-                        text-decoration: none;
-                        padding: 8px 18px;
-                        border-radius: 50px;
-                        border: 1px solid rgba(255, 255, 255, 0.35);
-                        background: rgba(255, 255, 255, 0.12);
-                        transition: 0.3s ease;
-                        font-weight: 600;
-                        font-size: 14px;
-                    }
+<aside class="ic-sidebar">
 
-                    .app-navbar .nav-link-btn:hover {
-                        background: white;
-                        color: #00508f;
-                        transform: translateY(-1px);
-                    }
+    <%-- Logo --%>
+    <div class="ic-sidebar-logo">
+        <div class="ic-logo-mark">
+            <i class="ti ti-cloud"></i>
+        </div>
+        <div>
+            <div class="ic-logo-text">i.Core</div>
+            <div class="ic-logo-ver">v1.2.0-STABLE</div>
+        </div>
+    </div>
 
-                    .app-navbar .logout-btn {
-                        border: none;
-                        padding: 8px 18px;
-                        border-radius: 50px;
-                        background: #ffffff;
-                        color: #00508f;
-                        font-weight: 700;
-                        font-size: 14px;
-                        transition: 0.3s ease;
-                    }
+    <%-- User pill --%>
+    <div style="padding: 12px 10px;">
+        <div style="display:flex; align-items:center; gap:9px; padding: 8px 10px;
+                    background: var(--surface-2); border-radius: var(--radius-sm);">
+            <div class="ic-avatar av-purple" style="font-size:12px;">
+                <%= navInitials %>
+            </div>
+            <div style="overflow:hidden;">
+                <div style="font-size:13px; font-weight:500; color:var(--text-1);
+                            white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                    <%= navUser != null ? navUser.getName() : "Guest" %>
+                </div>
+                <div style="font-size:11px; color:var(--text-3);">
+                    <%= navUser != null ? navUser.getRole() : "" %>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    .app-navbar .logout-btn:hover {
-                        background: #eaf7ff;
-                        color: #003b68;
-                        transform: translateY(-1px);
-                    }
+    <%-- Main nav --%>
+    <div class="ic-nav-section">Main</div>
 
-                    @media(max-width: 576px) {
-                        .app-navbar .container {
-                            flex-direction: column;
-                            gap: 12px;
-                        }
+    <a href="<%= request.getContextPath() %>/welcome"
+       class="ic-nav-item <%= currentPath != null && currentPath.contains("welcome") ? "active" : "" %>">
+        <i class="ti ti-layout-dashboard"></i> Dashboard
+    </a>
 
-                        .app-navbar .nav-actions {
-                            flex-wrap: wrap;
-                            justify-content: center;
-                        }
-                    }
-                </style>
+        <a href="<%= request.getContextPath() %>/profile"
+       class="ic-nav-item <%= currentPath != null && currentPath.contains("welcome") ? "active" : "" %>">
+        <i class="ti ti-layout-dashboard"></i> profile
+    </a>
 
-                <nav class="app-navbar">
-                    <div class="container d-flex justify-content-between align-items-center">
+    <% if (canViewUsers) { %>
+    <a href="<%= request.getContextPath() %>/users"
+       class="ic-nav-item <%= currentPath != null && currentPath.contains("users") ? "active" : "" %>">
+        <i class="ti ti-users"></i> Users
+    </a>
+    <% } %>
 
-                        <a class="navbar-brand text-decoration-none" href="welcome">
-                            Session App
-                        </a>
+    <% if (canManageRoles) { %>
+    <a href="<%= request.getContextPath() %>/roles"
+       class="ic-nav-item <%= currentPath != null && currentPath.contains("roles") ? "active" : "" %>">
+        <i class="ti ti-shield-lock"></i> Roles
+    </a>
+    <% } %>
 
-                        <div class="nav-actions">
+    <%-- System nav --%>
+    <div class="ic-nav-section">System</div>
 
-                            <a href="welcome" class="nav-link-btn">
-                                Home
-                            </a>
+    <% if (canViewLogs) { %>
+    <a href="<%= request.getContextPath() %>/logs"
+       class="ic-nav-item <%= currentPath != null && currentPath.contains("logs") ? "active" : "" %>">
+        <i class="ti ti-file-description"></i> Audit Logs
+    </a>
+    <% } %>
 
-                            <a href="settings" class="nav-link-btn">
-                                Settings
-                            </a>
-                            <% if (canViewUsers) { %>
-                                <a href="<%= request.getContextPath() %>/users" class="nav-link-btn">Users</a>
-                                <% } %>
+    <a href="<%= request.getContextPath() %>/settings"
+       class="ic-nav-item <%= currentPath != null && currentPath.contains("settings") ? "active" : "" %>">
+        <i class="ti ti-settings"></i> Settings
+    </a>
 
-                                    <% if (canViewLogs) { %>
-                                        <a href="<%= request.getContextPath() %>/logs" class="nav-link-btn">Logs</a>
-                                        <% } %>
+    <%-- Footer --%>
+    <div class="ic-sidebar-footer">
+        <form action="<%= request.getContextPath() %>/logout" method="post" style="margin:0;">
+            <button type="submit" class="ic-nav-item danger"
+                    style="width:100%; border:none; background:none; cursor:pointer; text-align:left;"
+                    onclick="return confirm('Sign out of i.Core?')">
+                <i class="ti ti-logout"></i> Sign out
+            </button>
+        </form>
+    </div>
 
-                                            <% if (canManageRoles) { %>
-                                                <a href="<%= request.getContextPath() %>/roles"
-                                                    class="nav-link-btn">Roles</a>
-                                                <% } %>
+</aside>
 
-                                                    <form action="logout" method="post" style="margin:0;">
-                                                        <button type="submit" class="logout-btn"
-                                                            onclick="return confirmLogout();">
-                                                            Logout
-                                                        </button>
-                                                    </form>
-
-                        </div>
-
-                    </div>
-                </nav>
-
-                <script>
-                    function confirmLogout() {
-                        return confirm("Are you sure you want to logout?");
-                    }
-                </script>
+<script>
+function confirmLogout() {
+    return confirm("Sign out of i.Core?");
+}
+</script>

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import com.example.session.exceptions.DatabaseException;
 import com.example.session.model.User;
 import com.example.session.util.PermissionValidator;
+import com.example.session.util.RequestUtil;
 
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.*;
@@ -32,12 +33,18 @@ public class AuthFilter implements Filter {
 
         HttpSession session = req.getSession(false);
 
+        String ip = RequestUtil.getClientIp(req);
+        String browser = RequestUtil.getBrowser(req);
+        String os = RequestUtil.getOS(req);
+
         if (session == null || session.getAttribute("user") == null) {
             logger.warn(
-                    "AUTH_REQUIRED | method={} | endpoint={} | ip={}",
+                    "AUTH_REQUIRED | method={} | endpoint={} | ip={} | browser={} | os={}",
                     req.getMethod(),
                     path,
-                    req.getRemoteAddr());
+                    ip,
+                    browser,
+                    os);
             res.sendRedirect(req.getContextPath() + "/index.jsp?error=loginRequired");
             return;
         }
@@ -56,13 +63,15 @@ public class AuthFilter implements Filter {
                 if (!allowed) {
 
                     logger.warn(
-                            "ACCESS_DENIED | method={} | endpoint={} | user={} | userId={} | permission={} | ip={}",
+                            "ACCESS_DENIED | method={} | endpoint={} | user={} | userId={} | permission={} | ip={} | browser={} | os={}",
                             req.getMethod(),
                             path,
                             user.getUsername(),
                             user.getId(),
                             requiredPermission,
-                            req.getRemoteAddr());
+                            ip,
+                            browser,
+                            os);
 
                     res.sendError(
                             HttpServletResponse.SC_FORBIDDEN,
@@ -71,23 +80,28 @@ public class AuthFilter implements Filter {
                 }
 
                 logger.info(
-                        "ACCESS_ALLOWED | method={} | endpoint={} | user={} | userId={} | permission={} | ip={}",
+                        "ACCESS_ALLOWED | method={} | endpoint={} | user={} | userId={} | permission={} | ip={} | browser={} | os={}",
                         req.getMethod(),
                         path,
                         user.getUsername(),
                         user.getId(),
                         requiredPermission,
-                        req.getRemoteAddr());
+                        ip,
+                        browser,
+                        os);
 
             } catch (DatabaseException e) {
 
                 logger.error(
-                        "PERMISSION_VALIDATION_FAILED | method={} | endpoint={} | user={} | userId={} | permission={} | message={}",
+                        "PERMISSION_VALIDATION_FAILED | method={} | endpoint={} | user={} | userId={} | permission={} | ip={} | browser={} | os={} | message={}",
                         req.getMethod(),
                         path,
                         user.getUsername(),
                         user.getId(),
                         requiredPermission,
+                        ip,
+                        browser,
+                        os,
                         e.getMessage());
 
                 res.sendError(
@@ -210,6 +224,13 @@ public class AuthFilter implements Filter {
         if (path.equals("/auth/roles/update-permissions")) {
             return "ROLE_PERMISSION_MANAGE";
         }
+
+        if (path.equals("/profile") ||
+                path.equals("/profile.jsp")) {
+            return "PROFILE_READ";
+        }
+        
+        
         return null;
     }
 }

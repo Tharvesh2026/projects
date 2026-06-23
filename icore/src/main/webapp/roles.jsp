@@ -1,297 +1,198 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
-
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.session.model.Role" %>
-
 <%
-    List<Role> roles =
-            (List<Role>) request.getAttribute("roles");
-
+    List<Role> roles = (List<Role>) request.getAttribute("roles");
     if (roles == null) {
         response.sendRedirect(request.getContextPath() + "/roles");
         return;
     }
 %>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Roles Management</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-
-    <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: #eef3f8;
-            font-family: Arial, sans-serif;
-        }
-
-        .page-wrapper {
-            padding: 35px 15px;
-        }
-
-        .roles-box {
-            max-width: 1200px;
-            margin: auto;
-            background: linear-gradient(135deg, #062b52, #00508f);
-            border-radius: 18px;
-            padding: 40px;
-            box-shadow: 0 18px 35px rgba(0,0,0,0.25);
-        }
-
-        .roles-header {
-            color: white;
-            margin-bottom: 25px;
-        }
-
-        .roles-header h1 {
-            font-size: 36px;
-            font-weight: 800;
-            margin-bottom: 6px;
-        }
-
-        .roles-header p {
-            margin: 0;
-            opacity: .95;
-        }
-
-        .create-box {
-            background: white;
-            border-radius: 16px;
-            padding: 22px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 20px rgba(0,0,0,.15);
-        }
-
-        .btn-main {
-            border: none;
-            padding: 10px 16px;
-            border-radius: 10px;
-            color: white;
-            font-weight: 700;
-            background: linear-gradient(135deg, #0079d6, #00518d);
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .status-active {
-            background: #e8fff0;
-            color: #0b7a34;
-        }
-
-        .status-inactive {
-            background: #ffeaea;
-            color: #a10000;
-        }
-
-        .manage-btn {
-            display: inline-block;
-            padding: 8px 12px;
-            border-radius: 10px;
-            text-decoration: none;
-            color: white;
-            font-weight: 700;
-            background: linear-gradient(135deg, #0079d6, #00518d);
-        }
-
-        .role-table {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,.15);
-        }
-
-        .role-table th {
-            color: #04336b;
-            font-weight: 700;
-        }
-
-        .role-table td {
-            vertical-align: middle;
-        }
-
-        .role-name {
-            font-weight: 800;
-            color: #04336b;
-        }
-
-        .role-id {
-            color: #777;
-            font-size: 13px;
-        }
-    </style>
+    <title>i.Core — Roles</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+    <link rel="stylesheet" href="assets/icore.css">
 </head>
-
 <body>
 
-<%@ include file="navbar.jsp" %>
+<div class="ic-shell">
 
-<div class="page-wrapper">
+    <%@ include file="navbar.jsp" %>
 
-    <div class="roles-box">
+    <main class="ic-main">
 
-        <div class="roles-header">
-            <h1>Roles Management</h1>
-            <p>Create custom roles and manage role based permission groups.</p>
+        <div class="ic-topbar">
+            <div class="ic-breadcrumb">
+                <span>i.Core</span>
+                <span class="ic-breadcrumb-sep">/</span>
+                <span>Roles</span>
+            </div>
         </div>
 
-        <!-- CREATE ROLE -->
-        <div class="create-box">
-            <h5>Create Custom Role</h5>
+        <div class="ic-content">
 
-            <form action="<%= request.getContextPath() %>/roles"
-                  method="post"
-                  class="row g-3">
-
-                <div class="col-md-9">
-                    <input type="text"
-                           name="roleName"
-                           class="form-control"
-                           placeholder="Example: SUPPORT_ENGINEER"
-                           required>
+            <div class="ic-page-header">
+                <div>
+                    <div class="ic-page-title">Role management</div>
+                    <div class="ic-page-sub">
+                        Create custom roles and manage permission groups.
+                    </div>
                 </div>
+            </div>
 
-                <div class="col-md-3">
-                    <button type="submit" class="btn-main w-100">
-                        Create Role
-                    </button>
+            <%-- Create new role --%>
+            <div class="ic-card ic-card-padded" style="margin-bottom: 20px;">
+                <div style="font-size:14px; font-weight:500; color:var(--text-1); margin-bottom:14px;
+                            display:flex; align-items:center; gap:7px;">
+                    <i class="ti ti-plus-circle" style="font-size:18px; color:var(--brand);"></i>
+                    Create a new role
                 </div>
-
-            </form>
-        </div>
-
-        <!-- TABLE -->
-        <div class="table-responsive">
-
-            <table class="table role-table">
-
-                <thead class="table-light">
-                <tr>
-                    <th>Role</th>
-                    <th>Role ID</th>
-                    <th>Status</th>
-                    <th>Manage</th>
-                    <th>Rename</th>
-                    <th>Update Status</th>
-                </tr>
-                </thead>
-
-                <tbody>
-
-                <%
-                    for (Role role : roles) {
-
-                        String statusClass = "status-active";
-
-                        if (!"ACTIVE".equalsIgnoreCase(role.getStatus())) {
-                            statusClass = "status-inactive";
-                        }
-                %>
-
-                <tr>
-
-                    <td class="role-name">
-                        <%= role.getRoleName() %>
-                    </td>
-
-                    <td class="role-id">
-                        #<%= role.getId() %>
-                    </td>
-
-                    <td>
-                        <span class="status-badge <%= statusClass %>">
-                            <%= role.getStatus() %>
-                        </span>
-                    </td>
-
-                    <td>
-                        <a class="manage-btn"
-                           href="<%= request.getContextPath() %>/manage-role?id=<%= role.getId() %>">
-                            Manage
-                        </a>
-                    </td>
-
-                    <!-- RENAME -->
-                    <td>
-
-                        <form action="<%= request.getContextPath() %>/roles/rename"
-                              method="post"
-                              class="d-flex flex-column gap-2">
-
-                            <input type="hidden" name="roleId" value="<%= role.getId() %>">
-
-                            <input type="text"
-                                   name="roleName"
-                                   class="form-control"
-                                   value="<%= role.getRoleName() %>"
-                                   required>
-
-                            <button type="submit" class="btn-main">
-                                Rename
+                <form action="<%= request.getContextPath() %>/roles" method="post">
+                    <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
+                        <div style="flex:1; min-width:220px;">
+                            <label class="ic-label">Role name</label>
+                            <div class="ic-input-icon">
+                                <i class="ti ti-shield"></i>
+                                <input type="text" class="ic-input" name="roleName"
+                                       placeholder="e.g. SUPPORT_ENGINEER" required
+                                       style="text-transform:uppercase;"
+                                       oninput="this.value=this.value.toUpperCase().replace(/\s/g,'_')">
+                            </div>
+                        </div>
+                        <div>
+                            <button type="submit" class="ic-btn ic-btn-primary"
+                                    style="padding: 8px 18px; height:38px;">
+                                <i class="ti ti-plus"></i> Create role
                             </button>
+                        </div>
+                    </div>
+                    <div style="font-size:12px; color:var(--text-3); margin-top:6px;">
+                        New roles are assigned <code style="background:var(--surface-2);padding:1px 5px;border-radius:4px;">PROFILE_READ</code>
+                        permission by default.
+                    </div>
+                </form>
+            </div>
 
-                        </form>
+            <%-- Roles table --%>
+            <div class="ic-table-wrap">
+                <div style="overflow-x:auto;">
+                    <table class="ic-table">
+                        <thead>
+                            <tr>
+                                <th>Role</th>
+                                <th>ID</th>
+                                <th>Status</th>
+                                <th>Permissions</th>
+                                <th>Rename</th>
+                                <th>Update status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <%
+                            for (Role role : roles) {
+                                boolean isActive = "ACTIVE".equalsIgnoreCase(role.getStatus());
+                                String roleUpper = role.getRoleName() != null ? role.getRoleName().toUpperCase() : "";
+                                String roleClass = "tag-generic";
+                                if (roleUpper.contains("ADMIN"))   roleClass = "tag-admin";
+                                else if (roleUpper.contains("AUDIT"))   roleClass = "tag-auditor";
+                                else if (roleUpper.contains("MANAGER")) roleClass = "tag-manager";
+                                else if (roleUpper.contains("USER"))    roleClass = "tag-user";
+                        %>
+                        <tr>
+                            <td>
+                                <div style="display:flex; align-items:center; gap:9px;">
+                                    <div style="width:30px; height:30px; border-radius:8px;
+                                                background:var(--brand-light);
+                                                display:flex; align-items:center; justify-content:center;">
+                                        <i class="ti ti-shield-lock" style="font-size:15px; color:var(--brand);"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight:600; color:var(--text-1); font-size:13.5px;
+                                                    font-family:var(--mono);">
+                                            <%= role.getRoleName() %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span style="font-family:var(--mono); font-size:12px; color:var(--text-3);">
+                                    #<%= role.getId() %>
+                                </span>
+                            </td>
+                            <td>
+                                <span class="ic-tag <%= isActive ? "tag-active" : "tag-inactive" %>">
+                                    <i class="ti <%= isActive ? "ti-circle-check" : "ti-circle-x" %>"
+                                       style="font-size:13px;"></i>
+                                    <%= role.getStatus() %>
+                                </span>
+                            </td>
+                            <td>
+                                <a href="<%= request.getContextPath() %>/manage-role?id=<%= role.getId() %>"
+                                   class="ic-btn ic-btn-sm">
+                                    <i class="ti ti-adjustments" style="font-size:14px;"></i> Manage
+                                </a>
+                            </td>
 
-                    </td>
+                            <%-- Rename form --%>
+                            <td>
+                                <form action="<%= request.getContextPath() %>/roles/rename"
+                                      method="post"
+                                      style="display:flex; gap:6px; align-items:center;">
+                                    <input type="hidden" name="roleId" value="<%= role.getId() %>">
+                                    <input type="text" class="ic-input" name="roleName"
+                                           value="<%= role.getRoleName() %>"
+                                           style="width:150px; font-family:var(--mono); font-size:12px;"
+                                           oninput="this.value=this.value.toUpperCase().replace(/\s/g,'_')"
+                                           required>
+                                    <button type="submit" class="ic-btn ic-btn-sm">
+                                        <i class="ti ti-pencil" style="font-size:13px;"></i>
+                                    </button>
+                                </form>
+                            </td>
 
-                    <!-- STATUS -->
-                    <td>
+                            <%-- Status form --%>
+                            <td>
+                                <form action="<%= request.getContextPath() %>/roles/status"
+                                      method="post"
+                                      style="display:flex; gap:6px; align-items:center;">
+                                    <input type="hidden" name="roleId" value="<%= role.getId() %>">
+                                    <select name="status" class="ic-input ic-select"
+                                            style="width:130px; font-size:12px;">
+                                        <option value="ACTIVE"
+                                                <%= "ACTIVE".equalsIgnoreCase(role.getStatus()) ? "selected" : "" %>>
+                                            ACTIVE
+                                        </option>
+                                        <option value="INACTIVE"
+                                                <%= "INACTIVE".equalsIgnoreCase(role.getStatus()) ? "selected" : "" %>>
+                                            INACTIVE
+                                        </option>
+                                    </select>
+                                    <button type="submit" class="ic-btn ic-btn-sm">
+                                        <i class="ti ti-check" style="font-size:13px;"></i>
+                                    </button>
+                                </form>
+                            </td>
 
-                        <form action="<%= request.getContextPath() %>/roles/status"
-                              method="post"
-                              class="d-flex flex-column gap-2">
+                        </tr>
+                        <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-                            <input type="hidden" name="roleId" value="<%= role.getId() %>">
-
-                            <select name="status" class="form-control">
-
-                                <option value="ACTIVE"
-                                        <%= "ACTIVE".equalsIgnoreCase(role.getStatus()) ? "selected" : "" %>>
-                                    ACTIVE
-                                </option>
-
-                                <option value="INACTIVE"
-                                        <%= "INACTIVE".equalsIgnoreCase(role.getStatus()) ? "selected" : "" %>>
-                                    INACTIVE
-                                </option>
-
-                            </select>
-
-                            <button type="submit" class="btn-main">
-                                Update
-                            </button>
-
-                        </form>
-
-                    </td>
-
-                </tr>
-
-                <%
-                    }
-                %>
-
-                </tbody>
-
-            </table>
+            <div style="margin-top:12px; font-size:12px; color:var(--text-3);">
+                <%= roles.size() %> role<%= roles.size() != 1 ? "s" : "" %> configured
+            </div>
 
         </div>
-
-    </div>
-
+    </main>
 </div>
 
 </body>

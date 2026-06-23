@@ -9,7 +9,6 @@ import com.example.session.DTO.Res.ApiResponseDTO;
 import com.example.session.DTO.Res.ErrorResponseDTO;
 import com.example.session.exceptions.DatabaseException;
 import com.example.session.exceptions.ResourceNotFoundException;
-import com.example.session.exceptions.ValidationException;
 import com.example.session.model.User;
 import com.example.session.model.Role;
 import com.example.session.util.JsonUtil;

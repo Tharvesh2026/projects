@@ -101,7 +101,7 @@ public class LoginServlet extends HttpServlet {
             logger.info("Timeout : {}", session.getMaxInactiveInterval());
             logger.info("Is New : {}", session.isNew());
             logger.info("Session User : {}", session.getAttribute("user"));
-            System.out.println("\n\n\n");
+            logger.info("=============================");
 
             res.sendRedirect("welcome");
 

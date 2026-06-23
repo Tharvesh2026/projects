@@ -2,211 +2,206 @@
 <%@ page isELIgnored="false" %>
 
 <%
-    Integer statusCode =
-            (Integer) request.getAttribute("jakarta.servlet.error.status_code");
+    Integer statusCode = (Integer) request.getAttribute("jakarta.servlet.error.status_code");
 
-    String errorTitle = "Something went wrong";
-    String errorMessage = "The application could not process your request. Please try again later.";
+    String errorTitle   = "Something went wrong";
+    String errorMessage = "The application could not process your request. Please try again.";
+    String errorIcon    = "ti-alert-circle";
+    String errorColor   = "#4F46E5";
+    String errorBg      = "#EEF2FF";
+    String errorBorder  = "#C7D2FE";
 
     if (statusCode != null) {
         if (statusCode == 404) {
-            errorTitle = "Page Not Found";
-            errorMessage = "The page you are looking for does not exist.";
+            errorTitle   = "Page not found";
+            errorMessage = "The page you're looking for doesn't exist or may have been moved.";
+            errorIcon    = "ti-map-pin-off";
+            errorColor   = "#B45309";
+            errorBg      = "#FEF3C7";
+            errorBorder  = "#FDE68A";
         } else if (statusCode == 403) {
-            errorTitle = "Access Denied";
-            errorMessage = "You do not have permission to access this page.";
+            errorTitle   = "Access denied";
+            errorMessage = "You don't have permission to access this page. Contact your administrator if you believe this is a mistake.";
+            errorIcon    = "ti-shield-x";
+            errorColor   = "#DC2626";
+            errorBg      = "#FEE2E2";
+            errorBorder  = "#FECACA";
         } else if (statusCode == 500) {
-            errorTitle = "Server Error";
-            errorMessage = "Something went wrong on the server side.";
+            errorTitle   = "Server error";
+            errorMessage = "Something went wrong on the server. Our team has been notified. Please try again later.";
+            errorIcon    = "ti-server-off";
+            errorColor   = "#DC2626";
+            errorBg      = "#FEE2E2";
+            errorBorder  = "#FECACA";
         }
     }
+
+    String codeText = statusCode != null ? String.valueOf(statusCode) : "ERR";
 %>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><%= errorTitle %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>i.Core — <%= errorTitle %></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+    <link rel="stylesheet" href="assets/icore.css">
 
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
         body {
-            margin: 0;
-            min-height: 100vh;
-            background: #f4f4f4;
-        }
-
-        .page-wrapper {
+            background: var(--bg);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 40px 15px;
+            padding: 24px;
         }
 
-        .error-box {
-            width: 900px;
-            min-height: 520px;
-            background: linear-gradient(135deg, #0399f5, #00508f);
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 55px;
-            box-shadow: 0 18px 35px rgba(0,0,0,0.25);
-            position: relative;
-            overflow: hidden;
+        .error-shell {
+            width: 100%;
+            max-width: 520px;
         }
 
-        .error-box::before {
-            content: "";
-            position: absolute;
-            width: 420px;
-            height: 420px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 50%;
-            left: -120px;
-            top: -70px;
-        }
-
-        .error-box::after {
-            content: "";
-            position: absolute;
-            width: 360px;
-            height: 360px;
-            background: rgba(0,180,255,0.35);
-            border-radius: 50%;
-            left: -40px;
-            bottom: -170px;
-        }
-
-        .error-info {
-            color: white;
-            width: 42%;
-            z-index: 1;
-        }
-
-        .error-info h1 {
-            font-size: 54px;
-            font-weight: 900;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-        }
-
-        .error-info p {
-            font-size: 15px;
-            line-height: 1.8;
-            opacity: 0.95;
-        }
-
-        .error-card {
-            width: 430px;
-            background: white;
-            border-radius: 18px;
-            padding: 35px;
-            z-index: 1;
-            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
-        }
-
-        .error-card h3 {
-            color: #04336b;
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-
-        .error-card small {
-            color: #777;
-            display: block;
-            margin-bottom: 25px;
-        }
-
-        .detail-item {
-            border: 1px solid #e5e5e5;
-            border-radius: 10px;
-            padding: 12px 14px;
-            margin-bottom: 12px;
-            font-size: 14px;
-            background: #fafafa;
-        }
-
-        .detail-item strong {
-            color: #04336b;
-        }
-
-        .error-button {
-            display: block;
-            margin-top: 18px;
-            padding: 14px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #0079d6, #00518d);
-            color: white;
+        /* Big code display */
+        .error-code {
+            font-size: 96px;
+            font-weight: 600;
+            font-family: var(--mono);
+            color: var(--border);
+            line-height: 1;
             text-align: center;
-            font-weight: 700;
-            text-decoration: none;
+            letter-spacing: -4px;
+            margin-bottom: 0;
+            user-select: none;
         }
 
-        .error-button:hover {
-            color: white;
-            opacity: 0.95;
+        .error-icon-wrap {
+            width: 72px; height: 72px;
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px;
         }
 
-        @media(max-width: 768px) {
-            .error-box {
-                width: 92%;
-                flex-direction: column;
-                padding: 35px 22px;
-                gap: 30px;
-            }
-
-            .error-info,
-            .error-card {
-                width: 100%;
-            }
+        .error-icon-wrap i {
+            font-size: 36px;
         }
+
+        .log-line {
+            font-family: var(--mono);
+            font-size: 11.5px;
+            color: var(--text-3);
+            padding: 4px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .log-line:last-child { border-bottom: none; }
+
+        .log-key   { color: var(--text-2); }
+        .log-val   { color: var(--text-1); }
     </style>
 </head>
-
 <body>
 
-<div class="page-wrapper">
+<div class="error-shell">
 
-    <div class="error-box">
+    <%-- Code --%>
+    <div class="error-code"><%= codeText %></div>
 
-        <div class="error-info">
-            <h1>ERROR</h1>
-            <p>
-                The request could not be completed.
-                Please review the details and return to the login page.
-            </p>
+    <%-- Icon + title --%>
+    <div class="ic-card ic-card-padded" style="text-align:center; margin-top:-10px;">
+
+        <div class="error-icon-wrap"
+             style="background:<%= errorBg %>; border:1px solid <%= errorBorder %>;">
+            <i class="ti <%= errorIcon %>" style="color:<%= errorColor %>;"></i>
         </div>
 
-        <div class="error-card">
-            <h3><%= errorTitle %></h3>
-            <small>Application error details</small>
+        <div style="font-size:20px; font-weight:600; color:var(--text-1); margin-bottom:8px;">
+            <%= errorTitle %>
+        </div>
 
-            <div class="detail-item">
-                <strong>Status Code:</strong>
-                <%= statusCode != null ? statusCode : "Unknown" %>
+        <div style="font-size:14px; color:var(--text-3); line-height:1.7; margin-bottom:22px;">
+            <%= errorMessage %>
+        </div>
+
+        <%-- Log-style detail block --%>
+        <div class="ic-card" style="text-align:left; padding:12px 16px; margin-bottom:20px;
+                                    background:var(--surface-2);">
+            <div class="log-line">
+                <span class="log-key">status_code    </span>
+                <span class="log-val"><%= codeText %></span>
             </div>
-
-            <div class="detail-item">
-                <strong>Message:</strong>
-                <%= errorMessage %>
+            <div class="log-line">
+                <span class="log-key">request_uri    </span>
+                <span class="log-val">
+                    <%
+                        String reqUri = (String) request.getAttribute("jakarta.servlet.error.request_uri");
+                        if (reqUri == null) reqUri = request.getRequestURI();
+                    %>
+                    <%= reqUri %>
+                </span>
             </div>
+            <div class="log-line">
+                <span class="log-key">timestamp      </span>
+                <span class="log-val" id="errTimestamp">—</span>
+            </div>
+            <div class="log-line">
+                <span class="log-key">session        </span>
+                <span class="log-val">
+                    <%
+                        jakarta.servlet.http.HttpSession errSession = request.getSession(false);
+                        if (errSession != null) {
+                    %>
+                    <%= errSession.getId().substring(0, Math.min(16, errSession.getId().length())) %>…
+                    <% } else { %>
+                    none
+                    <% } %>
+                </span>
+            </div>
+        </div>
 
-            <a href="<%= request.getContextPath() %>/welcome" class="error-button">
-                Back
+        <%-- Actions --%>
+        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+
+            <a href="javascript:history.back()" class="ic-btn" style="min-width:120px; justify-content:center;">
+                <i class="ti ti-arrow-left"></i> Go back
             </a>
+
+            <% if (errSession != null) { %>
+            <a href="<%= request.getContextPath() %>/welcome"
+               class="ic-btn ic-btn-primary" style="min-width:140px; justify-content:center;">
+                <i class="ti ti-layout-dashboard"></i> Dashboard
+            </a>
+            <% } else { %>
+            <a href="<%= request.getContextPath() %>/index.jsp"
+               class="ic-btn ic-btn-primary" style="min-width:140px; justify-content:center;">
+                <i class="ti ti-login"></i> Sign in
+            </a>
+            <% } %>
+
+        </div>
+
+        <%-- Brand footer --%>
+        <div style="margin-top:20px; padding-top:14px; border-top:1px solid var(--border);
+                    font-size:12px; color:var(--text-3); display:flex; align-items:center;
+                    justify-content:center; gap:6px;">
+            <div style="width:20px; height:20px; background:var(--brand); border-radius:5px;
+                        display:flex; align-items:center; justify-content:center;">
+                <i class="ti ti-cloud" style="color:#fff; font-size:12px;"></i>
+            </div>
+            i.Core &nbsp;&bull;&nbsp; Identity & Access Management
         </div>
 
     </div>
 
 </div>
+
+<script>
+    document.getElementById('errTimestamp').textContent =
+        new Date().toLocaleString('en-IN');
+</script>
 
 </body>
 </html>

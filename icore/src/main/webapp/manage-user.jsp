@@ -4,7 +4,6 @@
 <%@ page import="com.example.session.model.Role" %>
 <%@ page import="java.util.*" %>
 
-
 <%
     User selectedUser = (User) request.getAttribute("selectedUser");
 
@@ -12,330 +11,302 @@
         response.sendRedirect(request.getContextPath() + "/users");
         return;
     }
+
+    List<Role> roles = (List<Role>) request.getAttribute("roles");
+
+    String[] parts = selectedUser.getName() != null
+        ? selectedUser.getName().trim().split("\\s+") : new String[]{"U"};
+    String initials = parts.length >= 2
+        ? String.valueOf(parts[0].charAt(0)) + String.valueOf(parts[1].charAt(0))
+        : (parts[0].length() > 0 ? String.valueOf(parts[0].charAt(0)) : "U");
+
+    String statusTagClass = "ACTIVE".equalsIgnoreCase(selectedUser.getStatus())   ? "tag-active"
+                          : "LOCKED".equalsIgnoreCase(selectedUser.getStatus())   ? "tag-locked"
+                          : "tag-inactive";
 %>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Manage User</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: #f4f4f4;
-        }
-
-        .page-wrapper {
-            min-height: calc(100vh - 70px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 15px;
-        }
-
-        .main-box {
-            width: 1000px;
-            min-height: 560px;
-            background: linear-gradient(135deg, #0399f5, #00508f);
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 55px;
-            box-shadow: 0 18px 35px rgba(0,0,0,0.25);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .main-box::before {
-            content: "";
-            position: absolute;
-            width: 420px;
-            height: 420px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 50%;
-            left: -120px;
-            top: -70px;
-        }
-
-        .main-box::after {
-            content: "";
-            position: absolute;
-            width: 360px;
-            height: 360px;
-            background: rgba(0,180,255,0.35);
-            border-radius: 50%;
-            left: -40px;
-            bottom: -170px;
-        }
-
-        .welcome {
-            color: white;
-            width: 38%;
-            z-index: 1;
-        }
-
-        .welcome h1 {
-            font-size: 42px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            margin-bottom: 12px;
-        }
-
-        .welcome h4 {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .welcome p {
-            font-size: 13px;
-            line-height: 1.8;
-            max-width: 350px;
-        }
-
-        .form-card {
-            width: 520px;
-            background: white;
-            border-radius: 18px;
-            padding: 35px;
-            z-index: 1;
-            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
-        }
-
-        .form-card h3 {
-            color: #04336b;
-            font-size: 30px;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-
-        .form-card small {
-            color: #777;
-            display: block;
-            margin-bottom: 20px;
-        }
-
-        .user-summary {
-            background: #f7fbff;
-            border: 1px solid #dcefff;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 18px;
-            font-size: 14px;
-        }
-
-        .user-summary p {
-            margin: 6px 0;
-        }
-
-        .user-summary strong {
-            color: #04336b;
-        }
-
-        .form-section {
-            border: 1px solid #e8e8e8;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            background: #fafafa;
-        }
-
-        .form-section h5 {
-            margin: 0 0 12px;
-            color: #04336b;
-            font-size: 16px;
-            font-weight: 800;
-        }
-
-        .form-control {
-            width: 100%;
-            height: 42px;
-            border-radius: 8px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            padding: 8px 10px;
-            margin-bottom: 10px;
-        }
-
-        .btn-main {
-            background: linear-gradient(135deg, #0079d6, #00518d);
-            border: none;
-            height: 42px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 700;
-            width: 100%;
-            cursor: pointer;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #e74c3c, #b82015);
-        }
-
-        .alert-success {
-            background: #e8fff0;
-            color: #0b7a34;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            font-size: 14px;
-        }
-
-        .alert-error {
-            background: #ffeaea;
-            color: #a10000;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            font-size: 14px;
-        }
-
-        .back-link {
-            display: block;
-            margin-top: 16px;
-            text-align: center;
-            color: #006fc9;
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        @media(max-width: 768px) {
-            .main-box {
-                width: 92%;
-                flex-direction: column;
-                padding: 35px 22px;
-                gap: 30px;
-            }
-
-            .welcome,
-            .form-card {
-                width: 100%;
-            }
-        }
-    </style>
+    <title>i.Core — Manage User</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+    <link rel="stylesheet" href="assets/icore.css">
 </head>
-
 <body>
 
-<%@ include file="navbar.jsp" %>
+<div class="ic-shell">
 
-<div class="page-wrapper">
-    <div class="main-box">
+    <%@ include file="navbar.jsp" %>
 
-        <div class="welcome">
-            <h1>MANAGE</h1>
-            <h4><%= selectedUser.getUsername() %></h4>
-            <p>
-                Update user role, account status, or reset password.
-                These actions are restricted to SYS_ADMIN users only.
-            </p>
+    <main class="ic-main">
+
+        <%-- Topbar --%>
+        <div class="ic-topbar">
+            <div class="ic-topbar-left">
+                <div class="ic-breadcrumb">
+                    <span>i.Core</span>
+                    <span class="ic-breadcrumb-sep">/</span>
+                    <a href="<%= request.getContextPath() %>/users"
+                       style="color:var(--text-3); text-decoration:none;">Users</a>
+                    <span class="ic-breadcrumb-sep">/</span>
+                    <span><%= selectedUser.getUsername() %></span>
+                </div>
+            </div>
+            <div>
+                <a href="<%= request.getContextPath() %>/users" class="ic-btn ic-btn-sm">
+                    <i class="ti ti-arrow-left" style="font-size:14px;"></i> Back to users
+                </a>
+            </div>
         </div>
 
-        <div class="form-card">
-            <h3>User Control</h3>
-            <small>Manage selected user account safely</small>
+        <div class="ic-content">
 
+            <%-- Alerts --%>
             <% if (request.getParameter("success") != null) { %>
-                <div class="alert-success"><%= request.getParameter("success") %></div>
+            <div class="ic-alert ic-alert-success">
+                <i class="ti ti-circle-check"></i>
+                <%= request.getParameter("success") %>
+            </div>
             <% } %>
 
             <% if (request.getParameter("error") != null) { %>
-                <div class="alert-error"><%= request.getParameter("error") %></div>
+            <div class="ic-alert ic-alert-error">
+                <i class="ti ti-alert-circle"></i>
+                <%= request.getParameter("error") %>
+            </div>
             <% } %>
 
-            <div class="user-summary">
-                <p><strong>ID:</strong> <%= selectedUser.getId() %></p>
-                <p><strong>Name:</strong> <%= selectedUser.getName() %></p>
-                <p><strong>Username:</strong> <%= selectedUser.getUsername() %></p>
-                <p><strong>Email:</strong> <%= selectedUser.getEmail() %></p>
-                <p><strong>Current Role:</strong> <%= selectedUser.getRole() %></p>
-                <p><strong>Current Status:</strong> <%= selectedUser.getStatus() %></p>
+            <%-- Profile header card --%>
+            <div class="ic-card" style="margin-bottom:20px; overflow:hidden;">
+
+                <%-- Banner --%>
+                <div style="height:72px;
+                            background: linear-gradient(135deg, #312E81 0%, #4338CA 60%, #6366F1 100%);
+                            position:relative;">
+                </div>
+
+                <div style="padding: 0 24px 22px; position:relative;">
+
+                    <%-- Avatar overlapping banner --%>
+                    <div class="ic-avatar ic-avatar-lg av-purple"
+                         style="position:absolute; top:-26px; left:24px;
+                                border:3px solid var(--surface); font-size:18px;">
+                        <%= initials.toUpperCase() %>
+                    </div>
+
+                    <div style="padding-top:36px; display:flex;
+                                justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <div style="font-size:17px; font-weight:600; color:var(--text-1);">
+                                <%= selectedUser.getName() %>
+                            </div>
+                            <div style="font-size:13px; color:var(--text-3); margin-top:3px;">
+                                @<%= selectedUser.getUsername() %>
+                                &nbsp;&bull;&nbsp;
+                                <%= selectedUser.getEmail() %>
+                            </div>
+                            <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
+                                <%
+                                    String roleUpper = selectedUser.getRole() != null ? selectedUser.getRole().toUpperCase() : "";
+                                    String roleTagClass = "tag-generic";
+                                    if (roleUpper.contains("ADMIN"))    roleTagClass = "tag-admin";
+                                    else if (roleUpper.contains("AUDIT"))    roleTagClass = "tag-auditor";
+                                    else if (roleUpper.contains("MANAGER")) roleTagClass = "tag-manager";
+                                    else if (roleUpper.contains("USER"))    roleTagClass = "tag-user";
+                                %>
+                                <span class="ic-tag <%= roleTagClass %>">
+                                    <i class="ti ti-shield" style="font-size:12px;"></i>
+                                    <%= selectedUser.getRole() %>
+                                </span>
+                                <span class="ic-tag <%= statusTagClass %>">
+                                    <i class="ti ti-circle-check" style="font-size:12px;"></i>
+                                    <%= selectedUser.getStatus() %>
+                                </span>
+                            </div>
+                        </div>
+
+                        <%-- Quick stat pills --%>
+                        <div style="display:flex; gap:10px;">
+                            <div style="text-align:center; padding:8px 14px;
+                                        background:var(--surface-2); border-radius:var(--radius-sm);">
+                                <div style="font-size:10px; color:var(--text-3); margin-bottom:2px;">User ID</div>
+                                <div style="font-family:var(--mono); font-size:13px; font-weight:500;
+                                            color:var(--text-1);">#<%= selectedUser.getId() %></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-section">
-                <%
-                List<Role> roles =
-                        (List<Role>)
-                                request.getAttribute(
-                                        "roles"
-                                );
-                %>
-                <h5>Change Role</h5>
-                <form action="<%= request.getContextPath() %>/manage-user" method="post">
-                    <input type="hidden" name="id" value="<%= selectedUser.getId() %>">
-                    <input type="hidden" name="action" value="updateRole">
-                    <select name="roleId" class="form-control">
-                        <%
-                        for(Role role : roles){
-                        %>
-                        <option
-                            value="<%= role.getId() %>"
-                            <%= role.getRoleName().equals(selectedUser.getRole()) ? "selected": "" %>>
-                            <%= role.getRoleName() %>
-                        </option>
+            <%-- Three action panels --%>
+            <div class="ic-grid-3">
 
-                            <%
-                            }
-                            %>
+                <%-- ① Change Role --%>
+                <div class="ic-card ic-card-padded">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                        <div style="width:32px; height:32px; border-radius:8px;
+                                    background:var(--brand-light);
+                                    display:flex; align-items:center; justify-content:center;">
+                            <i class="ti ti-shield-lock" style="font-size:17px; color:var(--brand);"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:14px; font-weight:600; color:var(--text-1);">Change role</div>
+                            <div style="font-size:12px; color:var(--text-3);">Reassign to a different role</div>
+                        </div>
+                    </div>
 
-                    </select>
+                    <form action="<%= request.getContextPath() %>/manage-user" method="post">
+                        <input type="hidden" name="id"     value="<%= selectedUser.getId() %>">
+                        <input type="hidden" name="action" value="updateRole">
 
-                    <button type="submit" class="btn-main">Update Role</button>
-                </form>
+                        <div class="ic-form-group">
+                            <label class="ic-label">Select new role</label>
+                            <select name="roleId" class="ic-input ic-select">
+                                <% if (roles != null) {
+                                    for (Role role : roles) { %>
+                                <option value="<%= role.getId() %>"
+                                        <%= role.getRoleName().equals(selectedUser.getRole()) ? "selected" : "" %>>
+                                    <%= role.getRoleName() %>
+                                </option>
+                                <% } } %>
+                            </select>
+                        </div>
+
+                        <div style="padding:10px 12px; background:var(--brand-light);
+                                    border:1px solid #C7D2FE; border-radius:var(--radius-sm);
+                                    font-size:12px; color:var(--brand); margin-bottom:14px;">
+                            <i class="ti ti-info-circle" style="font-size:14px;"></i>
+                            Permissions update instantly on the user's next request.
+                        </div>
+
+                        <button type="submit" class="ic-btn ic-btn-primary" style="width:100%; justify-content:center;">
+                            <i class="ti ti-device-floppy"></i> Update role
+                        </button>
+                    </form>
+                </div>
+
+                <%-- ② Change Status --%>
+                <div class="ic-card ic-card-padded">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                        <div style="width:32px; height:32px; border-radius:8px;
+                                    background:#FEF3C7;
+                                    display:flex; align-items:center; justify-content:center;">
+                            <i class="ti ti-toggle-right" style="font-size:17px; color:var(--amber);"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:14px; font-weight:600; color:var(--text-1);">Account status</div>
+                            <div style="font-size:12px; color:var(--text-3);">Enable, lock or disable access</div>
+                        </div>
+                    </div>
+
+                    <form action="<%= request.getContextPath() %>/manage-user" method="post">
+                        <input type="hidden" name="id"     value="<%= selectedUser.getId() %>">
+                        <input type="hidden" name="action" value="updateStatus">
+
+                        <div class="ic-form-group">
+                            <label class="ic-label">New status</label>
+                            <select name="status" class="ic-input ic-select">
+                                <option value="ACTIVE"
+                                        <%= "ACTIVE".equals(selectedUser.getStatus())    ? "selected" : "" %>>
+                                    ACTIVE
+                                </option>
+                                <option value="DISABLED"
+                                        <%= "DISABLED".equals(selectedUser.getStatus())  ? "selected" : "" %>>
+                                    DISABLED
+                                </option>
+                                <option value="LOCKED"
+                                        <%= "LOCKED".equals(selectedUser.getStatus())    ? "selected" : "" %>>
+                                    LOCKED
+                                </option>
+                            </select>
+                        </div>
+
+                        <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:14px;">
+                            <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-3);">
+                                <span class="ic-dot ic-dot-green"></span> ACTIVE — full access
+                            </div>
+                            <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-3);">
+                                <span class="ic-dot ic-dot-red"></span> DISABLED — cannot log in
+                            </div>
+                            <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-3);">
+                                <span class="ic-dot ic-dot-amber"></span> LOCKED — temporarily blocked
+                            </div>
+                        </div>
+
+                        <button type="submit" class="ic-btn" style="width:100%; justify-content:center;
+                                background:#FEF3C7; border-color:#FDE68A; color:var(--amber);">
+                            <i class="ti ti-toggle-right"></i> Update status
+                        </button>
+                    </form>
+                </div>
+
+                <%-- ③ Reset Password --%>
+                <div class="ic-card ic-card-padded">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                        <div style="width:32px; height:32px; border-radius:8px;
+                                    background:var(--red-bg);
+                                    display:flex; align-items:center; justify-content:center;">
+                            <i class="ti ti-lock-open" style="font-size:17px; color:var(--red);"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:14px; font-weight:600; color:var(--text-1);">Reset password</div>
+                            <div style="font-size:12px; color:var(--text-3);">Force a new password for this user</div>
+                        </div>
+                    </div>
+
+                    <form action="<%= request.getContextPath() %>/manage-user" method="post"
+                          onsubmit="return confirm('Reset password for <%= selectedUser.getUsername() %>? This cannot be undone.');">
+                        <input type="hidden" name="id"     value="<%= selectedUser.getId() %>">
+                        <input type="hidden" name="action" value="resetPassword">
+
+                        <div class="ic-form-group">
+                            <label class="ic-label">New password</label>
+                            <div class="ic-input-icon" style="position:relative;">
+                                <i class="ti ti-lock"></i>
+                                <input type="password" class="ic-input" id="newPwd"
+                                       name="newPassword"
+                                       placeholder="At least 6 characters"
+                                       minlength="6" required>
+                                <i class="ti ti-eye" id="toggleNewPwd"
+                                   style="position:absolute; right:10px; top:50%; transform:translateY(-50%);
+                                          cursor:pointer; color:var(--text-3); font-size:16px; left:auto;"></i>
+                            </div>
+                        </div>
+
+                        <div style="padding:10px 12px; background:var(--red-bg);
+                                    border:1px solid #FECACA; border-radius:var(--radius-sm);
+                                    font-size:12px; color:var(--red); margin-bottom:14px;">
+                            <i class="ti ti-alert-triangle" style="font-size:14px;"></i>
+                            This will immediately invalidate the user's current password.
+                        </div>
+
+                        <button type="submit" class="ic-btn ic-btn-danger" style="width:100%; justify-content:center;">
+                            <i class="ti ti-key"></i> Reset password
+                        </button>
+                    </form>
+                </div>
+
             </div>
 
-            <div class="form-section">
-                <h5>Change Status</h5>
-                <form action="<%= request.getContextPath() %>/manage-user" method="post">
-                    <input type="hidden" name="id" value="<%= selectedUser.getId() %>">
-                    <input type="hidden" name="action" value="updateStatus">
-
-                    <select name="status" class="form-control">
-                        <option value="ACTIVE" <%= "ACTIVE".equals(selectedUser.getStatus()) ? "selected" : "" %>>ACTIVE</option>
-                        <option value="DISABLED" <%= "DISABLED".equals(selectedUser.getStatus()) ? "selected" : "" %>>DISABLED</option>
-                        <option value="LOCKED" <%= "LOCKED".equals(selectedUser.getStatus()) ? "selected" : "" %>>LOCKED</option>
-                    </select>
-
-                    <button type="submit" class="btn-main">Update Status</button>
-                </form>
-            </div>
-
-            <div class="form-section">
-                <h5>Reset Password</h5>
-                <form action="<%= request.getContextPath() %>/manage-user" method="post">
-                    <input type="hidden" name="id" value="<%= selectedUser.getId() %>">
-                    <input type="hidden" name="action" value="resetPassword">
-
-                    <input type="password"
-                           name="newPassword"
-                           class="form-control"
-                           placeholder="Enter new password"
-                           required>
-
-                    <button type="submit"
-                            class="btn-main btn-danger"
-                            onclick="return confirm('Are you sure you want to reset this password?');">
-                        Reset Password
-                    </button>
-                </form>
-            </div>
-
-            <a href="<%= request.getContextPath() %>/users" class="back-link">
-                Back to Users
-            </a>
         </div>
-
-    </div>
+    </main>
 </div>
+
+<script>
+    const toggleNewPwd = document.getElementById('toggleNewPwd');
+    const newPwd       = document.getElementById('newPwd');
+    if (toggleNewPwd && newPwd) {
+        toggleNewPwd.addEventListener('click', function () {
+            const isText = newPwd.type === 'text';
+            newPwd.type = isText ? 'password' : 'text';
+            toggleNewPwd.className = isText ? 'ti ti-eye' : 'ti ti-eye-off';
+        });
+    }
+</script>
 
 </body>
 </html>

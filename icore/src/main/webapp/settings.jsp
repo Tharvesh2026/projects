@@ -3,279 +3,367 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Session Settings</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>i.Core — Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+    <link rel="stylesheet" href="assets/icore.css">
 
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: #f4f4f4;
-        }
-
-        .page-wrapper {
-            min-height: calc(100vh - 70px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 15px;
-        }
-
-        .session-box {
-            width: 900px;
-            min-height: 520px;
-            background: linear-gradient(135deg, #0399f5, #00508f);
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 55px;
-            box-shadow: 0 18px 35px rgba(0,0,0,0.25);
+        /* Animated countdown ring */
+        .ring-wrap {
             position: relative;
-            overflow: hidden;
+            width: 120px; height: 120px;
+            margin: 0 auto 6px;
         }
 
-        .session-box::before {
-            content: "";
+        .ring-svg { transform: rotate(-90deg); }
+
+        .ring-bg {
+            fill: none;
+            stroke: var(--border);
+            stroke-width: 8;
+        }
+
+        .ring-fg {
+            fill: none;
+            stroke: var(--brand);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 314;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset .8s linear, stroke .5s;
+        }
+
+        .ring-label {
             position: absolute;
-            width: 420px;
-            height: 420px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 50%;
-            left: -120px;
-            top: -70px;
-        }
-
-        .session-box::after {
-            content: "";
-            position: absolute;
-            width: 360px;
-            height: 360px;
-            background: rgba(0,180,255,0.35);
-            border-radius: 50%;
-            left: -40px;
-            bottom: -170px;
-        }
-
-        .session-info {
-            color: white;
-            width: 42%;
-            z-index: 1;
-        }
-
-        .session-info h1 {
-            font-size: 40px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-        }
-
-        .session-info p {
-            font-size: 14px;
-            line-height: 1.8;
-            opacity: 0.95;
-        }
-
-        .session-card {
-            width: 430px;
-            background: white;
-            border-radius: 18px;
-            padding: 35px;
-            z-index: 1;
-            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
-        }
-
-        .session-card h3 {
-            color: #04336b;
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-
-        .session-card small {
-            color: #777;
-            display: block;
-            margin-bottom: 25px;
-        }
-
-        .detail-item {
-            border: 1px solid #e5e5e5;
-            border-radius: 10px;
-            padding: 12px 14px;
-            margin-bottom: 12px;
-            font-size: 14px;
-            background: #fafafa;
-        }
-
-        .detail-item strong {
-            color: #04336b;
-        }
-
-        .countdown-box {
-            margin-top: 18px;
-            padding: 14px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #0079d6, #00518d);
-            color: white;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px; font-weight: 600;
+            color: var(--text-1);
             text-align: center;
-            font-weight: 700;
+            font-family: var(--mono);
+            white-space: nowrap;
         }
 
-        @media(max-width: 768px) {
-            .session-box {
-                width: 92%;
-                flex-direction: column;
-                padding: 35px 22px;
-                gap: 30px;
-            }
-
-            .session-info,
-            .session-card {
-                width: 100%;
-            }
+        .ic-security-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 5px 11px;
+            border-radius: 50px;
+            font-size: 12px; font-weight: 500;
         }
     </style>
 </head>
-
 <body>
 
-<%@ include file="navbar.jsp" %>
+<div class="ic-shell">
 
-<div class="page-wrapper">
+    <%@ include file="navbar.jsp" %>
 
-    <div class="session-box">
+    <main class="ic-main">
 
-        <div class="session-info">
-            <h1>SESSION</h1>
-            <p>
-                View your current login session details, timeout status,
-                creation time and last accessed time in one place.
-            </p>
-        </div>
-
-        <div class="session-card">
-            <h3>Session Details</h3>
-            <small>Your active login session information</small>
-
-            <div class="detail-item">
-                <strong>Name:</strong>
-                ${sessionScope.user.name}
-            </div>
-
-            <div class="detail-item">
-                <strong>Session ID:</strong>
-                ${pageContext.session.id}
-            </div>
-
-            <div class="detail-item" id="creationTime">
-                ${pageContext.session.creationTime}
-            </div>
-
-            <div class="detail-item" id="lastAccessTime">
-                ${pageContext.session.lastAccessedTime}
-            </div>
-
-            <div class="detail-item" id="timeout">
-                ${pageContext.session.maxInactiveInterval}
-            </div>
-
-            <div class="detail-item" id="isNew">
-                ${pageContext.session.isNew()}
-            </div>
-
-            <div class="countdown-box">
-                Session expires in <span id="countdown"></span>
+        <div class="ic-topbar">
+            <div class="ic-topbar-left">
+                <div class="ic-breadcrumb">
+                    <span>i.Core</span>
+                    <span class="ic-breadcrumb-sep">/</span>
+                    <span>Settings</span>
+                </div>
             </div>
         </div>
 
-    </div>
+        <div class="ic-content">
+
+            <div class="ic-page-header">
+                <div>
+                    <div class="ic-page-title">Settings</div>
+                    <div class="ic-page-sub">View your active session details and security status.</div>
+                </div>
+            </div>
+
+            <div class="ic-grid-2" style="align-items:start;">
+
+                <%-- Left: Session details --%>
+                <div style="display:flex; flex-direction:column; gap:14px;">
+
+                    <%-- User identity --%>
+                    <div class="ic-card ic-card-padded">
+                        <div style="font-size:13px; font-weight:500; color:var(--text-2);
+                                    margin-bottom:14px; display:flex; align-items:center; gap:6px;">
+                            <i class="ti ti-user-circle" style="font-size:17px; color:var(--brand);"></i>
+                            Signed in as
+                        </div>
+
+                        <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+                            <%
+                                Object userObjS = session.getAttribute("user");
+                                String sName = userObjS != null
+                                    ? ((com.example.session.model.User) userObjS).getName() : "User";
+                                String[] sParts = sName.trim().split("\\s+");
+                                String sInit = sParts.length >= 2
+                                    ? String.valueOf(sParts[0].charAt(0)) + String.valueOf(sParts[1].charAt(0))
+                                    : String.valueOf(sParts[0].charAt(0));
+                            %>
+                            <div class="ic-avatar ic-avatar-lg av-purple">
+                                <%= sInit.toUpperCase() %>
+                            </div>
+                            <div>
+                                <div style="font-size:15px; font-weight:600; color:var(--text-1);">
+                                    ${sessionScope.user.name}
+                                </div>
+                                <div style="font-size:12px; color:var(--text-3);">
+                                    ${sessionScope.user.email}
+                                </div>
+                                <span class="ic-tag tag-admin" style="margin-top:6px; display:inline-flex;">
+                                    ${sessionScope.user.role}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="ic-info-row">
+                            <span class="ic-info-label">Name</span>
+                            <span class="ic-info-value">${sessionScope.user.name}</span>
+                        </div>
+                        <div class="ic-info-row">
+                            <span class="ic-info-label">Email</span>
+                            <span class="ic-info-value">${sessionScope.user.email}</span>
+                        </div>
+                        <div class="ic-info-row">
+                            <span class="ic-info-label">Role</span>
+                            <span class="ic-info-value">${sessionScope.user.role}</span>
+                        </div>
+                    </div>
+
+                    <%-- Session metadata --%>
+                    <div class="ic-card ic-card-padded">
+                        <div style="font-size:13px; font-weight:500; color:var(--text-2);
+                                    margin-bottom:14px; display:flex; align-items:center; gap:6px;">
+                            <i class="ti ti-database" style="font-size:17px; color:var(--brand);"></i>
+                            Session metadata
+                        </div>
+
+                        <div class="ic-info-row">
+                            <span class="ic-info-label">Session ID</span>
+                            <span class="ic-info-mono"
+                                  id="sid"
+                                  style="font-size:11px; max-width:180px;
+                                         overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"
+                                  title="${pageContext.session.id}">
+                                ${pageContext.session.id}
+                            </span>
+                        </div>
+                        <div class="ic-info-row">
+                            <span class="ic-info-label">Created at</span>
+                            <span class="ic-info-mono" id="creationTime">
+                                ${pageContext.session.creationTime}
+                            </span>
+                        </div>
+                        <div class="ic-info-row">
+                            <span class="ic-info-label">Last accessed</span>
+                            <span class="ic-info-mono" id="lastAccessTime">
+                                ${pageContext.session.lastAccessedTime}
+                            </span>
+                        </div>
+                        <div class="ic-info-row">
+                            <span class="ic-info-label">Max idle timeout</span>
+                            <span class="ic-info-mono">
+                                ${pageContext.session.maxInactiveInterval}s
+                            </span>
+                        </div>
+                        <div class="ic-info-row">
+                            <span class="ic-info-label">New session?</span>
+                            <span class="ic-info-mono" id="isNew">
+                                ${pageContext.session.isNew()}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <%-- Right: Countdown + security status --%>
+                <div style="display:flex; flex-direction:column; gap:14px;">
+
+                    <%-- Session expiry ring --%>
+                    <div class="ic-card ic-card-padded" style="text-align:center;">
+                        <div style="font-size:13px; font-weight:500; color:var(--text-2);
+                                    margin-bottom:16px; display:flex; align-items:center;
+                                    justify-content:center; gap:6px;">
+                            <i class="ti ti-clock" style="font-size:17px; color:var(--brand);"></i>
+                            Session expires in
+                        </div>
+
+                        <div class="ring-wrap">
+                            <svg class="ring-svg" viewBox="0 0 120 120" width="120" height="120">
+                                <circle class="ring-bg" cx="60" cy="60" r="50"/>
+                                <circle class="ring-fg" id="ringFg" cx="60" cy="60" r="50"/>
+                            </svg>
+                            <div class="ring-label" id="ringLabel">--</div>
+                        </div>
+
+                        <div style="font-size:12px; color:var(--text-3); margin-top:8px;">
+                            Resets on activity
+                        </div>
+                    </div>
+
+                    <%-- Security status --%>
+                    <div class="ic-card ic-card-padded">
+                        <div style="font-size:13px; font-weight:500; color:var(--text-2);
+                                    margin-bottom:14px; display:flex; align-items:center; gap:6px;">
+                            <i class="ti ti-shield-check" style="font-size:17px; color:var(--brand);"></i>
+                            Security status
+                        </div>
+
+                        <div style="display:flex; flex-direction:column; gap:8px;">
+
+                            <div style="display:flex; align-items:center; justify-content:space-between;
+                                        padding:10px 12px; background:var(--surface-2);
+                                        border-radius:var(--radius-sm);">
+                                <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-2);">
+                                    <i class="ti ti-key" style="color:var(--brand);"></i> CSRF protection
+                                </div>
+                                <span class="ic-security-badge" style="background:var(--green-bg); color:var(--green);">
+                                    <span class="ic-dot ic-dot-green"></span> Active
+                                </span>
+                            </div>
+
+                            <div style="display:flex; align-items:center; justify-content:space-between;
+                                        padding:10px 12px; background:var(--surface-2);
+                                        border-radius:var(--radius-sm);">
+                                <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-2);">
+                                    <i class="ti ti-refresh" style="color:var(--brand);"></i> Session refresh
+                                </div>
+                                <span class="ic-security-badge" style="background:var(--green-bg); color:var(--green);">
+                                    <span class="ic-dot ic-dot-green"></span> Enabled
+                                </span>
+                            </div>
+
+                            <div style="display:flex; align-items:center; justify-content:space-between;
+                                        padding:10px 12px; background:var(--surface-2);
+                                        border-radius:var(--radius-sm);">
+                                <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-2);">
+                                    <i class="ti ti-database" style="color:var(--brand);"></i> Permission source
+                                </div>
+                                <span class="ic-security-badge" style="background:var(--blue-bg); color:var(--blue);">
+                                    DB per-request
+                                </span>
+                            </div>
+
+                            <div style="display:flex; align-items:center; justify-content:space-between;
+                                        padding:10px 12px; background:var(--surface-2);
+                                        border-radius:var(--radius-sm);">
+                                <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-2);">
+                                    <i class="ti ti-cookie" style="color:var(--brand);"></i> Remember-me cookie
+                                </div>
+                                <span class="ic-security-badge" style="background:var(--green-bg); color:var(--green);">
+                                    <span class="ic-dot ic-dot-green"></span> Issued
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <%-- Danger zone --%>
+                    <div class="ic-card ic-card-padded"
+                         style="border-color:#FECACA; background:#FFFAFA;">
+                        <div style="font-size:13px; font-weight:500; color:var(--red);
+                                    margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+                            <i class="ti ti-logout" style="font-size:16px;"></i> End session
+                        </div>
+                        <p style="font-size:12px; color:var(--text-3); margin-bottom:12px;">
+                            Sign out from all active sessions. You'll need to log in again.
+                        </p>
+                        <form action="<%= request.getContextPath() %>/logout" method="post">
+                            <button type="submit" class="ic-btn ic-btn-danger"
+                                    style="width:100%; justify-content:center;"
+                                    onclick="return confirm('Sign out of i.Core?')">
+                                <i class="ti ti-logout"></i> Sign out now
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
 
 </div>
 
 <script>
     const timeoutSeconds = Number("${pageContext.session.maxInactiveInterval}");
+    let remaining = timeoutSeconds;
 
-    const creationTime = document.getElementById("creationTime");
-    const lastAccessTime = document.getElementById("lastAccessTime");
-    const timeoutText = document.getElementById("timeout");
-    const isNew = document.getElementById("isNew");
+    const ringFg    = document.getElementById('ringFg');
+    const ringLabel = document.getElementById('ringLabel');
+    const circumference = 2 * Math.PI * 50; // r=50
 
-    creationTime.innerText =
-        "Creation Time: " +
-        new Date(Number(creationTime.innerText)).toLocaleString("en-IN");
-
-    lastAccessTime.innerText =
-        "Last Access Time: " +
-        new Date(Number(lastAccessTime.innerText)).toLocaleString("en-IN");
-
-    timeoutText.innerText =
-        "Timeout In: " + timeoutSeconds + " seconds";
-
-    isNew.innerText =
-        "Is New Session?: " + isNew.innerText;
-</script>
-
-<script>
-    let remainingSeconds = Number("${pageContext.session.maxInactiveInterval}");
-
-    const countdown = document.getElementById("countdown");
-
-    function updateCountdown() {
-        countdown.innerText = remainingSeconds + " seconds";
-
-        if (remainingSeconds <= 0) {
-            window.location.href =
-                "index.jsp?error=Session expired. Please login again.";
-        }
-
-        remainingSeconds--;
+    function fmtTime(s) {
+        const m = Math.floor(s / 60);
+        const sec = s % 60;
+        return m + ':' + String(sec).padStart(2, '0');
     }
 
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-</script>
+    function updateRing() {
+        const ratio = remaining / timeoutSeconds;
+        const offset = circumference * (1 - ratio);
+        ringFg.style.strokeDashoffset = offset;
+        ringLabel.textContent = fmtTime(remaining);
 
-<script>
+        // Colour shift as it gets low
+        if (ratio < 0.25)      ringFg.style.stroke = '#DC2626';
+        else if (ratio < 0.5)  ringFg.style.stroke = '#F59E0B';
+        else                   ringFg.style.stroke = 'var(--brand)';
+
+        if (remaining <= 0) {
+            clearInterval(countdownTimer);
+            window.location.href = "index.jsp?error=Session expired. Please login again.";
+        }
+        remaining--;
+    }
+
+    ringFg.style.strokeDasharray = circumference;
+    updateRing();
+    const countdownTimer = setInterval(updateRing, 1000);
+
+    /* Session refresh on activity */
     let userActive = false;
-
-    ["mousemove", "keydown", "click", "input", "scroll"].forEach(function (eventName) {
-        document.addEventListener(eventName, function () {
-            userActive = true;
-        });
+    ["mousemove","keydown","click","input","scroll"].forEach(function(ev) {
+        document.addEventListener(ev, function() { userActive = true; });
     });
 
-    const sessionTimeoutSeconds = Number("${pageContext.session.maxInactiveInterval}");
-    const refreshBeforeSeconds = 60;
-
-    setInterval(function () {
-        if (userActive) {
-            fetch("refresh-session", {
-                method: "POST"
+    setInterval(function() {
+        if (!userActive) return;
+        fetch("refresh-session", { method: "POST" })
+            .then(function(r) {
+                if (r.status === 200) { userActive = false; remaining = timeoutSeconds; }
+                if (r.status === 401) {
+                    clearInterval(countdownTimer);
+                    window.location.href = "index.jsp?error=Session expired.";
+                }
             })
-            .then(function (response) {
-                if (response.status === 200) {
-                    console.log("Session refreshed");
-                    userActive = false;
-                    remainingSeconds = sessionTimeoutSeconds;
-                }
+            .catch(function(e) { console.error("Session refresh failed", e); });
+    }, (timeoutSeconds - 60) * 1000);
 
-                if (response.status === 401) {
-                    window.location.href =
-                        "index.jsp?error=Session expired. Please login again.";
-                }
-            });
-        }
-    }, (sessionTimeoutSeconds - refreshBeforeSeconds) * 1000);
+    /* Format timestamps */
+    const creationEl    = document.getElementById('creationTime');
+    const lastAccessEl  = document.getElementById('lastAccessTime');
+    const isNewEl       = document.getElementById('isNew');
+
+    if (creationEl) {
+        const raw = creationEl.innerText.trim();
+        if (!isNaN(raw)) creationEl.innerText = new Date(Number(raw)).toLocaleString('en-IN');
+    }
+    if (lastAccessEl) {
+        const raw = lastAccessEl.innerText.trim();
+        if (!isNaN(raw)) lastAccessEl.innerText = new Date(Number(raw)).toLocaleString('en-IN');
+    }
+    if (isNewEl) {
+        isNewEl.innerText = isNewEl.innerText.trim() === 'true' ? 'Yes (new)' : 'No (existing)';
+    }
 </script>
 
 </body>

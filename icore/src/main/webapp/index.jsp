@@ -2,7 +2,6 @@
 <%
     String mail = "";
     Cookie[] cookies = request.getCookies();
-
     if (cookies != null) {
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("email")) {
@@ -12,313 +11,430 @@
         }
     }
 %>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Session Management</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>i.Core — Sign In</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+    <link rel="stylesheet" href="assets/icore.css">
 
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+        html, body { height: 100%; }
 
         body {
-            margin: 0;
-            min-height: 100vh;
-            background: #f4f4f4;
+            background: var(--bg);
             display: flex;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        .main-box {
-            width: 900px;
-            min-height: 520px;
-            background: linear-gradient(135deg, #0399f5, #00508f);
-            border-radius: 18px;
+        .auth-shell {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 55px;
-            box-shadow: 0 18px 35px rgba(0,0,0,0.25);
+            width: 880px;
+            min-height: 560px;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* ── Left brand panel ── */
+        .auth-panel {
+            width: 300px;
+            flex-shrink: 0;
+            background: var(--brand);
+            padding: 36px 30px;
+            display: flex;
+            flex-direction: column;
             position: relative;
             overflow: hidden;
         }
 
-        .main-box::before {
+        .auth-panel::before {
             content: "";
             position: absolute;
-            width: 420px;
-            height: 420px;
-            background: rgba(255,255,255,0.08);
+            width: 340px; height: 340px;
+            background: rgba(255,255,255,.07);
             border-radius: 50%;
-            left: -120px;
-            top: -70px;
+            right: -160px; top: -100px;
         }
 
-        .main-box::after {
+        .auth-panel::after {
             content: "";
             position: absolute;
-            width: 360px;
-            height: 360px;
-            background: rgba(0,180,255,0.35);
+            width: 260px; height: 260px;
+            background: rgba(255,255,255,.05);
             border-radius: 50%;
-            left: -40px;
-            bottom: -170px;
+            left: -80px; bottom: -80px;
         }
 
-        .welcome {
-            color: white;
-            width: 45%;
-            z-index: 1;
+        .auth-brand {
+            display: flex; align-items: center; gap: 9px;
+            position: relative; z-index: 1;
         }
 
-        .welcome h1 {
-            font-size: 42px;
-            font-weight: 800;
-            letter-spacing: 2px;
+        .auth-brand-icon {
+            width: 36px; height: 36px;
+            background: rgba(255,255,255,.18);
+            border-radius: 9px;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        .welcome h4 {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 15px;
+        .auth-brand-icon i { color: #fff; font-size: 20px; }
+        .auth-brand-name { color: #fff; font-size: 18px; font-weight: 600; }
+        .auth-brand-ver  { color: rgba(255,255,255,.5); font-size: 11px; margin-top: 1px; }
+
+        .auth-headline {
+            position: relative; z-index: 1;
+            margin-top: 36px;
         }
 
-        .welcome p {
+        .auth-headline h2 {
+            color: #fff;
+            font-size: 22px; font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 10px;
+        }
+
+        .auth-headline p {
+            color: rgba(255,255,255,.7);
             font-size: 13px;
-            line-height: 1.8;
-            max-width: 350px;
+            line-height: 1.7;
         }
 
-        .form-card {
-            width: 360px;
-            background: white;
-            border-radius: 18px;
-            padding: 35px;
-            z-index: 1;
-            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+        .auth-features {
+            margin-top: 32px;
+            position: relative; z-index: 1;
+            display: flex; flex-direction: column; gap: 12px;
         }
 
-        .form-card h3 {
-            color: #04336b;
-            font-size: 30px;
-            font-weight: 800;
-            margin-bottom: 8px;
+        .auth-feature {
+            display: flex; align-items: center; gap: 10px;
+            color: rgba(255,255,255,.85);
+            font-size: 13px;
         }
 
-        .form-card small {
-            color: #777;
-            display: block;
-            margin-bottom: 25px;
+        .auth-feature i {
+            font-size: 16px;
+            color: #A5F3FC;
+            flex-shrink: 0;
         }
 
-        .form-control {
-            height: 45px;
-            border-radius: 8px;
-            font-size: 14px;
+        .auth-footer {
+            margin-top: auto;
+            position: relative; z-index: 1;
+            color: rgba(255,255,255,.35);
+            font-size: 11px;
         }
 
-        .btn-main {
-            background: linear-gradient(135deg, #0079d6, #00518d);
-            border: none;
-            height: 45px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 700;
+        /* ── Right form panel ── */
+        .auth-form-panel {
+            flex: 1;
+            background: var(--surface);
+            padding: 36px 38px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 28px;
+        }
+
+        .auth-tab {
+            padding: 7px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 13.5px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid transparent;
+            color: var(--text-3);
+            background: transparent;
+            transition: all .15s;
+        }
+
+        .auth-tab.active {
+            background: var(--brand-light);
+            color: var(--brand);
+            border-color: #C7D2FE;
+        }
+
+        .auth-tab:hover:not(.active) { background: var(--surface-2); color: var(--text-2); }
+
+        .auth-form { display: none; flex-direction: column; gap: 0; }
+        .auth-form.active { display: flex; }
+
+        .form-title {
+            font-size: 20px; font-weight: 600; color: var(--text-1);
+            margin-bottom: 4px;
+        }
+
+        .form-sub {
+            font-size: 13px; color: var(--text-3);
+            margin-bottom: 22px;
+        }
+
+        .ic-btn-auth {
             width: 100%;
+            padding: 10px;
+            justify-content: center;
+            font-size: 14px;
+            border-radius: var(--radius-sm);
+            margin-top: 4px;
         }
 
-        .bottom-text {
+        .remember-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .remember-label {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 13px; color: var(--text-2); cursor: pointer;
+        }
+
+        .remember-label input { accent-color: var(--brand); }
+
+        .forgot-link { font-size: 13px; color: var(--brand); font-weight: 500; }
+        .forgot-link:hover { text-decoration: underline; }
+
+        .switch-text {
             text-align: center;
-            font-size: 12px;
-            margin-top: 25px;
+            font-size: 13px;
+            color: var(--text-3);
+            margin-top: 18px;
         }
 
-        .bottom-text a,
-        .forgot-link {
-            color: #006fc9;
-            text-decoration: none;
-            font-weight: 700;
-        }
+        .switch-text a { color: var(--brand); font-weight: 500; }
+        .switch-text a:hover { text-decoration: underline; }
 
-        .registerFrom {
-            display: none;
-        }
-
-        @media(max-width: 768px) {
-            .main-box {
-                width: 92%;
-                flex-direction: column;
-                padding: 35px 22px;
-                gap: 30px;
-            }
-
-            .welcome,
-            .form-card {
-                width: 100%;
-            }
+        @media (max-width: 720px) {
+            .auth-shell  { flex-direction: column; width: 100%; max-width: 440px; }
+            .auth-panel  { width: 100%; min-height: auto; padding: 26px; }
+            .auth-features, .auth-headline h2 { display: none; }
         }
     </style>
 </head>
-
 <body>
 
-<div class="main-box">
+<div class="auth-shell">
 
-    <div class="welcome">
-        <h1>WELCOME</h1>
-        <h4>YOUR HEADLINE NAME</h4>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Sed diam nonummy nibh euismod tincidunt ut laoreet dolore.
-        </p>
+    <%-- Brand panel --%>
+    <div class="auth-panel">
+        <div class="auth-brand">
+            <div class="auth-brand-icon"><i class="ti ti-cloud"></i></div>
+            <div>
+                <div class="auth-brand-name">i.Core</div>
+                <div class="auth-brand-ver">v1.2.0-STABLE</div>
+            </div>
+        </div>
+
+        <div class="auth-headline">
+            <h2>Identity & Access Management</h2>
+            <p>Secure, permission-driven cloud portal for your team.</p>
+        </div>
+
+        <div class="auth-features">
+            <div class="auth-feature">
+                <i class="ti ti-shield-check"></i>
+                <span>Permission-based access control</span>
+            </div>
+            <div class="auth-feature">
+                <i class="ti ti-database"></i>
+                <span>DB-resolved role permissions</span>
+            </div>
+            <div class="auth-feature">
+                <i class="ti ti-activity"></i>
+                <span>Real-time audit logging</span>
+            </div>
+            <div class="auth-feature">
+                <i class="ti ti-lock"></i>
+                <span>CSRF & session protection</span>
+            </div>
+            <div class="auth-feature">
+                <i class="ti ti-cookie"></i>
+                <span>Remember-me with secure cookies</span>
+            </div>
+        </div>
+
+        <div class="auth-footer">
+            &copy; 2025 i.Core · Anthropic Cloud
+        </div>
     </div>
 
-    <div class="form-card loginForm">
-        <h3>Sign in</h3>
-        <small>Lorem ipsum dolor sit amet, consectetur adipiscing elit</small>
+    <%-- Form panel --%>
+    <div class="auth-form-panel">
 
-        <% if(request.getParameter("error") != null){ %>
-            <div class="alert alert-danger">
+        <div class="auth-tabs">
+            <button class="auth-tab active" id="tab-login" onclick="showForm('login')">Sign in</button>
+            <button class="auth-tab" id="tab-register" onclick="showForm('register')">Register</button>
+        </div>
+
+        <%-- LOGIN FORM --%>
+        <div class="auth-form active" id="form-login">
+
+            <div class="form-title">Welcome back</div>
+            <div class="form-sub">Sign in to your i.Core account</div>
+
+            <% if (request.getParameter("error") != null) { %>
+            <div class="ic-alert ic-alert-error">
+                <i class="ti ti-alert-circle"></i>
                 <%= request.getParameter("error") %>
             </div>
-        <% } %>
+            <% } %>
 
-        <% if(request.getParameter("logout") != null){ %>
-            <div class="alert alert-success">
-                Logged out successfully.
+            <% if (request.getParameter("logout") != null) { %>
+            <div class="ic-alert ic-alert-success">
+                <i class="ti ti-circle-check"></i>
+                You've been signed out successfully.
             </div>
-        <% } %>
+            <% } %>
 
-        <form action="login" method="post">
+            <form action="<%= request.getContextPath() %>/login" method="post">
 
-            <div class="mb-3">
-                <input type="email" class="form-control" id="loginEmail" name="email"
-                       placeholder="User Name" value="<%= mail %>" required>
-            </div>
-
-            <div class="mb-2">
-                <input type="password" class="form-control" id="loginPassword" name="password"
-                       placeholder="Password" required>
-            </div>
-
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox"
-                           name="rememberMe" value="true"
-                           <%= mail.isEmpty() ? "" : "checked" %>>
-
-                    <label class="form-check-label small">
-                        Remember me
-                    </label>
+                <div class="ic-form-group">
+                    <label class="ic-label" for="loginEmail">Email address</label>
+                    <div class="ic-input-icon">
+                        <i class="ti ti-mail"></i>
+                        <input type="email" class="ic-input" id="loginEmail" name="email"
+                               placeholder="you@example.com"
+                               value="<%= mail %>" required>
+                    </div>
                 </div>
 
-                <a href="#" class="small forgot-link">Forgot Password?</a>
+                <div class="ic-form-group">
+                    <label class="ic-label" for="loginPassword">Password</label>
+                    <div class="ic-input-icon" style="position:relative;">
+                        <i class="ti ti-lock"></i>
+                        <input type="password" class="ic-input" id="loginPassword" name="password"
+                               placeholder="Your password" required>
+                        <i class="ti ti-eye" id="togglePwd"
+                           style="position:absolute;right:10px;top:50%;transform:translateY(-50%);
+                                  cursor:pointer;color:var(--text-3);font-size:16px;left:auto;"></i>
+                    </div>
+                </div>
+
+                <div class="remember-row">
+                    <label class="remember-label">
+                        <input type="checkbox" name="rememberMe" value="true"
+                               <%= mail.isEmpty() ? "" : "checked" %>>
+                        Remember me
+                    </label>
+                    <a href="#" class="forgot-link">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="ic-btn ic-btn-primary ic-btn-auth">
+                    <i class="ti ti-login"></i> Sign in
+                </button>
+
+            </form>
+
+            <div class="switch-text">
+                Don't have an account?
+                <a href="#" onclick="showForm('register')">Create one</a>
             </div>
-
-            <button class="btn-main">
-                Sign in
-            </button>
-
-        </form>
-
-        <div class="bottom-text">
-            Don't have an account?
-            <a href="#" id="switchToRegister">Sign Up</a>
         </div>
-    </div>
 
-    <div class="form-card registerFrom">
-        <h3>Sign up</h3>
-        <small>Create your new account</small>
+        <%-- REGISTER FORM --%>
+        <div class="auth-form" id="form-register">
 
-        <form action="register" method="post">
+            <div class="form-title">Create account</div>
+            <div class="form-sub">Join i.Core — you'll get USER role by default</div>
 
-            <div class="mb-3">
-                <input type="text" class="form-control" id="name" name="name"
-                       placeholder="Name" required>
+            <form action="<%= request.getContextPath() %>/register" method="post">
+
+                <div class="ic-form-group">
+                    <label class="ic-label" for="regName">Full name</label>
+                    <div class="ic-input-icon">
+                        <i class="ti ti-user"></i>
+                        <input type="text" class="ic-input" id="regName" name="name"
+                               placeholder="John Doe" required>
+                    </div>
+                </div>
+
+                <div class="ic-form-group">
+                    <label class="ic-label" for="regUsername">Username</label>
+                    <div class="ic-input-icon">
+                        <i class="ti ti-at"></i>
+                        <input type="text" class="ic-input" id="regUsername" name="username"
+                               placeholder="johndoe" required>
+                    </div>
+                </div>
+
+                <div class="ic-form-group">
+                    <label class="ic-label" for="regEmail">Email address</label>
+                    <div class="ic-input-icon">
+                        <i class="ti ti-mail"></i>
+                        <input type="email" class="ic-input" id="regEmail" name="email"
+                               placeholder="you@example.com" required>
+                    </div>
+                </div>
+
+                <div class="ic-form-group">
+                    <label class="ic-label" for="regPassword">Password</label>
+                    <div class="ic-input-icon">
+                        <i class="ti ti-lock"></i>
+                        <input type="password" class="ic-input" id="regPassword" name="password"
+                               placeholder="At least 6 characters" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="ic-btn ic-btn-primary ic-btn-auth" style="margin-top:4px;">
+                    <i class="ti ti-user-plus"></i> Create account
+                </button>
+
+            </form>
+
+            <div class="switch-text">
+                Already have an account?
+                <a href="#" onclick="showForm('login')">Sign in</a>
             </div>
-
-            <div class="mb-3">
-                <input type="text" class="form-control" name="username"
-                       placeholder="Username" required>
-            </div>
-
-            <div class="mb-3">
-                <input type="email" class="form-control" id="registerEmail" name="email"
-                       placeholder="Email" required>
-            </div>
-
-            <div class="mb-3">
-                <input type="password" class="form-control" id="registerPassword" name="password"
-                       placeholder="Password" required>
-            </div>
-
-            <button class="btn-main">
-                Register
-            </button>
-
-        </form>
-
-        <div class="bottom-text">
-            Already have an account?
-            <a href="#" id="switchToLogin">Sign in</a>
         </div>
-    </div>
 
+    </div>
 </div>
 
 <script>
-    document.getElementById("switchToRegister").addEventListener("click", function (e) {
-        e.preventDefault();
-        document.querySelector(".loginForm").style.display = "none";
-        document.querySelector(".registerFrom").style.display = "block";
-    });
+    function showForm(name) {
+        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('form-' + name).classList.add('active');
+        document.getElementById('tab-' + name).classList.add('active');
+    }
 
-    document.getElementById("switchToLogin").addEventListener("click", function (e) {
-        e.preventDefault();
-        document.querySelector(".registerFrom").style.display = "none";
-        document.querySelector(".loginForm").style.display = "block";
-    });
-
-    const name = document.getElementById("name");
-    const loginPassword = document.getElementById("loginPassword");
-    const registerPassword = document.getElementById("registerPassword");
-
-    if (name) {
-        name.addEventListener("input", function () {
-            if (name.value.trim() === "") {
-                name.setCustomValidity("Name cannot be empty");
-            } else {
-                name.setCustomValidity("");
-            }
+    /* Password toggle */
+    const togglePwd = document.getElementById('togglePwd');
+    const pwdInput  = document.getElementById('loginPassword');
+    if (togglePwd && pwdInput) {
+        togglePwd.addEventListener('click', function () {
+            const isText = pwdInput.type === 'text';
+            pwdInput.type = isText ? 'password' : 'text';
+            togglePwd.className = isText ? 'ti ti-eye' : 'ti ti-eye-off';
         });
     }
 
+    /* Validation */
+    const regPassword = document.getElementById('regPassword');
+    if (regPassword) {
+        regPassword.addEventListener('input', function () {
+            this.setCustomValidity(this.value.length < 6
+                ? 'Password must be at least 6 characters' : '');
+        });
+    }
+
+    const loginPassword = document.getElementById('loginPassword');
     if (loginPassword) {
-        loginPassword.addEventListener("input", function () {
-            if (loginPassword.value.length < 6) {
-                loginPassword.setCustomValidity("Password must be at least 6 characters long");
-            } else {
-                loginPassword.setCustomValidity("");
-            }
-        });
-    }
-
-    if (registerPassword) {
-        registerPassword.addEventListener("input", function () {
-            if (registerPassword.value.length < 6) {
-                registerPassword.setCustomValidity("Password must be at least 6 characters long");
-            } else {
-                registerPassword.setCustomValidity("");
-            }
+        loginPassword.addEventListener('input', function () {
+            this.setCustomValidity(this.value.length < 6
+                ? 'Password must be at least 6 characters' : '');
         });
     }
 </script>

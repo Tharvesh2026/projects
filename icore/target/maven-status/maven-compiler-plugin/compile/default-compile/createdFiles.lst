@@ -7,8 +7,10 @@ com\example\session\DAO\RoleDAO.class
 com\example\session\DTO\Req\ResetPasswordRequestDTO.class
 com\example\session\constants\Constants$ResponseKey.class
 com\example\session\constants\Constants$ContentType.class
+com\example\session\api\ActivateRoleApiServlet.class
 com\example\session\api\noAuth\LanguageServlet.class
 com\example\session\exceptions\ApplicationException.class
+com\example\session\api\DeactivateRoleApiServlet.class
 com\example\session\exceptions\AuthenticationException.class
 com\example\session\api\UpdateRoleApiServlet.class
 com\example\session\DTO\Res\ProfileResponseDTO.class
@@ -24,6 +26,8 @@ com\example\session\api\page\SettingsServlet.class
 com\example\session\util\JsonUtil.class
 com\example\session\DTO\Req\UpdateRoleRequestDTO.class
 com\example\session\api\page\UpdateRoleStatusServlet.class
+com\example\session\util\RequestUtil.class
+com\example\session\api\RenameRoleApiServlet.class
 com\example\session\api\auth\LoginServlet.class
 com\example\session\util\RefreshSessionServlet.class
 com\example\session\model\User.class
@@ -31,11 +35,13 @@ com\example\session\util\PasswordHasher.class
 com\example\session\exceptions\ValidationException.class
 com\example\session\exceptions\ResourceNotFoundException.class
 com\example\session\model\Role.class
+com\example\session\api\auth\ProfileServlet.class
 com\example\session\api\UserByIdApiServlet.class
 com\example\session\util\PermissionValidator.class
 com\example\session\api\RegisterApiServlet.class
 com\example\session\api\page\LogServlet.class
 com\example\session\api\UpdateStatusApiServlet.class
+com\example\session\DTO\Req\RoleStatusRequestDTO.class
 com\example\session\model\Permission.class
 com\example\session\DTO\Req\UpdateStatusRequestDTO.class
 com\example\session\api\page\RenameRoleServlet.class
@@ -44,6 +50,7 @@ com\example\session\DTO\Req\CreateRoleRequestDTO.class
 com\example\session\api\LogoutApiServlet.class
 com\example\session\api\page\ManageRoleServlet.class
 com\example\session\DTO\Res\ApiResponseDTO.class
+com\example\session\DTO\Req\RenameRoleRequestDTO.class
 com\example\session\exceptions\DatabaseException.class
 com\example\session\util\csrfValidator.class
 com\example\session\api\noAuth\ConfigServlet.class

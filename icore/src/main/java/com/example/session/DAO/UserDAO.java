@@ -196,4 +196,49 @@ public class UserDAO {
             throw new DatabaseException("Unable to reset password");
         }
     }
+
+    public boolean updateProfile(int userId, String name, String username, String email)
+            throws DatabaseException {
+
+        String sql = "UPDATE users SET name = ?, username = ?, mailId = ? WHERE id = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, name);
+            ps.setString(2, username);
+            ps.setString(3, email);
+            ps.setInt(4, userId);
+
+            return ps.executeUpdate() == 1;
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Unable to update profile");
+        }
+    }
+
+    public boolean verifyPassword(int userId, String plainPassword)
+            throws DatabaseException {
+
+        String sql = "SELECT password FROM users WHERE id = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String storedHash = rs.getString("password");
+                return PasswordHasher.verify(plainPassword, storedHash);
+            }
+
+            return false;
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Unable to verify password");
+        }
+    }
+
 }

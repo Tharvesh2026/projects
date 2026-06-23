@@ -7,6 +7,7 @@ C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\Reset
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\DTO\Res\ErrorResponseDTO.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\noAuth\ConfigServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\LogoutApiServlet.java
+C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\ActivateRoleApiServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\util\PasswordHasher.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\DTO\Req\RegisterRequestDTO.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\page\LogServlet.java
@@ -15,6 +16,9 @@ C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\model\Rol
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\model\User.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\auth\ManageUserServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\DTO\Req\LoginRequestDTO.java
+C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\DeactivateRoleApiServlet.java
+C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\DTO\Req\RoleStatusRequestDTO.java
+C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\RenameRoleApiServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\LoginApiServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\UpdateStatusApiServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\auth\LogoutServlet.java
@@ -37,6 +41,7 @@ C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\util\Refr
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\page\RenameRoleServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\UpdateRoleApiServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\exceptions\ResourceNotFoundException.java
+C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\auth\ProfileServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\UserByIdApiServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\CreateRoleApiServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\UsersApiServlet.java
@@ -44,6 +49,8 @@ C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\page\
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\util\dbConnection.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\DAO\RoleDAO.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\page\SettingsServlet.java
+C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\util\RequestUtil.java
+C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\DTO\Req\RenameRoleRequestDTO.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\noAuth\ThemeServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\UpdateRolePermissionsApiServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\DAO\UserDAO.java
