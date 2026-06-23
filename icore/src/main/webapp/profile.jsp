@@ -41,7 +41,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/icore.css">
+    <link rel="stylesheet" href="assets/icore.css">
 
     <style>
         /* Profile banner */
