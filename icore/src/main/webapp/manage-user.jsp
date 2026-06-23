@@ -3,6 +3,7 @@
 <%@ page import="com.example.session.model.User" %>
 <%@ page import="com.example.session.model.Role" %>
 <%@ page import="java.util.*" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <%
     User selectedUser = (User) request.getAttribute("selectedUser");
@@ -23,6 +24,8 @@
     String statusTagClass = "ACTIVE".equalsIgnoreCase(selectedUser.getStatus())   ? "tag-active"
                           : "LOCKED".equalsIgnoreCase(selectedUser.getStatus())   ? "tag-locked"
                           : "tag-inactive";
+    pageContext.setAttribute("selectedUser", selectedUser);
+    pageContext.setAttribute("selectedInitials", initials.toUpperCase());
 %>
 
 <!DOCTYPE html>
@@ -53,7 +56,7 @@
                     <a href="<%= request.getContextPath() %>/users"
                        style="color:var(--text-3); text-decoration:none;">Users</a>
                     <span class="ic-breadcrumb-sep">/</span>
-                    <span><%= selectedUser.getUsername() %></span>
+                    <span><c:out value="${selectedUser.username}"/></span>
                 </div>
             </div>
             <div>
@@ -69,14 +72,14 @@
             <% if (request.getParameter("success") != null) { %>
             <div class="ic-alert ic-alert-success">
                 <i class="ti ti-circle-check"></i>
-                <%= request.getParameter("success") %>
+                <c:out value="${param.success}"/>
             </div>
             <% } %>
 
             <% if (request.getParameter("error") != null) { %>
             <div class="ic-alert ic-alert-error">
                 <i class="ti ti-alert-circle"></i>
-                <%= request.getParameter("error") %>
+                <c:out value="${param.error}"/>
             </div>
             <% } %>
 
@@ -95,19 +98,19 @@
                     <div class="ic-avatar ic-avatar-lg av-purple"
                          style="position:absolute; top:-26px; left:24px;
                                 border:3px solid var(--surface); font-size:18px;">
-                        <%= initials.toUpperCase() %>
+                        <c:out value="${selectedInitials}"/>
                     </div>
 
                     <div style="padding-top:36px; display:flex;
                                 justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
                         <div>
                             <div style="font-size:17px; font-weight:600; color:var(--text-1);">
-                                <c:out value="<%= selectedUser.getName() %>" />
+                                <c:out value="${selectedUser.name}"/>
                             </div>
                             <div style="font-size:13px; color:var(--text-3); margin-top:3px;">
-                                @<%= selectedUser.getUsername() %>
+                                @<c:out value="${selectedUser.username}"/>
                                 &nbsp;&bull;&nbsp;
-                                <%= selectedUser.getEmail() %>
+                                <c:out value="${selectedUser.email}"/>
                             </div>
                             <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
                                 <%
@@ -120,11 +123,11 @@
                                 %>
                                 <span class="ic-tag <%= roleTagClass %>">
                                     <i class="ti ti-shield" style="font-size:12px;"></i>
-                                    <%= selectedUser.getRole() %>
+                                    <c:out value="${selectedUser.role}"/>
                                 </span>
                                 <span class="ic-tag <%= statusTagClass %>">
                                     <i class="ti ti-circle-check" style="font-size:12px;"></i>
-                                    <%= selectedUser.getStatus() %>
+                                    <c:out value="${selectedUser.status}"/>
                                 </span>
                             </div>
                         </div>
@@ -167,10 +170,10 @@
                             <label class="ic-label">Select new role</label>
                             <select name="roleId" class="ic-input ic-select">
                                 <% if (roles != null) {
-                                    for (Role role : roles) { %>
+                                    for (Role role : roles) { pageContext.setAttribute("roleOption", role); %>
                                 <option value="<%= role.getId() %>"
                                         <%= role.getRoleName().equals(selectedUser.getRole()) ? "selected" : "" %>>
-                                    <%= role.getRoleName() %>
+                                    <c:out value="${roleOption.roleName}"/>
                                 </option>
                                 <% } } %>
                             </select>
@@ -259,7 +262,7 @@
                     </div>
 
                     <form action="<%= request.getContextPath() %>/manage-user" method="post"
-                          onsubmit="return confirm('Reset password for <%= selectedUser.getUsername() %>? This cannot be undone.');">
+                          onsubmit="return confirm('Reset password for this user? This cannot be undone.');">
                         <input type="hidden" name="id"     value="<%= selectedUser.getId() %>">
                         <input type="hidden" name="action" value="resetPassword">
 

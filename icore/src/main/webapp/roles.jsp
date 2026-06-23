@@ -2,6 +2,7 @@
 <%@ page isELIgnored="false" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.session.model.Role" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%
     List<Role> roles = (List<Role>) request.getAttribute("roles");
     if (roles == null) {
@@ -97,6 +98,7 @@
                         <tbody>
                         <%
                             for (Role role : roles) {
+                                pageContext.setAttribute("rowRole", role);
                                 boolean isActive = "ACTIVE".equalsIgnoreCase(role.getStatus());
                                 String roleUpper = role.getRoleName() != null ? role.getRoleName().toUpperCase() : "";
                                 String roleClass = "tag-generic";
@@ -116,7 +118,7 @@
                                     <div>
                                         <div style="font-weight:600; color:var(--text-1); font-size:13.5px;
                                                     font-family:var(--mono);">
-                                            <%= role.getRoleName() %>
+                                            <c:out value="${rowRole.roleName}"/>
                                         </div>
                                     </div>
                                 </div>
@@ -130,7 +132,7 @@
                                 <span class="ic-tag <%= isActive ? "tag-active" : "tag-inactive" %>">
                                     <i class="ti <%= isActive ? "ti-circle-check" : "ti-circle-x" %>"
                                        style="font-size:13px;"></i>
-                                    <%= role.getStatus() %>
+                                    <c:out value="${rowRole.status}"/>
                                 </span>
                             </td>
                             <td>
@@ -147,7 +149,7 @@
                                       style="display:flex; gap:6px; align-items:center;">
                                     <input type="hidden" name="roleId" value="<%= role.getId() %>">
                                     <input type="text" class="ic-input" name="roleName"
-                                           value="<%= role.getRoleName() %>"
+                                           value="<c:out value='${rowRole.roleName}'/>"
                                            style="width:150px; font-family:var(--mono); font-size:12px;"
                                            oninput="this.value=this.value.toUpperCase().replace(/\s/g,'_')"
                                            required>

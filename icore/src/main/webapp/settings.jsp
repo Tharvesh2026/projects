@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -106,34 +107,35 @@
                                 String sInit = sParts.length >= 2
                                     ? String.valueOf(sParts[0].charAt(0)) + String.valueOf(sParts[1].charAt(0))
                                     : String.valueOf(sParts[0].charAt(0));
+                                pageContext.setAttribute("sInit", sInit.toUpperCase());
                             %>
                             <div class="ic-avatar ic-avatar-lg av-purple">
-                                <%= sInit.toUpperCase() %>
+                                <c:out value="${sInit}"/>
                             </div>
                             <div>
                                 <div style="font-size:15px; font-weight:600; color:var(--text-1);">
-                                    ${sessionScope.user.name}
+                                    <c:out value="${sessionScope.user.name}"/>
                                 </div>
                                 <div style="font-size:12px; color:var(--text-3);">
-                                    ${sessionScope.user.email}
+                                    <c:out value="${sessionScope.user.email}"/>
                                 </div>
                                 <span class="ic-tag tag-admin" style="margin-top:6px; display:inline-flex;">
-                                    ${sessionScope.user.role}
+                                    <c:out value="${sessionScope.user.role}"/>
                                 </span>
                             </div>
                         </div>
 
                         <div class="ic-info-row">
                             <span class="ic-info-label">Name</span>
-                            <span class="ic-info-value">${sessionScope.user.name}</span>
+                            <span class="ic-info-value"><c:out value="${sessionScope.user.name}"/></span>
                         </div>
                         <div class="ic-info-row">
                             <span class="ic-info-label">Email</span>
-                            <span class="ic-info-value">${sessionScope.user.email}</span>
+                            <span class="ic-info-value"><c:out value="${sessionScope.user.email}"/></span>
                         </div>
                         <div class="ic-info-row">
                             <span class="ic-info-label">Role</span>
-                            <span class="ic-info-value">${sessionScope.user.role}</span>
+                            <span class="ic-info-value"><c:out value="${sessionScope.user.role}"/></span>
                         </div>
                     </div>
 
@@ -151,32 +153,32 @@
                                   id="sid"
                                   style="font-size:11px; max-width:180px;
                                          overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"
-                                  title="${pageContext.session.id}">
-                                ${pageContext.session.id}
+                                  title="<c:out value='${pageContext.session.id}'/>">
+                                <c:out value="${pageContext.session.id}"/>
                             </span>
                         </div>
                         <div class="ic-info-row">
                             <span class="ic-info-label">Created at</span>
                             <span class="ic-info-mono" id="creationTime">
-                                ${pageContext.session.creationTime}
+                                <c:out value="${pageContext.session.creationTime}"/>
                             </span>
                         </div>
                         <div class="ic-info-row">
                             <span class="ic-info-label">Last accessed</span>
                             <span class="ic-info-mono" id="lastAccessTime">
-                                ${pageContext.session.lastAccessedTime}
+                                <c:out value="${pageContext.session.lastAccessedTime}"/>
                             </span>
                         </div>
                         <div class="ic-info-row">
                             <span class="ic-info-label">Max idle timeout</span>
                             <span class="ic-info-mono">
-                                ${pageContext.session.maxInactiveInterval}s
+                                <c:out value="${pageContext.session.maxInactiveInterval}"/>s
                             </span>
                         </div>
                         <div class="ic-info-row">
                             <span class="ic-info-label">New session?</span>
                             <span class="ic-info-mono" id="isNew">
-                                ${pageContext.session.isNew()}
+                                <c:out value="${pageContext.session.isNew()}"/>
                             </span>
                         </div>
                     </div>
@@ -294,7 +296,7 @@
 </div>
 
 <script>
-    const timeoutSeconds = Number("${pageContext.session.maxInactiveInterval}");
+    const timeoutSeconds = Number("<c:out value='${pageContext.session.maxInactiveInterval}'/>");
     let remaining = timeoutSeconds;
 
     const ringFg    = document.getElementById('ringFg');

@@ -3,6 +3,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.session.model.User" %>
 <%@ page import="com.example.session.util.PermissionValidator" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%
     List<User> users = (List<User>) request.getAttribute("users");
 
@@ -120,6 +121,7 @@
                             int avIdx = 0;
 
                             for (User user : users) {
+                                pageContext.setAttribute("rowUser", user);
                                 String username   = user.getUsername();
                                 String displayName = user.getName();
 
@@ -143,34 +145,35 @@
                                 else if (roleUpper.contains("USER"))    roleClass = "tag-user";
 
                                 String avColor = avColors[avIdx % avColors.length];
+                                pageContext.setAttribute("rowInitials", initials.toUpperCase());
                                 avIdx++;
                         %>
                         <tr>
                             <td>
                                 <div style="display:flex; align-items:center; gap:10px;">
                                     <div class="ic-avatar <%= avColor %>">
-                                        <%= initials.toUpperCase() %>
+                                        <c:out value="${rowInitials}"/>
                                     </div>
                                     <div>
                                         <div style="font-weight:500; color:var(--text-1); font-size:13.5px;">
-                                            <c:out value="<%= user.getName() %>" />
+                                            <c:out value="${rowUser.name}"/>
                                         </div>
                                         <div style="font-size:12px; color:var(--text-3);">
-                                            @<%= username %>
+                                            @<c:out value="${rowUser.username}"/>
                                         </div>
                                     </div>
                                 </div>
                             </td>
-                            <td style="color:var(--text-2); font-size:13px;"><%= user.getEmail() %></td>
+                            <td style="color:var(--text-2); font-size:13px;"><c:out value="${rowUser.email}"/></td>
                             <td>
                                 <span class="ic-tag <%= roleClass %>">
-                                    <%= user.getRole() %>
+                                    <c:out value="${rowUser.role}"/>
                                 </span>
                             </td>
                             <td>
                                 <span class="ic-tag <%= statusClass %>">
                                     <i class="ti <%= statusIcon %>" style="font-size:13px;"></i>
-                                    <%= user.getStatus() %>
+                                    <c:out value="${rowUser.status}"/>
                                 </span>
                             </td>
                             <td>

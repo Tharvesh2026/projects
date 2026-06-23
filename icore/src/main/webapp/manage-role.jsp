@@ -3,6 +3,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.session.model.Role" %>
 <%@ page import="com.example.session.model.Permission" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%
     Role role = (Role) request.getAttribute("role");
     List<Permission> permissions = (List<Permission>) request.getAttribute("permissions");
@@ -12,6 +13,7 @@
         response.sendRedirect(request.getContextPath() + "/roles");
         return;
     }
+    pageContext.setAttribute("role", role);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,7 +41,7 @@
                 <a href="<%= request.getContextPath() %>/roles"
                    style="color:var(--text-3); text-decoration:none;">Roles</a>
                 <span class="ic-breadcrumb-sep">/</span>
-                <span><%= role.getRoleName() %></span>
+                <span><c:out value="${role.roleName}"/></span>
             </div>
             <div>
                 <a href="<%= request.getContextPath() %>/roles" class="ic-btn ic-btn-sm">
@@ -60,13 +62,13 @@
                         </div>
                         <div>
                             <div class="ic-page-title" style="font-family:var(--mono);">
-                                <%= role.getRoleName() %>
+                                <c:out value="${role.roleName}"/>
                             </div>
                             <div class="ic-page-sub">
                                 Role ID #<%= role.getId() %> &nbsp;&bull;&nbsp;
                                 <span class="ic-tag <%= "ACTIVE".equalsIgnoreCase(role.getStatus()) ? "tag-active" : "tag-inactive" %>"
                                       style="font-size:11.5px;">
-                                    <%= role.getStatus() %>
+                                    <c:out value="${role.status}"/>
                                 </span>
                             </div>
                         </div>
@@ -84,7 +86,7 @@
                         </div>
                         <div class="ic-info-row">
                             <span class="ic-info-label">Role name</span>
-                            <span class="ic-info-mono"><%= role.getRoleName() %></span>
+                            <span class="ic-info-mono"><c:out value="${role.roleName}"/></span>
                         </div>
                         <div class="ic-info-row">
                             <span class="ic-info-label">Role ID</span>
@@ -93,7 +95,7 @@
                         <div class="ic-info-row">
                             <span class="ic-info-label">Status</span>
                             <span class="ic-tag <%= "ACTIVE".equalsIgnoreCase(role.getStatus()) ? "tag-active" : "tag-inactive" %>">
-                                <%= role.getStatus() %>
+                                <c:out value="${role.status}"/>
                             </span>
                         </div>
                         <div class="ic-info-row">
@@ -146,6 +148,7 @@
                                     max-height:360px; overflow-y:auto; padding-right:4px;">
                             <%
                                 for (Permission permission : permissions) {
+                                    pageContext.setAttribute("permission", permission);
                                     boolean checked = assignedPermissionIds.contains(permission.getId());
                             %>
                             <label class="ic-perm-item">
@@ -155,8 +158,8 @@
                                        value="<%= permission.getId() %>"
                                        <%= checked ? "checked" : "" %>>
                                 <div>
-                                    <div class="ic-perm-key"><%= permission.getPermissionKey() %></div>
-                                    <div class="ic-perm-desc"><%= permission.getDescription() %></div>
+                                    <div class="ic-perm-key"><c:out value="${permission.permissionKey}"/></div>
+                                    <div class="ic-perm-desc"><c:out value="${permission.description}"/></div>
                                 </div>
                             </label>
                             <% } %>

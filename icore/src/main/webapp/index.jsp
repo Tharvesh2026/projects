@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%
     String mail = "";
     Cookie[] cookies = request.getCookies();
@@ -10,6 +11,7 @@
             }
         }
     }
+    pageContext.setAttribute("rememberedMail", mail);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -287,7 +289,7 @@
             <% if (request.getParameter("error") != null) { %>
             <div class="ic-alert ic-alert-error">
                 <i class="ti ti-alert-circle"></i>
-                <%= request.getParameter("error") %>
+                <c:out value="${param.error}"/>
             </div>
             <% } %>
 
@@ -306,7 +308,7 @@
                         <i class="ti ti-mail"></i>
                         <input type="email" class="ic-input" id="loginEmail" name="email"
                                placeholder="you@example.com"
-                               value="<%= mail %>" required>
+                               value="<c:out value='${rememberedMail}'/>" required>
                     </div>
                 </div>
 

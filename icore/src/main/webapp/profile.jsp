@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
 <%@ page import="com.example.session.model.User" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <%
     User profileUser = (User) session.getAttribute("user");
@@ -181,13 +182,13 @@
             <% if (request.getParameter("success") != null) { %>
             <div class="ic-alert ic-alert-success">
                 <i class="ti ti-circle-check"></i>
-                <%= request.getParameter("success") %>
+                <c:out value="${param.success}"/>
             </div>
             <% } %>
             <% if (request.getParameter("error") != null) { %>
             <div class="ic-alert ic-alert-error">
                 <i class="ti ti-alert-circle"></i>
-                <%= request.getParameter("error") %>
+                <c:out value="${param.error}"/>
             </div>
             <% } %>
 
@@ -198,7 +199,7 @@
                     <div class="profile-banner-dots"></div>
                     <div class="profile-avatar-wrap">
                         <div class="profile-avatar" id="avatarDisplay">
-                            <%= pInit %>
+                            <c:out value="${pInit}"/>
                         </div>
                     </div>
                 </div>
@@ -208,21 +209,21 @@
                                 align-items:flex-start; flex-wrap:wrap; gap:12px;">
                         <div>
                             <div style="font-size:18px; font-weight:600; color:var(--text-1);">
-                                ${sessionScope.user.name}
+                                <c:out value="${sessionScope.user.name}"/>
                             </div>
                             <div style="font-size:13px; color:var(--text-3); margin-top:3px;">
-                                @${sessionScope.user.username}
+                                @<c:out value="${sessionScope.user.username}"/>
                                 &nbsp;&bull;&nbsp;
-                                ${sessionScope.user.email}
+                                <c:out value="${sessionScope.user.email}"/>
                             </div>
                             <div style="margin-top:10px; display:flex; gap:7px; flex-wrap:wrap;">
                                 <span class="ic-tag <%= pRoleClass %>">
                                     <i class="ti ti-shield" style="font-size:12px;"></i>
-                                    ${sessionScope.user.role}
+                                    <c:out value="${sessionScope.user.role}"/>
                                 </span>
                                 <span class="ic-tag <%= pStatusClass %>">
                                     <i class="ti ti-circle-check" style="font-size:12px;"></i>
-                                    ${sessionScope.user.status}
+                                    <c:out value="${sessionScope.user.status}"/>
                                 </span>
                             </div>
                         </div>
@@ -233,7 +234,7 @@
                                         border-radius:var(--radius-sm); text-align:center;">
                                 <div style="font-size:10px; color:var(--text-3); margin-bottom:2px;">User ID</div>
                                 <div style="font-family:var(--mono); font-size:13px; font-weight:500;">
-                                    #${sessionScope.user.id}
+                                    #<c:out value="${sessionScope.user.id}"/>
                                 </div>
                             </div>
                             <div style="padding:8px 16px; background:var(--surface-2);
@@ -276,19 +277,19 @@
                             </div>
                             <div class="ic-info-row">
                                 <span class="ic-info-label">Full name</span>
-                                <span class="ic-info-value">${sessionScope.user.name}</span>
+                                <span class="ic-info-value"><c:out value="${sessionScope.user.name}"/></span>
                             </div>
                             <div class="ic-info-row">
                                 <span class="ic-info-label">Username</span>
-                                <span class="ic-info-mono">@${sessionScope.user.username}</span>
+                                <span class="ic-info-mono">@<c:out value="${sessionScope.user.username}"/></span>
                             </div>
                             <div class="ic-info-row">
                                 <span class="ic-info-label">Email address</span>
-                                <span class="ic-info-value">${sessionScope.user.email}</span>
+                                <span class="ic-info-value"><c:out value="${sessionScope.user.email}"/></span>
                             </div>
                             <div class="ic-info-row">
                                 <span class="ic-info-label">Account status</span>
-                                <span class="ic-tag <%= pStatusClass %>">${sessionScope.user.status}</span>
+                                <span class="ic-tag <%= pStatusClass %>"><c:out value="${sessionScope.user.status}"/></span>
                             </div>
                         </div>
 
@@ -300,11 +301,11 @@
                             </div>
                             <div class="ic-info-row">
                                 <span class="ic-info-label">Role</span>
-                                <span class="ic-tag <%= pRoleClass %>">${sessionScope.user.role}</span>
+                                <span class="ic-tag <%= pRoleClass %>"><c:out value="${sessionScope.user.role}"/></span>
                             </div>
                             <div class="ic-info-row">
                                 <span class="ic-info-label">User ID</span>
-                                <span class="ic-info-mono">#${sessionScope.user.id}</span>
+                                <span class="ic-info-mono">#<c:out value="${sessionScope.user.id}"/></span>
                             </div>
                             <div class="ic-info-row">
                                 <span class="ic-info-label">Permission source</span>
@@ -315,8 +316,8 @@
                                 <span class="ic-info-mono"
                                       style="font-size:11px; max-width:160px;
                                              overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"
-                                      title="${pageContext.session.id}">
-                                    ${pageContext.session.id}
+                                      title="<c:out value='${pageContext.session.id}'/>">
+                                    <c:out value="${pageContext.session.id}"/>
                                 </span>
                             </div>
                         </div>
@@ -341,7 +342,7 @@
                                     <i class="ti ti-user"></i>
                                     <input type="text" class="ic-input" id="editName"
                                            name="name"
-                                           value="<c:out value='<%= profileUser.getName() %>' />"
+                                           value="<c:out value='${sessionScope.user.name}'/>"
                                            placeholder="Your full name"
                                            required>
                                 </div>
@@ -353,7 +354,7 @@
                                     <i class="ti ti-at"></i>
                                     <input type="text" class="ic-input" id="editUsername"
                                            name="username"
-                                           value="<%= profileUser.getUsername() %>"
+                                           value="<c:out value='${sessionScope.user.username}'/>"
                                            placeholder="your_username"
                                            required
                                            oninput="this.value=this.value.toLowerCase().replace(/\s/g,'_')">
@@ -366,7 +367,7 @@
                                     <i class="ti ti-mail"></i>
                                     <input type="email" class="ic-input" id="editEmail"
                                            name="email"
-                                           value="<%= profileUser.getEmail() %>"
+                                           value="<c:out value='${sessionScope.user.email}'/>"
                                            placeholder="you@example.com"
                                            required>
                                 </div>
@@ -490,8 +491,8 @@
                     <div class="timeline-item">
                         <div class="timeline-dot"
                              style="background:<%= dotColors[di % dotColors.length] %>;"></div>
-                        <span class="timeline-time"><%= act.get("time") %></span>
-                        <span class="timeline-msg"><%= act.get("message") %></span>
+                        <span class="timeline-time"><c:out value="${activity.time}"/></span>
+                        <span class="timeline-msg"><c:out value="${activity.message}"/></span>
                     </div>
                     <%      di++;
                             }

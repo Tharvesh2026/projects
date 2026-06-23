@@ -1,6 +1,7 @@
 <%@ page isELIgnored="false" %>
 <%@ page import="com.example.session.model.User" %>
 <%@ page import="com.example.session.util.PermissionValidator" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <%
     User navUser = (User) session.getAttribute("user");
@@ -25,6 +26,7 @@
         ? String.valueOf(navParts[0].charAt(0)) + String.valueOf(navParts[1].charAt(0))
         : String.valueOf(navParts[0].charAt(0));
     navInitials = navInitials.toUpperCase();
+    pageContext.setAttribute("navInitials", navInitials);
 %>
 
 <aside class="ic-sidebar">
@@ -45,15 +47,15 @@
         <div style="display:flex; align-items:center; gap:9px; padding: 8px 10px;
                     background: var(--surface-2); border-radius: var(--radius-sm);">
             <div class="ic-avatar av-purple" style="font-size:12px;">
-                <%= navInitials %>
+                <c:out value="${navInitials}"/>
             </div>
             <div style="overflow:hidden;">
                 <div style="font-size:13px; font-weight:500; color:var(--text-1);
                             white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                    <%= navUser != null ? navUser.getName() : "Guest" %>
+                    <c:out value="${sessionScope.user != null ? sessionScope.user.name : 'Guest'}"/>
                 </div>
                 <div style="font-size:11px; color:var(--text-3);">
-                    <%= navUser != null ? navUser.getRole() : "" %>
+                    <c:out value="${sessionScope.user != null ? sessionScope.user.role : ''}"/>
                 </div>
             </div>
         </div>

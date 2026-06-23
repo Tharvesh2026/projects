@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,7 +42,7 @@
             <div class="ic-page-header">
                 <div>
                     <div class="ic-page-title">
-                        Welcome back, ${sessionScope.user.name}
+                        Welcome back, <c:out value="${sessionScope.user.name}"/>
                     </div>
                     <div class="ic-page-sub">
                         Here's what's happening in your cloud environment today.
@@ -68,21 +69,22 @@
                             String wInitials = wParts.length >= 2
                                 ? String.valueOf(wParts[0].charAt(0)) + String.valueOf(wParts[1].charAt(0))
                                 : String.valueOf(wParts[0].charAt(0));
+                            pageContext.setAttribute("wInitials", wInitials.toUpperCase());
                         %>
                         <div class="ic-avatar ic-avatar-lg av-purple">
-                            <%= wInitials.toUpperCase() %>
+                            <c:out value="${wInitials}"/>
                         </div>
                         <div>
                             <div style="font-size:16px; font-weight:600; color:var(--text-1);">
                                 <c:out value="${sessionScope.user.name}"/>
                             </div>
                             <div style="font-size:13px; color:var(--text-3); margin-top:2px;">
-                                @${sessionScope.user.username}
+                                @<c:out value="${sessionScope.user.username}"/>
                                 &nbsp;&bull;&nbsp;
-                                ${sessionScope.user.email}
+                                <c:out value="${sessionScope.user.email}"/>
                             </div>
                             <div style="margin-top:6px;">
-                                <span class="ic-tag tag-admin">${sessionScope.user.role}</span>
+                                <span class="ic-tag tag-admin"><c:out value="${sessionScope.user.role}"/></span>
                             </div>
                         </div>
                     </div>
@@ -91,7 +93,7 @@
                         <div style="text-align:right;">
                             <div style="font-size:11px; color:var(--text-3);">User ID</div>
                             <div style="font-family:var(--mono); font-size:13px; color:var(--text-2);">
-                                #${sessionScope.user.id}
+                                #<c:out value="${sessionScope.user.id}"/>
                             </div>
                         </div>
                         <div style="width:1px; height:32px; background:var(--border);"></div>
@@ -127,19 +129,19 @@
                     </div>
                     <div class="ic-info-row">
                         <span class="ic-info-label">Full name</span>
-                        <span class="ic-info-value">${sessionScope.user.name}</span>
+                        <span class="ic-info-value"><c:out value="${sessionScope.user.name}"/></span>
                     </div>
                     <div class="ic-info-row">
                         <span class="ic-info-label">Username</span>
-                        <span class="ic-info-mono">@${sessionScope.user.username}</span>
+                        <span class="ic-info-mono">@<c:out value="${sessionScope.user.username}"/></span>
                     </div>
                     <div class="ic-info-row">
                         <span class="ic-info-label">Email</span>
-                        <span class="ic-info-value">${sessionScope.user.email}</span>
+                        <span class="ic-info-value"><c:out value="${sessionScope.user.email}"/></span>
                     </div>
                     <div class="ic-info-row">
                         <span class="ic-info-label">Role</span>
-                        <span class="ic-tag tag-admin">${sessionScope.user.role}</span>
+                        <span class="ic-tag tag-admin"><c:out value="${sessionScope.user.role}"/></span>
                     </div>
                 </div>
 
@@ -151,8 +153,8 @@
                     <div class="ic-info-row">
                         <span class="ic-info-label">Session ID</span>
                         <span class="ic-info-mono" style="font-size:11px;"
-                              title="${pageContext.session.id}">
-                            ${pageContext.session.id}
+                              title="<c:out value='${pageContext.session.id}'/>">
+                            <c:out value="${pageContext.session.id}"/>
                         </span>
                     </div>
                     <div class="ic-info-row">
@@ -167,7 +169,7 @@
                     </div>
                     <div class="ic-info-row">
                         <span class="ic-info-label">Timeout</span>
-                        <span class="ic-info-mono">${pageContext.session.maxInactiveInterval}s</span>
+                        <span class="ic-info-mono"><c:out value="${pageContext.session.maxInactiveInterval}"/>s</span>
                     </div>
                 </div>
 
@@ -179,7 +181,7 @@
 </div>
 
 <script>
-    let timeout = Number("${pageContext.session.maxInactiveInterval}");
+    let timeout = Number("<c:out value='${pageContext.session.maxInactiveInterval}'/>");
     const sessionTimeoutSeconds = timeout;
     const countdownEl = document.getElementById("countdown");
     let userActive = false;

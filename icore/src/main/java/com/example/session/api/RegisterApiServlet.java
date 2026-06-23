@@ -28,7 +28,7 @@ public class RegisterApiServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         try {
             RegisterRequestDTO dto = JsonUtil.fromJson(req, RegisterRequestDTO.class);
-            String name = ValidationDAOUtil.sanitizeName(dto.getName);
+            String name = ValidationDAOUtil.sanitizeName(dto.getName());
             String mail = ValidationDAOUtil.sanitizeEmail(dto.getEmail());
             String username = ValidationDAOUtil.sanitizeUsername(dto.getUsername());
             String password = (dto.getPassword());
