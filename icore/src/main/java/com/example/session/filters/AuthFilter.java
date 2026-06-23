@@ -229,6 +229,15 @@ public class AuthFilter implements Filter {
                 path.equals("/profile.jsp")) {
             return "PROFILE_READ";
         }
+
+        if (path.equals("/auth/profile")) {
+            return "PROFILE_READ";
+        }
+
+        if (path.equals("/auth/profile/update") ||
+                path.equals("/auth/profile/change-password")) {
+            return "PROFILE_UPDATE";
+        }
         
         
         return null;

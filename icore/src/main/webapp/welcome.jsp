@@ -74,7 +74,7 @@
                         </div>
                         <div>
                             <div style="font-size:16px; font-weight:600; color:var(--text-1);">
-                                ${sessionScope.user.name}
+                                <c:out value="${sessionScope.user.name}"/>
                             </div>
                             <div style="font-size:13px; color:var(--text-3); margin-top:2px;">
                                 @${sessionScope.user.username}

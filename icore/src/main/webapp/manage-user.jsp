@@ -102,7 +102,7 @@
                                 justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
                         <div>
                             <div style="font-size:17px; font-weight:600; color:var(--text-1);">
-                                <%= selectedUser.getName() %>
+                                <c:out value="<%= selectedUser.getName() %>" />
                             </div>
                             <div style="font-size:13px; color:var(--text-3); margin-top:3px;">
                                 @<%= selectedUser.getUsername() %>

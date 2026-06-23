@@ -5,6 +5,7 @@ import com.example.session.DAO.PermissionDAO;
 import com.example.session.exceptions.DatabaseException;
 import com.example.session.model.User;
 import com.example.session.util.PasswordHasher;
+import com.example.session.util.ValidationDAOUtil;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,21 +21,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * ProfileServlet  —  /profile
+ * ProfileServlet — /profile
  *
- * GET  /profile                          → render profile.jsp
- * POST /profile  action=updateProfile    → update name, username, mailId
- * POST /profile  action=changePassword   → verify current pwd, store new hash
+ * GET /profile → render profile.jsp
+ * POST /profile action=updateProfile → update name, username, mailId
+ * POST /profile action=changePassword → verify current pwd, store new hash
  */
 @WebServlet("/profile")
 public class ProfileServlet extends HttpServlet {
 
-    private UserDAO       userDAO;
+    private UserDAO userDAO;
     private PermissionDAO permissionDAO;
 
     @Override
     public void init() {
-        userDAO       = new UserDAO();
+        userDAO = new UserDAO();
         permissionDAO = new PermissionDAO();
     }
 
@@ -80,7 +81,7 @@ public class ProfileServlet extends HttpServlet {
             return;
         }
 
-        User   user   = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("user");
         String action = request.getParameter("action");
 
         if (action == null) {
@@ -102,15 +103,15 @@ public class ProfileServlet extends HttpServlet {
 
     // ── Handler: update profile ───────────────────────────────────────────────
 
-    private void handleUpdateProfile(HttpServletRequest  request,
-                                     HttpServletResponse response,
-                                     HttpSession         session,
-                                     User                user)
+    private void handleUpdateProfile(HttpServletRequest request,
+            HttpServletResponse response,
+            HttpSession session,
+            User user)
             throws IOException {
 
-        String name     = clean(request.getParameter("name"));
-        String username = clean(request.getParameter("username"));
-        String email    = clean(request.getParameter("email"));   // stored as mailId in DB
+        String name = ValidationDAOUtil.sanitizeName(request.getParameter("name"));
+        String username = ValidationDAOUtil.sanitizeUsername(request.getParameter("username"));
+        String email = ValidationDAOUtil.sanitizeEmail(request.getParameter("email")); // stored as mailId in DB
 
         /* Validation */
         if (name.isEmpty() || username.isEmpty() || email.isEmpty()) {
@@ -130,7 +131,7 @@ public class ProfileServlet extends HttpServlet {
 
         if (!username.matches("^[a-z0-9_]+$")) {
             redirect(response, request,
-                "/profile?tab=edit&error=Username+may+only+contain+lowercase+letters,+numbers+and+underscores.");
+                    "/profile?tab=edit&error=Username+may+only+contain+lowercase+letters,+numbers+and+underscores.");
             return;
         }
 
@@ -140,7 +141,7 @@ public class ProfileServlet extends HttpServlet {
 
             if (!updated) {
                 redirect(response, request,
-                    "/profile?tab=edit&error=Update+failed.+Username+or+email+may+already+be+taken.");
+                        "/profile?tab=edit&error=Update+failed.+Username+or+email+may+already+be+taken.");
                 return;
             }
 
@@ -150,13 +151,12 @@ public class ProfileServlet extends HttpServlet {
              */
             User refreshed = new User(
                     username,
-                    email,                      // mailId
+                    email, // mailId
                     user.getPasswordHash(),
                     name,
                     user.getRole(),
                     user.getStatus(),
-                    user.getId()
-            );
+                    user.getId());
             session.setAttribute("user", refreshed);
 
             redirect(response, request, "/profile?success=Profile+updated+successfully.");
@@ -169,67 +169,70 @@ public class ProfileServlet extends HttpServlet {
 
     // ── Handler: change password ──────────────────────────────────────────────
 
-    private void handleChangePassword(HttpServletRequest  request,
-                                      HttpServletResponse response,
-                                      User                user)
+    private void handleChangePassword(HttpServletRequest request,
+            HttpServletResponse response,
+            User user)
             throws IOException {
 
         String currentPassword = request.getParameter("currentPassword");
-        String newPassword     = request.getParameter("newPassword");
+        String newPassword = request.getParameter("newPassword");
         String confirmPassword = request.getParameter("confirmPassword");
 
         /* Validation */
         if (isBlank(currentPassword) || isBlank(newPassword) || isBlank(confirmPassword)) {
             redirect(response, request,
-                "/profile?tab=password&error=All+password+fields+are+required.");
+                    "/profile?tab=password&error=All+password+fields+are+required.");
             return;
         }
 
         if (!newPassword.equals(confirmPassword)) {
             redirect(response, request,
-                "/profile?tab=password&error=New+passwords+do+not+match.");
+                    "/profile?tab=password&error=New+passwords+do+not+match.");
             return;
         }
 
         if (newPassword.length() < 6) {
             redirect(response, request,
-                "/profile?tab=password&error=New+password+must+be+at+least+6+characters.");
+                    "/profile?tab=password&error=New+password+must+be+at+least+6+characters.");
             return;
         }
 
         if (newPassword.equals(currentPassword)) {
             redirect(response, request,
-                "/profile?tab=password&error=New+password+must+differ+from+current+password.");
+                    "/profile?tab=password&error=New+password+must+differ+from+current+password.");
             return;
         }
 
-        /* Verify current password using PasswordHasher.verify() — same as validateUser() in UserDAO */
+        /*
+         * Verify current password using PasswordHasher.verify() — same as
+         * validateUser() in UserDAO
+         */
         try {
             boolean valid = userDAO.verifyPassword(user.getId(), currentPassword);
 
             if (!valid) {
                 redirect(response, request,
-                    "/profile?tab=password&error=Current+password+is+incorrect.");
+                        "/profile?tab=password&error=Current+password+is+incorrect.");
                 return;
             }
 
             /* Hash the new password and store via existing resetPassword() */
-            String newHash  = PasswordHasher.hash(newPassword);
+            String newHash = PasswordHasher.hash(newPassword);
             boolean changed = userDAO.resetPassword(user.getId(), newHash);
 
             if (!changed) {
                 redirect(response, request,
-                    "/profile?tab=password&error=Password+update+failed.+Please+try+again.");
+                        "/profile?tab=password&error=Password+update+failed.+Please+try+again.");
                 return;
             }
 
             redirect(response, request,
-                "/profile?success=Password+changed+successfully.");
+                    "/profile?success=Password+changed+successfully.");
 
         } catch (DatabaseException e) {
             getServletContext().log("ProfileServlet.handleChangePassword", e);
             redirect(response, request,
-                "/profile?tab=password&error=A+database+error+occurred.");
+                    "/profile?tab=password&error=A+database+error+occurred.");
         }
     }
 
@@ -239,7 +242,7 @@ public class ProfileServlet extends HttpServlet {
      * Returns a placeholder activity list.
      * When you add an AuditLogDAO, replace this with a real DB call:
      *
-     *   return auditLogDAO.getRecentByUser(userId, 10);
+     * return auditLogDAO.getRecentByUser(userId, 10);
      *
      * Each map must have keys "time" (String) and "message" (String).
      */
@@ -252,20 +255,16 @@ public class ProfileServlet extends HttpServlet {
 
     private Map<String, String> entry(String time, String message) {
         Map<String, String> m = new LinkedHashMap<>();
-        m.put("time",    time);
+        m.put("time", time);
         m.put("message", message);
         return m;
     }
 
     private void redirect(HttpServletResponse response,
-                          HttpServletRequest  request,
-                          String              path) throws IOException {
+            HttpServletRequest request,
+            String path) throws IOException {
         response.sendRedirect(request.getContextPath() + path);
-    }
-
-    private String clean(String s) {
-        return s == null ? "" : s.trim();
-    }
+    }   
 
     private boolean isBlank(String s) {
         return s == null || s.trim().isEmpty();

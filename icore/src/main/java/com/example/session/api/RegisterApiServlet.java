@@ -8,6 +8,7 @@ import com.example.session.DTO.Res.ErrorResponseDTO;
 import com.example.session.util.JsonUtil;
 import com.example.session.exceptions.*;
 import com.example.session.util.PasswordHasher;
+import com.example.session.util.ValidationDAOUtil;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -27,10 +28,10 @@ public class RegisterApiServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         try {
             RegisterRequestDTO dto = JsonUtil.fromJson(req, RegisterRequestDTO.class);
-            String name = dto.getName();
-            String mail = dto.getEmail();
-            String password = dto.getPassword();
-            String username = dto.getUsername();
+            String name = ValidationDAOUtil.sanitizeName(dto.getName);
+            String mail = ValidationDAOUtil.sanitizeEmail(dto.getEmail());
+            String username = ValidationDAOUtil.sanitizeUsername(dto.getUsername());
+            String password = (dto.getPassword());
             validateRegisterInput(name, mail, username, password);
 
             String hashPwd = PasswordHasher.hash(password);

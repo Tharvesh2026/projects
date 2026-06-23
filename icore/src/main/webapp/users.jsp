@@ -153,7 +153,7 @@
                                     </div>
                                     <div>
                                         <div style="font-weight:500; color:var(--text-1); font-size:13.5px;">
-                                            <%= user.getName() %>
+                                            <c:out value="<%= user.getName() %>" />
                                         </div>
                                         <div style="font-size:12px; color:var(--text-3);">
                                             @<%= username %>

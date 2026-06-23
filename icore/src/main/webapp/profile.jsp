@@ -341,7 +341,7 @@
                                     <i class="ti ti-user"></i>
                                     <input type="text" class="ic-input" id="editName"
                                            name="name"
-                                           value="<%= profileUser.getName() %>"
+                                           value="<c:out value='<%= profileUser.getName() %>' />"
                                            placeholder="Your full name"
                                            required>
                                 </div>
