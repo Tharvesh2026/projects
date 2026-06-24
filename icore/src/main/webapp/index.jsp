@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%
     String mail = "";
@@ -268,7 +268,7 @@
         </div>
 
         <div class="auth-footer">
-            &copy; 2025 i.Core · Anthropic Cloud
+            &copy; 2025 i.Core Projects · Identity Core Projects
         </div>
     </div>
 
@@ -308,7 +308,7 @@
                         <i class="ti ti-mail"></i>
                         <input type="email" class="ic-input" id="loginEmail" name="email"
                                placeholder="you@example.com"
-                               value="<c:out value='${rememberedMail}'/>" required>
+                               value="${rememberedMail}" required>
                     </div>
                 </div>
 
