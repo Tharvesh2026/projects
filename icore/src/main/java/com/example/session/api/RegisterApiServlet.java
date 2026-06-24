@@ -29,7 +29,7 @@ public class RegisterApiServlet extends HttpServlet {
         try {
             RegisterRequestDTO dto = JsonUtil.fromJson(req, RegisterRequestDTO.class);
             String name = ValidationDAOUtil.sanitizeName(dto.getName());
-            String mail = ValidationDAOUtil.sanitizeEmail(dto.getEmail());
+            String mail = dto.getEmail();
             String username = ValidationDAOUtil.sanitizeUsername(dto.getUsername());
             String password = (dto.getPassword());
             validateRegisterInput(name, mail, username, password);

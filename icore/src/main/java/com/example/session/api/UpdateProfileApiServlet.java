@@ -38,7 +38,7 @@ public class UpdateProfileApiServlet extends HttpServlet {
             UpdateProfileRequestDTO dto = JsonUtil.fromJson(req, UpdateProfileRequestDTO.class);
             
             String name = ValidationDAOUtil.sanitizeName(dto.getName());
-            String email = ValidationDAOUtil.sanitizeEmail(dto.getEmail());
+            String email = dto.getEmail();
             String username = ValidationDAOUtil.sanitizeUsername(dto.getUsername());
 
             validateProfile(name, username, email);
