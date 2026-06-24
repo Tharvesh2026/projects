@@ -28,12 +28,15 @@ C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\DTO\Req\U
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\page\UpdateRoleStatusServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\constants\Constants.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\noAuth\LanguageServlet.java
+C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\ProfileDetailsApiServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\DTO\Req\CreateRoleRequestDTO.java
+C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\ChangePasswordApiServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\DTO\Res\ProfileResponseDTO.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\util\PermissionValidator.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\exceptions\DatabaseException.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\exceptions\ValidationException.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\auth\RegisterServlet.java
+C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\UpdateProfileApiServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\page\RoleServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\util\csrfValidator.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\auth\UsersServlet.java
@@ -46,6 +49,7 @@ C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\UserB
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\CreateRoleApiServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\UsersApiServlet.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\page\ManageRoleServlet.java
+C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\DTO\Req\ChangePasswordRequestDTO.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\util\dbConnection.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\DAO\RoleDAO.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\page\SettingsServlet.java
@@ -57,6 +61,8 @@ C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\DAO\UserD
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\model\Permission.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\exceptions\ApplicationException.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\constants\WebResponseCodes.java
+C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\util\ValidationDAOUtil.java
+C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\DTO\Req\UpdateProfileRequestDTO.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\DTO\Req\UpdateRoleRequestDTO.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\filters\AuthFilter.java
 C:\Users\DS\Documents\projects\icore\src\main\java\com\example\session\api\auth\LoginServlet.java
