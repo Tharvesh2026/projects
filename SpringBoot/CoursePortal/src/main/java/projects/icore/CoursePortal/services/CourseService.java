@@ -1,18 +1,23 @@
 package projects.icore.CoursePortal.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import projects.icore.CoursePortal.entity.Course;
 import projects.icore.CoursePortal.repository.CourseRepo;
 
+
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CourseService {
     private final CourseRepo courseRepository;
+    PortalStatsService portalStatsService;
 
     public Course createCourse(Course course) {
+        log.info("Total No of Students:  {}", portalStatsService.getTotalStudents());
         return courseRepository.save(course);
     }
 
