@@ -3,9 +3,8 @@ package projects.icore.CoursePortal.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import projects.icore.CoursePortal.dto.StudentProfileResponse;
-import projects.icore.CoursePortal.entity.Student;
-import projects.icore.CoursePortal.services.StudentProfileService;
+import projects.icore.CoursePortal.dto.StudentRequest;
+import projects.icore.CoursePortal.dto.StudentResponse;
 import projects.icore.CoursePortal.services.StudentService;
 
 import java.util.List;
@@ -17,28 +16,27 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
-    private final StudentProfileService studentProfileService;
 
     @PostMapping
-    public Student createStudent(@RequestBody Student student) {
+    public StudentResponse createStudent(@RequestBody StudentRequest studentRequest) {
 
         log.info("POST /api/v1/students - Register request received. RollNo={}",
-                student.getRollNo());
+                studentRequest.rollNo());
 
-        Student savedStudent = studentService.register(student);
+        StudentResponse savedStudent = studentService.register(studentRequest);
 
         log.info("POST /api/v1/students - Student registered successfully. RollNo={}",
-                savedStudent.getRollNo());
+                savedStudent.rollNo());
 
         return savedStudent;
     }
 
     @GetMapping("/{rollNo}")
-    public Student getStudent(@PathVariable Integer rollNo) {
+    public StudentResponse getStudent(@PathVariable Integer rollNo) {
 
         log.info("GET /api/v1/students/{} - Request received", rollNo);
 
-        Student student = studentService.getById(rollNo);
+        StudentResponse student = studentService.getById(rollNo);
 
         log.info("GET /api/v1/students/{} - Request completed", rollNo);
 
@@ -46,15 +44,14 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<Student> getAllStudents() {
+    public List<StudentResponse> getAllStudents() {
 
         log.info("GET /api/v1/students - Fetch all students request received");
 
-        List<Student> students = studentService.getAll();
+        List<StudentResponse> students = studentService.getAll();
 
         log.info("GET /api/v1/students - Returned {} students", students.size());
 
         return students;
     }
-
 }

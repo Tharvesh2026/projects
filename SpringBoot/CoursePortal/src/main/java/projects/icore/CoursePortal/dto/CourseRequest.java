@@ -1,6 +1,6 @@
 package projects.icore.CoursePortal.dto;
 
-public record CourseResponse(
+public record CourseRequest(
         String code,
         String name,
         String description,

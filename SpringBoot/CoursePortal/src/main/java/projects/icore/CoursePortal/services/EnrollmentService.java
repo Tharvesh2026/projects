@@ -2,41 +2,47 @@ package projects.icore.CoursePortal.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Service;
+import projects.icore.CoursePortal.dto.EnrollmentRequest;
+import projects.icore.CoursePortal.dto.EnrollmentResponse;
 import projects.icore.CoursePortal.entity.Enrollment;
+import projects.icore.CoursePortal.exception.DuplicateEnrollmentException;
+import projects.icore.CoursePortal.exception.ResourceNotFoundException;
+import projects.icore.CoursePortal.mapper.EnrollmentMapper;
 import projects.icore.CoursePortal.repository.EnrollementRepo;
-import projects.icore.CoursePortal.repository.StudentRepo;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class EnrollmentService {
     private final EnrollementRepo enrollmentRepository;
-    private final StudentService studentService;
-    private final CourseService courseService;
+    private final StudentEnrollmentQueryService queryService;
+    private final EnrollmentMapper enrollmentMapper;
 
-    public Enrollment registerCourse(Integer rollNo, String courseCode) {
+    public EnrollmentResponse registerCourse(EnrollmentRequest request) {
+        Integer rollNo = request.rollNo();
+        String courseCode = request.courseCode();
 
         log.info("Enrollment request. RollNo={}, Course={}",
                 rollNo, courseCode);
 
-        if (!studentService.checkIdExists(rollNo)) {
+        if (!queryService.studentExists(rollNo)) {
             log.warn("Enrollment failed. Student not found. RollNo={}", rollNo);
-            throw new RuntimeException("Student not found");
+            throw new ResourceNotFoundException("Student not found");
         }
 
-        if (!courseService.exists(courseCode)) {
+        if (!queryService.courseExists(courseCode)) {
             log.warn("Enrollment failed. Course not found. Code={}", courseCode);
-            throw new RuntimeException("Course not found");
+            throw new ResourceNotFoundException("Course not found");
         }
 
-        if (enrollmentRepository.existsByRollNoAndCourseCode(rollNo, courseCode)) {
+        if (queryService.alreadyEnrolled(rollNo, courseCode)) {
             log.warn("Enrollment failed. Student already enrolled. RollNo={}, Course={}",
                     rollNo, courseCode);
-            throw new RuntimeException("Student already enrolled in this course");
+            throw new DuplicateEnrollmentException("Student already enrolled in this course");
         }
 
         Enrollment enrollment = Enrollment.builder()
@@ -49,30 +55,40 @@ public class EnrollmentService {
         log.info("Enrollment successful. RollNo={}, Course={}",
                 rollNo, courseCode);
 
-        return saved;
+        return enrollmentMapper.toResponse(saved);
     }
 
-    public List<Enrollment> getCoursesByStudent(Integer rollNo) {
-
+    public List<EnrollmentResponse> getCoursesByStudent(Integer rollNo) {
         log.info("Fetching courses for student={}", rollNo);
+
+        if (!queryService.studentExists(rollNo)) {
+            throw new ResourceNotFoundException("Student not found");
+        }
 
         List<Enrollment> enrollments = enrollmentRepository.findByRollNo(rollNo);
 
         log.info("Student {} is enrolled in {} course(s)",
                 rollNo, enrollments.size());
 
-        return enrollments;
+        return enrollments.stream()
+                .map(enrollmentMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
-    public List<Enrollment> getStudentsByCourse(String courseCode) {
-
+    public List<EnrollmentResponse> getStudentsByCourse(String courseCode) {
         log.info("Fetching students for course={}", courseCode);
+
+        if (!queryService.courseExists(courseCode)) {
+            throw new ResourceNotFoundException("Course not found");
+        }
 
         List<Enrollment> enrollments = enrollmentRepository.findByCourseCode(courseCode);
 
         log.info("Course {} has {} student(s)",
                 courseCode, enrollments.size());
 
-        return enrollments;
+        return enrollments.stream()
+                .map(enrollmentMapper::toResponse)
+                .collect(Collectors.toList());
     }
 }

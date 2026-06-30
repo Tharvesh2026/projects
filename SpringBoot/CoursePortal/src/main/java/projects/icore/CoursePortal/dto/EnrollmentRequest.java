@@ -1,7 +1,7 @@
 package projects.icore.CoursePortal.dto;
 
-public record StudentSummaryResponse(
+public record EnrollmentRequest(
         Integer rollNo,
-        String name
+        String courseCode
 ) {
 }
