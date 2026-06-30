@@ -18,24 +18,64 @@ public class CourseService {
     private final StudentEnrollmentQueryService studentEnrollmentQueryService;
 
     public Course createCourse(Course course) {
-        log.info("Total No of Students:  {}", portalStatsService.getTotalStudents());
-        return courseRepository.save(course);
+
+        log.info("Creating course. Code={}, Name={}", course.getCode(), course.getName());
+
+        log.info("Current total students = {}", portalStatsService.getTotalStudents());
+
+        Course savedCourse = courseRepository.save(course);
+
+        log.info("Course created successfully. Code={}", savedCourse.getCode());
+
+        return savedCourse;
     }
 
     public Course getCourse(String code) {
-        return courseRepository.findById(code)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        log.info("Fetching course with code={}", code);
+
+        Course course = courseRepository.findById(code)
+                .orElseThrow(() -> {
+                    log.error("Course not found. Code={}", code);
+                    return new RuntimeException("Course not found");
+                });
+
+        log.info("Course found. Code={}, Name={}",
+                course.getCode(), course.getName());
+
+        return course;
     }
 
     public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+
+        log.info("Fetching all courses");
+
+        List<Course> courses = courseRepository.findAll();
+
+        log.info("Total courses found={}", courses.size());
+
+        return courses;
     }
 
     public boolean exists(String code) {
-        return courseRepository.existsById(code);
+
+        boolean exists = courseRepository.existsById(code);
+
+        log.debug("Course exists check. Code={}, Exists={}",
+                code, exists);
+
+        return exists;
     }
 
     public boolean canAllowCourseForStudent(Integer rollNo) {
-        return studentEnrollmentQueryService.studentExists(rollNo);
+
+        log.info("Checking student eligibility. RollNo={}", rollNo);
+
+        boolean allowed = studentEnrollmentQueryService.studentExists(rollNo);
+
+        log.info("Eligibility result. RollNo={}, Allowed={}",
+                rollNo, allowed);
+
+        return allowed;
     }
 }

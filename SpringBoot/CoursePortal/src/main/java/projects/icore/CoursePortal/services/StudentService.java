@@ -16,26 +16,70 @@ public class StudentService {
     private final PortalStatsService portalStatsService;
     private final StudentEnrollmentQueryService studentEnrollmentQueryService;
 
-     public Student register(Student student){
-         log.info("Student Created {}", student.getRollNo());
-         log.info("Available Courses {}",portalStatsService.getTotalCourses());
-         return studentRepo.save(student);
-     }
 
-     public Student getById(Integer id){
-         return studentRepo.findById(id).orElseThrow(()->new RuntimeException("Student Not Found"));
-     }
+    public Student register(Student student) {
 
-     public List<Student> getAll(){
-         return studentRepo.findAll();
-     }
+        log.info("Registering student. RollNo={}, Name={}",
+                student.getRollNo(), student.getName());
 
-     public boolean checkIdExists(Integer id){
-         return studentRepo.existsById(id);
-     }
+        log.info("Available courses={}",
+                portalStatsService.getTotalCourses());
 
-     public long getStudentEnrollmentCount(Integer rollNo){
-        return studentEnrollmentQueryService.getEnrollmentCountByStudent(rollNo);
-     }
+        Student savedStudent = studentRepo.save(student);
+
+        log.info("Student registered successfully. RollNo={}",
+                savedStudent.getRollNo());
+
+        return savedStudent;
+    }
+
+    public Student getById(Integer id) {
+
+        log.info("Fetching student. RollNo={}", id);
+
+        Student student = studentRepo.findById(id)
+                .orElseThrow(() -> {
+                    log.error("Student not found. RollNo={}", id);
+                    return new RuntimeException("Student Not Found");
+                });
+
+        log.info("Student found. RollNo={}, Name={}",
+                student.getRollNo(), student.getName());
+
+        return student;
+    }
+
+    public List<Student> getAll() {
+
+        log.info("Fetching all students");
+
+        List<Student> students = studentRepo.findAll();
+
+        log.info("Total students={}", students.size());
+
+        return students;
+    }
+
+    public boolean checkIdExists(Integer id) {
+
+        boolean exists = studentRepo.existsById(id);
+
+        log.debug("Student exists check. RollNo={}, Exists={}",
+                id, exists);
+
+        return exists;
+    }
+
+    public long getStudentEnrollmentCount(Integer rollNo) {
+
+        log.info("Fetching enrollment count for RollNo={}", rollNo);
+
+        long count = studentEnrollmentQueryService.getEnrollmentCountByStudent(rollNo);
+
+        log.info("Enrollment count={}, RollNo={}", count, rollNo);
+
+        return count;
+    }
 
 }
+
