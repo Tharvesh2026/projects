@@ -1,5 +1,4 @@
-# Circular Dependency Lab 01 - Basic 2 Bean Cycle
-
+Indirect 3 Bean Circular Dependency
 ## Goal
 
 Create a indirect circular dependency intentionally among `StudentService`, `CourseService` and `Enrollement Service`.
@@ -17,6 +16,8 @@ CourseController
 CourseService  <-----|
       ↓              |
 StudentService       |
+      ↓              |
+EnrollmentService    |
       ↓              |
 CourseService  ------|
 ```
@@ -87,6 +88,4 @@ But this is not a proper solution. It only hides the design problem.
 
 ## Correct Fix
 
-Do not make `StudentService` and `CourseService` call each other directly.
-
-If both services need shared data, Move that combined logic to a separate service like PortalStatsService or EnrollmentService..
+```
