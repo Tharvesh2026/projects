@@ -14,7 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CourseService {
     private final CourseRepo courseRepository;
-    PortalStatsService portalStatsService;
+    private final PortalStatsService portalStatsService;
+    private final StudentService studentService;
 
     public Course createCourse(Course course) {
         log.info("Total No of Students:  {}", portalStatsService.getTotalStudents());
@@ -32,5 +33,9 @@ public class CourseService {
 
     public boolean exists(String code) {
         return courseRepository.existsById(code);
+    }
+
+    public boolean canAllowCourseForStudent(Integer rollNo) {
+        return studentService.checkIdExists(rollNo);
     }
 }

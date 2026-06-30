@@ -13,7 +13,9 @@ import java.util.List;
 @Slf4j
 public class StudentService {
     private final StudentRepo studentRepo;
-    PortalStatsService portalStatsService;
+    private final PortalStatsService portalStatsService;
+    private final EnrollmentService enrollmentService;
+
      public Student register(Student student){
          log.info("Student Created {}", student.getRollNo());
          log.info("Available Courses {}",portalStatsService.getTotalCourses());
@@ -30,6 +32,10 @@ public class StudentService {
 
      public boolean checkIdExists(Integer id){
          return studentRepo.existsById(id);
+     }
+
+     public long getStudentEnrollmentCount(Integer rollNo){
+        return enrollmentService.getCoursesByStudent(rollNo).size();
      }
 
 }
