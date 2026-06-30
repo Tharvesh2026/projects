@@ -15,7 +15,7 @@ import java.util.List;
 public class CourseService {
     private final CourseRepo courseRepository;
     private final PortalStatsService portalStatsService;
-    private final StudentService studentService;
+    private final StudentEnrollmentQueryService studentEnrollmentQueryService;
 
     public Course createCourse(Course course) {
         log.info("Total No of Students:  {}", portalStatsService.getTotalStudents());
@@ -36,6 +36,6 @@ public class CourseService {
     }
 
     public boolean canAllowCourseForStudent(Integer rollNo) {
-        return studentService.checkIdExists(rollNo);
+        return studentEnrollmentQueryService.studentExists(rollNo);
     }
 }

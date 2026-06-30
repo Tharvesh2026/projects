@@ -15,12 +15,12 @@ import java.util.List;
 @Slf4j
 public class EnrollmentService {
     private final EnrollementRepo enrollmentRepository;
-    private final StudentRepo studentService;
+    private final StudentService studentService;
     private final CourseService courseService;
 
     public Enrollment registerCourse(Integer rollNo, String courseCode) {
 
-        if (!studentService.existsById(rollNo)) {
+        if (!studentService.checkIdExists(rollNo)) {
             throw new RuntimeException("Student not found");
         }
 

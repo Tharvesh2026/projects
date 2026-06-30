@@ -14,7 +14,7 @@ import java.util.List;
 public class StudentService {
     private final StudentRepo studentRepo;
     private final PortalStatsService portalStatsService;
-    private final EnrollmentService enrollmentService;
+    private final StudentEnrollmentQueryService studentEnrollmentQueryService;
 
      public Student register(Student student){
          log.info("Student Created {}", student.getRollNo());
@@ -35,7 +35,7 @@ public class StudentService {
      }
 
      public long getStudentEnrollmentCount(Integer rollNo){
-        return enrollmentService.getCoursesByStudent(rollNo).size();
+        return studentEnrollmentQueryService.getEnrollmentCountByStudent(rollNo);
      }
 
 }
