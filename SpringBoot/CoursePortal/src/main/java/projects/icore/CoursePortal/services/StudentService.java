@@ -14,8 +14,6 @@ import java.util.List;
 public class StudentService {
     private final StudentRepo studentRepo;
     private final PortalStatsService portalStatsService;
-    private final StudentEnrollmentQueryService studentEnrollmentQueryService;
-
 
     public Student register(Student student) {
 
@@ -70,16 +68,6 @@ public class StudentService {
         return exists;
     }
 
-    public long getStudentEnrollmentCount(Integer rollNo) {
-
-        log.info("Fetching enrollment count for RollNo={}", rollNo);
-
-        long count = studentEnrollmentQueryService.getEnrollmentCountByStudent(rollNo);
-
-        log.info("Enrollment count={}, RollNo={}", count, rollNo);
-
-        return count;
-    }
-
+    
 }
 

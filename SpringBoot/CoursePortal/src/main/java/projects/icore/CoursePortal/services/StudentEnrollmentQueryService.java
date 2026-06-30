@@ -22,6 +22,9 @@ public class StudentEnrollmentQueryService {
         return courseRepo.existsById(courseCode);
     }
 
+    public boolean alreadyEnrolled(Integer rollNo, String courseCode) {
+        return enrollmentRepository.existsByRollNoAndCourseCode(rollNo, courseCode);
+    }
     public long getEnrollmentCountByStudent(Integer rollNo) {
         return enrollmentRepository.findByRollNo(rollNo).size();
     }

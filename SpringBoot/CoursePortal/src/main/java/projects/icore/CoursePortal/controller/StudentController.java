@@ -3,7 +3,9 @@ package projects.icore.CoursePortal.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import projects.icore.CoursePortal.dto.StudentProfileResponse;
 import projects.icore.CoursePortal.entity.Student;
+import projects.icore.CoursePortal.services.StudentProfileService;
 import projects.icore.CoursePortal.services.StudentService;
 
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
+    private final StudentProfileService studentProfileService;
 
     @PostMapping
     public Student createStudent(@RequestBody Student student) {
@@ -53,4 +56,19 @@ public class StudentController {
 
         return students;
     }
+
+    @GetMapping("/{rollNo}/profile")
+    public StudentProfileResponse getStudentProfile(@PathVariable Integer rollNo) {
+
+        log.info("GET /api/v1/students/{}/profile - Profile request received", rollNo);
+
+        StudentProfileResponse profile = studentProfileService.getProfile(rollNo);
+
+        log.info("GET /api/v1/students/{}/profile - Profile request completed. EnrollmentCount={}",
+                rollNo,
+                profile.enrollmentCount());
+
+        return profile;
+    }
+
 }
