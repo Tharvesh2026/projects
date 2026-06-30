@@ -87,5 +87,24 @@ spring.main.allow-circular-references=true
 But this is not a proper solution. It only hides the design problem.
 
 ## Correct Fix
+Instead of calling each other user Query Service Principle to Avoid the Service to service chain to avoid the `Circular Dependency`
 
+```text
+StudentService
+   ↓
+StudentEnrollmentQueryService
+   ↓
+StudentRepo / EnrollementRepo
+
+EnrollmentService
+   ↓
+StudentEnrollmentQueryService
+   ↓
+StudentRepo / CourseRepo / EnrollementRepo
+
+CourseService
+   ↓
+StudentEnrollmentQueryService
+   ↓
+StudentRepo
 ```
