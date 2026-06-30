@@ -15,7 +15,6 @@ import java.util.List;
 public class CourseService {
     private final CourseRepo courseRepository;
     private final PortalStatsService portalStatsService;
-    private final StudentEnrollmentQueryService studentEnrollmentQueryService;
 
     public Course createCourse(Course course) {
 
@@ -67,15 +66,4 @@ public class CourseService {
         return exists;
     }
 
-    public boolean canAllowCourseForStudent(Integer rollNo) {
-
-        log.info("Checking student eligibility. RollNo={}", rollNo);
-
-        boolean allowed = studentEnrollmentQueryService.studentExists(rollNo);
-
-        log.info("Eligibility result. RollNo={}, Allowed={}",
-                rollNo, allowed);
-
-        return allowed;
-    }
 }
