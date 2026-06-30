@@ -14,8 +14,11 @@ import java.util.List;
 public class StudentService {
     private final StudentRepo studentRepo;
 
+    private final CourseService courseService;
+
      public Student register(Student student){
-         log.info("Student Created {}", student);
+         log.info("Student Created {}", student.getRollNo());
+         log.info("Available Courses: {}", courseService.getAllCourses().size());
          return studentRepo.save(student);
      }
 
