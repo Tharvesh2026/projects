@@ -57,18 +57,4 @@ public class StudentController {
         return students;
     }
 
-    @GetMapping("/{rollNo}/profile")
-    public StudentProfileResponse getStudentProfile(@PathVariable Integer rollNo) {
-
-        log.info("GET /api/v1/students/{}/profile - Profile request received", rollNo);
-
-        StudentProfileResponse profile = studentProfileService.getProfile(rollNo);
-
-        log.info("GET /api/v1/students/{}/profile - Profile request completed. EnrollmentCount={}",
-                rollNo,
-                profile.enrollmentCount());
-
-        return profile;
-    }
-
 }
