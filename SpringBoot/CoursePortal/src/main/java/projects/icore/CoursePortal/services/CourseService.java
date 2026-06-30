@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import projects.icore.CoursePortal.entity.Course;
 import projects.icore.CoursePortal.repository.CourseRepo;
 
+
 import java.util.List;
 
 @Slf4j
@@ -13,10 +14,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CourseService {
     private final CourseRepo courseRepository;
-    private final StudentService studentService;
+    PortalStatsService portalStatsService;
 
     public Course createCourse(Course course) {
-        log.info("Total students: " + studentService.getAll().size());
+        log.info("Total No of Students:  {}", portalStatsService.getTotalStudents());
         return courseRepository.save(course);
     }
 

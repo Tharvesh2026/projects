@@ -13,12 +13,10 @@ import java.util.List;
 @Slf4j
 public class StudentService {
     private final StudentRepo studentRepo;
-
-    private final CourseService courseService;
-
+    PortalStatsService portalStatsService;
      public Student register(Student student){
          log.info("Student Created {}", student.getRollNo());
-         log.info("Available Courses: {}", courseService.getAllCourses().size());
+         log.info("Available Courses {}",portalStatsService.getTotalCourses());
          return studentRepo.save(student);
      }
 
