@@ -32,13 +32,22 @@ public class StudentJPAController {
         return service.getStudent(rollNo);
     }
 
+    @GetMapping("/filtersBy")
+    public List<Student> findByCourse(@RequestParam("course") String tech){
+        return service.findByTech(tech);
+    }
+
+    @PostMapping("/filtersBy")
+    public List<Student> findByGenderandCourse(@RequestParam("course") String tech,
+                                               @RequestParam("gender") String gender){
+        return service.findByGenderAndCourse(tech,gender);
+    }
     // UPDATE
     @PutMapping("/{rollNo}")
     public Student update(@PathVariable int rollNo,
                           @RequestBody Student student) {
         return service.updateStudent(rollNo, student);
     }
-
     // DELETE
     @DeleteMapping("/{rollNo}")
     public String delete(@PathVariable int rollNo) {
@@ -47,7 +56,7 @@ public class StudentJPAController {
 
     // MOCK DATA ENDPOINT
     @PostMapping("/addMock")
-    public Student addMock() {
+    public List<Student> addMock() {
         return service.mockData();
     }
 }

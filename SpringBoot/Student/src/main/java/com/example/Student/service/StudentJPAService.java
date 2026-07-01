@@ -54,11 +54,35 @@ public class StudentJPAService {
         return "Student Not Found";
     }
 
-    // MOCK DATA
-    public Student mockData(){
-        List<String> course = new ArrayList<>(Arrays.asList("Java","Spring Boot","MySQL"));
-        Student mock = new Student("Alice","F",1, course);
-        return repo.save(mock);
+    public List<Student> findByTech(String tech){
+        return repo.findByCourse(tech);
     }
 
+    // MOCK DATA
+    public List<Student> mockData() {
+
+        List<Student> students = List.of(
+                new Student("Alice", "F", 1, "Java"),
+                new Student("Bob", "M", 2, "Python"),
+                new Student("Charlie", "M", 3, "SpringBoot"),
+                new Student("Diana", "F", 4, "DSA"),
+                new Student("Ethan", "M", 5, "Java"),
+                new Student("Fiona", "F", 6, "Python"),
+                new Student("George", "M", 7, "SpringBoot"),
+                new Student("Hannah", "F", 8, "DSA"),
+                new Student("Ian", "M", 9, "Java"),
+                new Student("Julia", "F", 10, "Python"),
+                new Student("Kevin", "M", 11, "SpringBoot"),
+                new Student("Lily", "F", 12, "DSA"),
+                new Student("Michael", "M", 13, "Java"),
+                new Student("Nora", "F", 14, "SpringBoot"),
+                new Student("Oscar", "M", 15, "Python")
+        );
+
+        return repo.saveAll(students);
+    }
+
+    public List<Student> findByGenderAndCourse(String tech, String gender) {
+        return repo.findByGenderAndCourse(tech,gender);
+    }
 }

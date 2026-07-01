@@ -1,7 +1,6 @@
 package com.example.Student.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +17,5 @@ public class Student {
     private String gender;
     @Id
     private int rollNo;
-    private List<String> course;
+    private String course;
 }
