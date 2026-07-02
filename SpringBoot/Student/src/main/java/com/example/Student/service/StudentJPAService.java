@@ -1,12 +1,10 @@
 package com.example.Student.service;
 
 import com.example.Student.model.Student;
-import com.example.Student.repository.StudentRepoJPA;
+import com.example.Student.repository.StudentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +12,9 @@ import java.util.Optional;
 public class StudentJPAService {
 
     @Autowired
-    private StudentRepoJPA repo;
+    private StudentRepo repo;
+    @Autowired
+    private ValidationQueryService queryService;
 
     // CREATE
     public Student addStudent(Student student) {
@@ -55,34 +55,60 @@ public class StudentJPAService {
     }
 
     public List<Student> findByTech(String tech){
-        return repo.findByCourse(tech);
+        if(queryService.checkCourseExist(tech)){
+            return repo.findByCourse(tech);
+        }
+        return null;
     }
 
     // MOCK DATA
     public List<Student> mockData() {
 
         List<Student> students = List.of(
-                new Student("Alice", "F", 1, "Java"),
-                new Student("Bob", "M", 2, "Python"),
-                new Student("Charlie", "M", 3, "SpringBoot"),
-                new Student("Diana", "F", 4, "DSA"),
-                new Student("Ethan", "M", 5, "Java"),
-                new Student("Fiona", "F", 6, "Python"),
-                new Student("George", "M", 7, "SpringBoot"),
-                new Student("Hannah", "F", 8, "DSA"),
-                new Student("Ian", "M", 9, "Java"),
-                new Student("Julia", "F", 10, "Python"),
-                new Student("Kevin", "M", 11, "SpringBoot"),
-                new Student("Lily", "F", 12, "DSA"),
-                new Student("Michael", "M", 13, "Java"),
-                new Student("Nora", "F", 14, "SpringBoot"),
-                new Student("Oscar", "M", 15, "Python")
+                new Student("Alice", "F", 1, "datascience"),
+                new Student("Bob", "M", 2, "java"),
+                new Student("Charlie", "M", 3, "aws"),
+                new Student("Diana", "F", 4, "python"),
+                new Student("Ethan", "M", 5, "fullstack"),
+                new Student("Fiona", "F", 6, "cybersecurity"),
+                new Student("George", "M", 7, "springboot"),
+                new Student("Hannah", "F", 8, "dsa"),
+                new Student("Ian", "M", 9, "devops"),
+                new Student("Julia", "F", 10, "systemdesign"),
+                new Student("Kevin", "M", 11, "python"),
+                new Student("Lily", "F", 12, "aws"),
+                new Student("Michael", "M", 13, "java"),
+                new Student("Nora", "F", 14, "fullstack"),
+                new Student("Oscar", "M", 15, "datascience"),
+                new Student("Priya", "F", 16, "springboot"),
+                new Student("Rahul", "M", 17, "cybersecurity"),
+                new Student("Sneha", "F", 18, "devops"),
+                new Student("Arjun", "M", 19, "dsa"),
+                new Student("Meera", "F", 20, "systemdesign"),
+                new Student("Vikram", "M", 21, "python"),
+                new Student("Ananya", "F", 22, "java"),
+                new Student("Karthik", "M", 23, "aws"),
+                new Student("Divya", "F", 24, "springboot"),
+                new Student("Rohit", "M", 25, "fullstack"),
+                new Student("Pooja", "F", 26, "datascience"),
+                new Student("Sanjay", "M", 27, "devops"),
+                new Student("Aishwarya", "F", 28, "cybersecurity"),
+                new Student("Manoj", "M", 29, "dsa"),
+                new Student("Keerthana", "F", 30, "python")
         );
 
         return repo.saveAll(students);
     }
 
-    public List<Student> findByGenderAndCourse(String tech, String gender) {
-        return repo.findByGenderAndCourse(tech,gender);
+    public String deleteMock(boolean state){
+        if(state){
+            repo.deleteAll();
+            return "deleted";
+        }
+        return null;
+    }
+
+    public List<Student> findByGenderAndCourse(String gender, String tech) {
+        return repo.findByGenderAndCourse(gender,tech);
     }
 }

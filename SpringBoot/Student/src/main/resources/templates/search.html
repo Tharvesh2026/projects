@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+<div class="bg-white p-6 rounded shadow">
+
+    <h2 class="text-xl font-bold mb-4">🔍 Search Student</h2>
+
+    <input id="id" placeholder="Roll No" class="border p-2 w-full mb-2">
+
+    <button onclick="search()"
+            class="bg-yellow-500 text-white w-full py-2 rounded">
+        Search
+    </button>
+
+    <table class="mt-4 w-full text-center">
+        <tbody id="result"></tbody>
+    </table>
+
+    <br>
+    <a href="/" class="text-blue-500">Back</a>
+
+</div>
+
+<script>
+    function search() {
+
+        const id = document.getElementById("id").value;
+
+        fetch(`http://localhost:9090/api/v01/students/${id}`)
+            .then(res => res.json())
+            .then(data => {
+
+                let s = data.data;
+
+                document.getElementById("result").innerHTML = `
+                <tr>
+                    <td>${s.rollNo}</td>
+                    <td>${s.name}</td>
+                    <td>${s.gender}</td>
+                    <td>${s.course}</td>
+                </tr>
+            `;
+            });
+    }
+</script>
+
+</body>
+</html>

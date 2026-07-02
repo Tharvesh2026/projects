@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Student</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+<div class="bg-white p-6 rounded shadow w-80">
+
+    <h2 class="text-xl font-bold mb-4">➕ Add Student</h2>
+
+    <input id="name" placeholder="Name" class="w-full p-2 border mb-2">
+    <input id="gender" placeholder="Gender" class="w-full p-2 border mb-2">
+    <input id="rollNo" placeholder="Roll No" class="w-full p-2 border mb-2">
+    <input id="course" placeholder="Course" class="w-full p-2 border mb-4">
+
+    <button onclick="addStudent()"
+            class="bg-blue-500 text-white w-full py-2 rounded">
+        Add
+    </button>
+
+    <a href="/" class="block text-center mt-4 text-blue-500">Back</a>
+
+</div>
+
+<script>
+    function addStudent() {
+
+        const student = {
+            name: document.getElementById("name").value,
+            gender: document.getElementById("gender").value,
+            rollNo: document.getElementById("rollNo").value,
+            course: document.getElementById("course").value
+        };
+
+        fetch("http://localhost:9090/api/v01/students", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(student)
+        }).then(() => {
+            alert("Student Added");
+            window.location.href = "/";
+        });
+
+    }
+</script>
+
+</body>
+</html>
