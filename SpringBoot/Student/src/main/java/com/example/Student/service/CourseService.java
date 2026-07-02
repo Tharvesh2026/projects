@@ -1,5 +1,6 @@
 package com.example.Student.service;
 
+import com.example.Student.exception.ResourceNotFoundException;
 import com.example.Student.model.Course;
 import com.example.Student.repository.CourseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +26,25 @@ public class CourseService {
             new Course("Cyber Security Basics", "cybersecurity", "David John", 4),
             new Course("Data Science with Python", "datascience", "Neha Patel", 6),
             new Course("System Design Fundamentals", "systemdesign", "Karthik Subramanian", 12)
-
         );
 
         repo.saveAll(courses);
     }
 
     public List<Course> getAllCourse() {
-        return repo.findAll();
+        List<Course> courses = repo.findAll();
+        if(courses.isEmpty()){
+            throw new ResourceNotFoundException("Courses Not Available");
+        }
+        return courses;
     }
 
     public Course getByTitle(String code){
-        return repo.findByCode(code);
+        Course course = repo.findByCode(code);
+        if(course==null){
+            throw new ResourceNotFoundException("Course Not Found with code: "+code);
+        }
+        return course;
     }
 
 }

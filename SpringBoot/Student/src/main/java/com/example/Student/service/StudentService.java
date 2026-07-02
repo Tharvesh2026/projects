@@ -1,5 +1,6 @@
 package com.example.Student.service;
 
+import com.example.Student.exception.ResourceNotFoundException;
 import com.example.Student.model.Student;
 import com.example.Student.repository.StudentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class StudentJPAService {
+public class StudentService {
 
     @Autowired
     private StudentRepo repo;
@@ -28,37 +29,40 @@ public class StudentJPAService {
 
     // READ BY ID
     public Student getStudent(int rollNo) {
-        return repo.findById(rollNo).orElse(null);
+        return repo.findById(rollNo).orElseThrow(()->new ResourceNotFoundException("Student not found with RollNo: "+rollNo));
     }
 
     // UPDATE
-    public Student updateStudent(int rollNo, Student updatedStudent) {
+    public Student updateStudent(int rollNo, Student updatedStudent) throws ResourceNotFoundException {
         Optional<Student> existing = repo.findById(rollNo);
 
-        if (existing.isPresent()) {
-            Student s = existing.get();
-            s.setName(updatedStudent.getName());
-            s.setGender(updatedStudent.getGender());
-            s.setCourse(updatedStudent.getCourse());
-            return repo.save(s);
+        if (!existing.isPresent()) {
+            throw new ResourceNotFoundException("Can't Update, Student not found with rollNo: " + rollNo);
         }
-        return null;
+
+        Student s = existing.get();
+        s.setName(updatedStudent.getName());
+        s.setGender(updatedStudent.getGender());
+        s.setCourse(updatedStudent.getCourse());
+        return repo.save(s);
     }
 
     // DELETE
     public String deleteStudent(int rollNo) {
-        if (repo.existsById(rollNo)) {
-            repo.deleteById(rollNo);
-            return "Deleted Successfully";
+
+        if (!repo.existsById(rollNo)) {
+            throw new ResourceNotFoundException("Student not found with rollNo: " + rollNo);
         }
-        return "Student Not Found";
+
+        repo.deleteById(rollNo);
+        return "Deleted Successfully";
     }
 
     public List<Student> findByTech(String tech){
-        if(queryService.checkCourseExist(tech)){
-            return repo.findByCourse(tech);
+        if(!queryService.checkCourseExist(tech)){
+            throw new ResourceNotFoundException("Course Not Found");
         }
-        return null;
+        return repo.findByCourse(tech);
     }
 
     // MOCK DATA
@@ -109,6 +113,8 @@ public class StudentJPAService {
     }
 
     public List<Student> findByGenderAndCourse(String gender, String tech) {
-        return repo.findByGenderAndCourse(gender,tech);
+        List<Student> students = repo.findByGenderAndCourse(gender,tech);
+        if(students.isEmpty()) throw new ResourceNotFoundException("Not Student Satisfied the filter condition");
+        return students;
     }
 }
