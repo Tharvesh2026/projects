@@ -39,7 +39,7 @@ public class CourseService {
         return courses;
     }
 
-    public Course getByTitle(String code){
+    public Course getByCode(String code){
         Course course = repo.findByCode(code);
         if(course==null){
             throw new ResourceNotFoundException("Course Not Found with code: "+code);

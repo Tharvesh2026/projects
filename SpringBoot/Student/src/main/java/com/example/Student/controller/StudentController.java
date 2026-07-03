@@ -54,10 +54,10 @@ public class StudentController {
     @PostMapping("/clearAll")
     public ResponseEntity<ApiResponse<String>> deleteAll(@RequestParam boolean confirm) {
 
-        String status = service.deleteMock(confirm);
+        service.deleteMock(confirm);
 
         return ResponseEntity.ok(
-                new ApiResponse<>("Student data cleared", status)
+                new ApiResponse<>("Student data cleared", null)
         );
     }
 
@@ -102,10 +102,9 @@ public class StudentController {
     @DeleteMapping("/{rollNo}")
     public ResponseEntity<ApiResponse<String>> delete(@PathVariable int rollNo) {
 
-        String result = service.deleteStudent(rollNo);
-
+        service.deleteStudent(rollNo);
         return ResponseEntity.ok(
-                new ApiResponse<>("Student deleted successfully", result)
+                new ApiResponse<>("Student deleted successfully", null)
         );
     }
 

@@ -12,7 +12,7 @@ public class ValidationQueryService {
     private CourseService courseService;
 
     public boolean checkCourseExist(String code){
-        return courseService.getByTitle(code)!=null;
+        return courseService.getByCode(code)!=null;
     }
 
     public boolean checkStudentExist(String name){

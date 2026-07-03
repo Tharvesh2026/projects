@@ -34,13 +34,8 @@ public class StudentService {
 
     // UPDATE
     public Student updateStudent(int rollNo, Student updatedStudent) throws ResourceNotFoundException {
-        Optional<Student> existing = repo.findById(rollNo);
+        Student s = repo.findById(rollNo).orElseThrow(()->new ResourceNotFoundException("Can't Update, Student not found with rollNo: " + rollNo));
 
-        if (!existing.isPresent()) {
-            throw new ResourceNotFoundException("Can't Update, Student not found with rollNo: " + rollNo);
-        }
-
-        Student s = existing.get();
         s.setName(updatedStudent.getName());
         s.setGender(updatedStudent.getGender());
         s.setCourse(updatedStudent.getCourse());
@@ -48,14 +43,13 @@ public class StudentService {
     }
 
     // DELETE
-    public String deleteStudent(int rollNo) {
+    public void deleteStudent(int rollNo) {
 
         if (!repo.existsById(rollNo)) {
             throw new ResourceNotFoundException("Student not found with rollNo: " + rollNo);
         }
 
         repo.deleteById(rollNo);
-        return "Deleted Successfully";
     }
 
     public List<Student> findByTech(String tech){
@@ -104,12 +98,11 @@ public class StudentService {
         return repo.saveAll(students);
     }
 
-    public String deleteMock(boolean state){
-        if(state){
-            repo.deleteAll();
-            return "deleted";
+    public void deleteMock(boolean state){
+        if(!state){
+            throw new ResourceNotFoundException("No Data Found to delete");
         }
-        return null;
+        repo.deleteAll();
     }
 
     public List<Student> findByGenderAndCourse(String gender, String tech) {
