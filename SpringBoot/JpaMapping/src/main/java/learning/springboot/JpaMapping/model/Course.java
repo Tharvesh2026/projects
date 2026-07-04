@@ -15,7 +15,7 @@ import java.util.List;
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long course_id;
+    private int course_id;
     private String title;
     private String code;
     private String staff;

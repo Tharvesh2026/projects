@@ -22,6 +22,6 @@ public class Student {
     private int rollNo;
 
     @ManyToOne
-    @JoinColumn(name = "course_id")
+    @JoinColumn(name = "course_id", nullable = true)
     private Course course;
 }

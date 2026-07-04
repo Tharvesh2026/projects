@@ -1,6 +1,7 @@
 package learning.springboot.JpaMapping.mapper;
 
-import learning.springboot.JpaMapping.dto.CourseInfoDTO;
+import learning.springboot.JpaMapping.dto.CourseResponseDTO;
+import learning.springboot.JpaMapping.dto.StudentRequestDTO;
 import learning.springboot.JpaMapping.dto.StudentResponseDTO;
 import learning.springboot.JpaMapping.model.Course;
 import learning.springboot.JpaMapping.model.Student;
@@ -13,10 +14,10 @@ public class StudentMapper {
 
         Course course = student.getCourse();
 
-        CourseInfoDTO courseInfo = null;
+        CourseResponseDTO courseInfo = null;
 
         if (course != null) {
-            courseInfo = new CourseInfoDTO(
+            courseInfo = new CourseResponseDTO(
                     course.getCourse_id(),
                     course.getCode(),
                     course.getTitle(),
@@ -32,4 +33,13 @@ public class StudentMapper {
                 courseInfo
         );
     }
+
+    public Student toStudentEntity(StudentRequestDTO dto, Course course) {
+        return Student.builder()
+                .name(dto.getName())
+                .gender(dto.getGender())
+                .course(course)
+                .build();
+    }
+
 }

@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class StudentResponseDTO {
-    private int rollNo;
+public class StudentRequestDTO {
     private String name;
     private String gender;
-    private CourseResponseDTO course;
+    private int courseId;
 }

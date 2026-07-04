@@ -1,5 +1,8 @@
 package learning.springboot.JpaMapping.service;
 
+import learning.springboot.JpaMapping.dto.StudentRequestDTO;
+import learning.springboot.JpaMapping.exception.BadRequestException;
+import learning.springboot.JpaMapping.exception.ResourceNotFoundException;
 import learning.springboot.JpaMapping.model.Course;
 import learning.springboot.JpaMapping.model.Student;
 import learning.springboot.JpaMapping.util.CourseStudentCount;
@@ -12,22 +15,22 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class EnrollmentService {
+public class ValidationQueryService  {
 
     private final StudentRepo studentRepo;
     private final CourseRepo courseRepo;
 
-    public Student enrollStudentToCourse(int rollNo, String courseCode) {
+    public Course getCourseOrThrow(int courseId) {
+        return courseRepo.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Course not found with id: " + courseId
+                ));
+    }
 
-        Student student = studentRepo.findById(rollNo)
-                .orElseThrow(() -> new RuntimeException("Student not found with rollNo: " + rollNo));
-
-        Course course = courseRepo.findByCode(courseCode)
-                .orElseThrow(() -> new RuntimeException("Course not found with code: " + courseCode));
-
-        student.setCourse(course);
-
-        return studentRepo.save(student);
+    public void checkExistOrThrow(String code) {
+        if(courseRepo.findByCode(code).isPresent()){
+            throw new BadRequestException("course already exist with code"+code);
+        }
     }
 
     public List<CourseStudentCount> getCourseWiseStudentCount() {
