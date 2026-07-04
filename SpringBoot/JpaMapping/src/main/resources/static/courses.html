@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CourseMapping | Courses</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap 5 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">CourseMapping</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="index.html">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="students.html">Students</a></li>
+        <li class="nav-item"><a class="nav-link active" href="courses.html">Courses</a></li>
+        <li class="nav-item"><a class="nav-link" href="admin.html">Admin</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main class="container py-4">
+
+  <section class="page-header">
+    <h1 class="fw-bold">Courses</h1>
+    <p class="mb-0">Create, update, view, and delete course records.</p>
+  </section>
+
+  <div id="courseMessage" class="message-box"></div>
+
+  <section class="row g-4">
+    <div class="col-lg-4">
+      <div class="card card-custom">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3" id="formTitle">Add Course</h5>
+
+          <form id="courseForm">
+            <input type="hidden" id="oldCode">
+
+            <div class="mb-3">
+              <label class="form-label">Course Code</label>
+              <input type="text" id="code" class="form-control" placeholder="java" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Title</label>
+              <input type="text" id="title" class="form-control" placeholder="Java Programming" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Staff</label>
+              <input type="text" id="staff" class="form-control" placeholder="Staff Name" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Duration</label>
+              <input type="number" id="duration" class="form-control" placeholder="3" required>
+            </div>
+
+            <button class="btn btn-primary btn-custom w-100" type="submit">Save Course</button>
+
+            <button class="btn btn-outline-secondary btn-custom w-100 mt-2" type="button" onclick="resetCourseForm()">
+              Reset
+            </button>
+          </form>
+
+          <button class="btn btn-dark btn-custom w-100 mt-3" onclick="addMockCourses()">
+            Add Mock Courses
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="card card-custom">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3">Course List</h5>
+
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>Code</th>
+                <th>Title</th>
+                <th>Staff</th>
+                <th>Duration</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody id="courseTable">
+              <tr>
+                <td colspan="6" class="text-muted">Loading...</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="text-center py-3 footer-text">
+  CourseMapping | Courses
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+  const courseForm = document.getElementById("courseForm");
+
+  courseForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const oldCode = document.getElementById("oldCode").value;
+
+    const courseData = {
+      code: document.getElementById("code").value.trim(),
+      title: document.getElementById("title").value.trim(),
+      staff: document.getElementById("staff").value.trim(),
+      duration: Number(document.getElementById("duration").value)
+    };
+
+    try {
+      if (oldCode) {
+        await requestApi(`${COURSE_API}/${oldCode}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(courseData)
+        });
+
+        showMessage("courseMessage", "Course updated successfully");
+      } else {
+        await requestApi(COURSE_API, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(courseData)
+        });
+
+        showMessage("courseMessage", "Course created successfully");
+      }
+
+      resetCourseForm();
+      loadCourses();
+
+    } catch (error) {
+      showMessage("courseMessage", error.message, "error");
+    }
+  });
+
+  async function loadCourses() {
+    try {
+      const response = await requestApi(COURSE_API);
+      const courses = response.data || [];
+
+      const table = document.getElementById("courseTable");
+      table.innerHTML = "";
+
+      if (courses.length === 0) {
+        table.innerHTML = `<tr><td colspan="6" class="text-muted">No courses found</td></tr>`;
+        return;
+      }
+
+      courses.forEach(course => {
+        table.innerHTML += `
+                    <tr>
+                        <td>${course.courseId || course.course_id}</td>
+                        <td><span class="badge-soft">${course.code}</span></td>
+                        <td>${course.title}</td>
+                        <td>${course.staff}</td>
+                        <td>${course.duration}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" onclick='editCourse(${JSON.stringify(course)})'>Edit</button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteCourse('${course.code}')">Delete</button>
+                        </td>
+                    </tr>
+                `;
+      });
+
+    } catch (error) {
+      showMessage("courseMessage", error.message, "error");
+    }
+  }
+
+  function editCourse(course) {
+    document.getElementById("formTitle").textContent = "Update Course";
+    document.getElementById("oldCode").value = course.code;
+    document.getElementById("code").value = course.code;
+    document.getElementById("title").value = course.title;
+    document.getElementById("staff").value = course.staff;
+    document.getElementById("duration").value = course.duration;
+  }
+
+  function resetCourseForm() {
+    document.getElementById("formTitle").textContent = "Add Course";
+    document.getElementById("oldCode").value = "";
+    courseForm.reset();
+  }
+
+  async function deleteCourse(code) {
+    const confirmDelete = confirm(`Are you sure you want to delete course: ${code}?`);
+
+    if (!confirmDelete) return;
+
+    try {
+      await requestApi(`${COURSE_API}/${code}`, {
+        method: "DELETE"
+      });
+
+      showMessage("courseMessage", "Course deleted successfully");
+      loadCourses();
+
+    } catch (error) {
+      showMessage("courseMessage", error.message, "error");
+    }
+  }
+
+  async function addMockCourses() {
+    try {
+      await requestApi(`${COURSE_API}/mock`, {
+        method: "POST"
+      });
+
+      showMessage("courseMessage", "Mock courses inserted successfully");
+      loadCourses();
+
+    } catch (error) {
+      showMessage("courseMessage", error.message, "error");
+    }
+  }
+
+  loadCourses();
+</script>
+
+</body>
+</html>

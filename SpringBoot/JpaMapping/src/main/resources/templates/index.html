@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CourseMapping | Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">CourseMapping</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link active" href="index.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="students.html">Students</a></li>
+                <li class="nav-item"><a class="nav-link" href="courses.html">Courses</a></li>
+                <li class="nav-item"><a class="nav-link" href="admin.html">Admin</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-4">
+
+    <section class="page-header">
+        <h1 class="fw-bold">CourseMapping Dashboard</h1>
+        <p class="mb-0">Manage students, courses, and course-wise student registration data.</p>
+    </section>
+
+    <div id="dashboardMessage" class="message-box"></div>
+
+    <section class="row g-4">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <p class="text-muted mb-1">Total Students</p>
+                <div class="stat-number" id="studentCount">0</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card">
+                <p class="text-muted mb-1">Total Courses</p>
+                <div class="stat-number" id="courseCount">0</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card">
+                <p class="text-muted mb-1">Project Status</p>
+                <div class="stat-number fs-4">Active</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card card-custom mt-4">
+        <div class="card-body">
+            <h5 class="fw-bold mb-3">Course-wise Student Count</h5>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Title</th>
+                        <th>Student Count</th>
+                    </tr>
+                    </thead>
+                    <tbody id="summaryTable">
+                    <tr>
+                        <td colspan="3" class="text-muted">Loading...</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="text-center py-3 footer-text">
+    CourseMapping | Spring Boot + JPA + Bootstrap 5
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+    async function loadDashboard() {
+        try {
+            const studentsRes = await requestApi(STUDENT_API);
+            const coursesRes = await requestApi(COURSE_API);
+            const summaryRes = await requestApi(`${COURSE_API}/summary/student-count`);
+
+            const students = studentsRes.data || [];
+            const courses = coursesRes.data || [];
+            const summary = summaryRes.data || [];
+
+            document.getElementById("studentCount").textContent = students.length;
+            document.getElementById("courseCount").textContent = courses.length;
+
+            const table = document.getElementById("summaryTable");
+            table.innerHTML = "";
+
+            if (summary.length === 0) {
+                table.innerHTML = `<tr><td colspan="3" class="text-muted">No summary data available</td></tr>`;
+                return;
+            }
+
+            summary.forEach(item => {
+                table.innerHTML += `
+                    <tr>
+                        <td><span class="badge-soft">${item.code}</span></td>
+                        <td>${item.title}</td>
+                        <td>${item.studentCount}</td>
+                    </tr>
+                `;
+            });
+
+        } catch (error) {
+            showMessage("dashboardMessage", error.message, "error");
+        }
+    }
+
+    loadDashboard();
+</script>
+
+</body>
+</html>
