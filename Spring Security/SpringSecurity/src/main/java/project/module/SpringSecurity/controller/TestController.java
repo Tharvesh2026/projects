@@ -20,7 +20,8 @@ public class TestController extends HttpServlet {
 
 
     @GetMapping
-    public List<Student> getAll(){
+    public List<Student> getAll(HttpServletRequest req){
+        System.out.println("Session Id: "+req.getSession().getId());
         return students;
     }
 
