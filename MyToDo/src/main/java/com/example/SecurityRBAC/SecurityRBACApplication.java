@@ -29,7 +29,6 @@ public class SecurityRBACApplication {
 			roleService.saveRole(new Role(null, "ROLE_EDITOR"));
 			roleService.saveRole(new Role(null, "ROLE_USER"));
 
-
 			userService.saveUser(new AppUser(null, "Alice Johnson", "alice", "1234", new ArrayList<>()));
 			userService.saveUser(new AppUser(null, "Bob Smith", "bob", "1234", new ArrayList<>()));
 			userService.saveUser(new AppUser(null, "Charlie Brown", "charlie", "1234", new ArrayList<>()));
@@ -60,31 +59,26 @@ public class SecurityRBACApplication {
 			userService.saveUser(new AppUser(null, "Xavier Baker", "xavier", "1234", new ArrayList<>()));
 			userService.saveUser(new AppUser(null, "Zoe Adams", "zoe", "1234", new ArrayList<>()));
 
-			// Admins
 			userService.assignRoleToUser("alice", "ROLE_ADMIN");
 			userService.assignRoleToUser("alice", "ROLE_MANAGER");
 
 			userService.assignRoleToUser("bob", "ROLE_ADMIN");
 			userService.assignRoleToUser("bob", "ROLE_EDITOR");
 
-// Managers
 			userService.assignRoleToUser("charlie", "ROLE_MANAGER");
 			userService.assignRoleToUser("charlie", "ROLE_USER");
 
 			userService.assignRoleToUser("david", "ROLE_MANAGER");
 			userService.assignRoleToUser("david", "ROLE_MODERATOR");
 
-// Editors
 			userService.assignRoleToUser("emma", "ROLE_EDITOR");
 			userService.assignRoleToUser("frank", "ROLE_EDITOR");
 			userService.assignRoleToUser("grace", "ROLE_EDITOR");
 
-// Moderators
 			userService.assignRoleToUser("henry", "ROLE_MODERATOR");
 			userService.assignRoleToUser("isabella", "ROLE_MODERATOR");
 			userService.assignRoleToUser("jack", "ROLE_MODERATOR");
 
-// Mixed roles
 			userService.assignRoleToUser("karen", "ROLE_USER");
 			userService.assignRoleToUser("karen", "ROLE_EDITOR");
 
@@ -100,7 +94,6 @@ public class SecurityRBACApplication {
 			userService.assignRoleToUser("olivia", "ROLE_MANAGER");
 			userService.assignRoleToUser("olivia", "ROLE_EDITOR");
 
-// Remaining users get ROLE_USER
 			userService.assignRoleToUser("peter", "ROLE_USER");
 			userService.assignRoleToUser("queen", "ROLE_USER");
 			userService.assignRoleToUser("ryan", "ROLE_USER");
@@ -112,7 +105,6 @@ public class SecurityRBACApplication {
 			userService.assignRoleToUser("xavier", "ROLE_USER");
 			userService.assignRoleToUser("zoe", "ROLE_USER");
 
-// Users with three roles
 			userService.assignRoleToUser("alice", "ROLE_EDITOR");
 			userService.assignRoleToUser("olivia", "ROLE_USER");
 			userService.assignRoleToUser("noah", "ROLE_USER");
