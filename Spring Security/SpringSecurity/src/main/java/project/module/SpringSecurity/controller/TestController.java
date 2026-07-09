@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
-import project.module.SpringSecurity.entity.Student;
+import project.module.SpringSecurity.entity.Users;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,14 +13,10 @@ import java.util.List;
 @RestController
 @RequestMapping("api/students")
 public class TestController extends HttpServlet {
-    List<Student> students = new ArrayList<>(List.of(
-            new Student("Arthi", 1, "CSE"),
-            new Student("Kamal", 2, "CSE")
-    ));
 
 
     @GetMapping
-    public List<Student> getAll(HttpServletRequest req){
+    public List<Users> getAll(HttpServletRequest req){
         System.out.println("Session Id: "+req.getSession().getId());
         return students;
     }
@@ -31,7 +27,7 @@ public class TestController extends HttpServlet {
     }
 
     @PostMapping
-    public void addOne(@RequestBody Student student){
+    public void addOne(@RequestBody Users student){
         students.add(student);
     }
 }
