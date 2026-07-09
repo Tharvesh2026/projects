@@ -1,9 +1,12 @@
 package com.example.SecurityRBAC.service;
 
-import com.example.SecurityRBAC.domain.Role;
+import com.example.SecurityRBAC.dto.request.CreateRoleRequest;
+import com.example.SecurityRBAC.dto.response.RoleResponse;
 import org.springframework.data.domain.Page;
 
 public interface RolesServices {
-    Role saveRole(Role role);
-    Page<Role> getAllRole(int page, int size);
+
+    RoleResponse saveRole(CreateRoleRequest request);
+
+    Page<RoleResponse> getAllRole(int page, int size);
 }

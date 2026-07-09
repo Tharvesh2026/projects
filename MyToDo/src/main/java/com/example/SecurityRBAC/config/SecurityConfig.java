@@ -30,6 +30,7 @@ public class SecurityConfig{
                 auth-> auth
                         .requestMatchers(
                                 "/auth/**",
+                                "/api/auth/**",
                                 "/login",
                                 "/error"
                         ).permitAll()
@@ -50,13 +51,13 @@ public class SecurityConfig{
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(12);
     }
 
 

@@ -1,0 +1,120 @@
+# ==========================================
+# Windows System Files
+# ==========================================
+System Volume Information/
+spring-security/
+$RECYCLE.BIN/
+Thumbs.db
+Desktop.ini
+
+# ==========================================
+# Java
+# ==========================================
+*.class
+*.log
+*.ctxt
+
+# JVM crash logs
+hs_err_pid*
+replay_pid*
+
+# ==========================================
+# Build Artifacts
+# ==========================================
+target/
+bin/
+out/
+build/
+dist/
+
+# Archives (optional)
+*.zip
+*.tar
+*.tar.gz
+*.rar
+
+# ==========================================
+# Maven
+# ==========================================
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+
+.mvn/timing.properties
+
+# Ignore Maven Wrapper JAR only if you don't
+# want it versioned. Most teams commit it.
+# .mvn/wrapper/maven-wrapper.jar
+
+# ==========================================
+# Eclipse
+# ==========================================
+.project
+.classpath
+.settings/
+.metadata/
+
+# ==========================================
+# IntelliJ IDEA
+# ==========================================
+.idea/
+*.iml
+
+# ==========================================
+# VS Code
+# ==========================================
+.vscode/
+
+# ==========================================
+# NetBeans
+# ==========================================
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# ==========================================
+# Gradle
+# ==========================================
+.gradle/
+
+# ==========================================
+# Temporary Files
+# ==========================================
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# ==========================================
+# OS Generated Files
+# ==========================================
+.DS_Store
+
+# ==========================================
+# Logs
+# ==========================================
+logs/
+*.log
+
+# ==========================================
+# Dependency Directories
+# ==========================================
+node_modules/
+
+# ==========================================
+# Environment Files
+# ==========================================
+.env
+.env.*
+
+# ==========================================
+# Git
+# ==========================================
+.gitmodules

@@ -2,14 +2,17 @@ package com.example.SecurityRBAC.service;
 
 import com.example.SecurityRBAC.domain.AppUser;
 import com.example.SecurityRBAC.domain.Role;
+import com.example.SecurityRBAC.dto.request.CreateUserRequest;
+import com.example.SecurityRBAC.dto.response.UserResponse;
 import org.springframework.data.domain.Page;
 
 public interface UserServices {
-    AppUser saveUser(AppUser user);
 
-    void assignRoleToUser(String uname, String rname);
-    AppUser getUser(String uname);
+    UserResponse saveUser(CreateUserRequest request);
 
-    Page<AppUser> getAllUser(int page, int size);
+    void assignRoleToUser(String username, String roleName);
 
+    UserResponse getUser(String username);
+
+    Page<UserResponse> getAllUser(int page, int size);
 }

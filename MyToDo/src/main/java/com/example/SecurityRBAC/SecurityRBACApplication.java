@@ -1,119 +1,114 @@
 package com.example.SecurityRBAC;
 
-import com.example.SecurityRBAC.domain.AppUser;
-import com.example.SecurityRBAC.domain.Role;
+import com.example.SecurityRBAC.dto.request.CreateRoleRequest;
+import com.example.SecurityRBAC.dto.request.CreateUserRequest;
 import com.example.SecurityRBAC.service.RolesServices;
-import com.example.SecurityRBAC.service.UserServiceImpl;
 import com.example.SecurityRBAC.service.UserServices;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class SecurityRBACApplication {
-
-	@Autowired
-	PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SecurityRBACApplication.class, args);
 	}
 
 	@Bean
-	CommandLineRunner commandLineRunner(UserServices userService, RolesServices roleService){
-		return args ->
-		{
-			roleService.saveRole(new Role(null, "ROLE_ADMIN"));
-			roleService.saveRole(new Role(null, "ROLE_MANAGER"));
-			roleService.saveRole(new Role(null, "ROLE_MODERATOR"));
-			roleService.saveRole(new Role(null, "ROLE_EDITOR"));
-			roleService.saveRole(new Role(null, "ROLE_USER"));
+	CommandLineRunner commandLineRunner(
+			UserServices userService,
+			RolesServices roleService) {
 
-			userService.saveUser(new AppUser(null, "Alice Johnson", "alice", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Bob Smith", "bob", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Charlie Brown", "charlie", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "David Wilson", "david", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Emma Davis", "emma", passwordEncoder.encode("123456"), new ArrayList<>()));
+		return args -> {
 
-			userService.saveUser(new AppUser(null, "Frank Miller", "frank", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Grace Taylor", "grace", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Henry Anderson", "henry", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Isabella Thomas", "isabella", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Jack Moore", "jack", passwordEncoder.encode("123456"), new ArrayList<>()));
+			List.of(
+					new CreateRoleRequest("ROLE_ADMIN"),
+					new CreateRoleRequest("ROLE_MANAGER"),
+					new CreateRoleRequest("ROLE_MODERATOR"),
+					new CreateRoleRequest("ROLE_EDITOR"),
+					new CreateRoleRequest("ROLE_USER")
+			).forEach(roleService::saveRole);
 
-			userService.saveUser(new AppUser(null, "Karen Martin", "karen", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Liam Jackson", "liam", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Mia White", "mia", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Noah Harris", "noah", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Olivia Clark", "olivia", passwordEncoder.encode("123456"), new ArrayList<>()));
+			List.of(
+					new CreateUserRequest("Alice Johnson", "alice", "123456"),
+					new CreateUserRequest("Bob Smith", "bob", "123456"),
+					new CreateUserRequest("Charlie Brown", "charlie", "123456"),
+					new CreateUserRequest("David Wilson", "david", "123456"),
+					new CreateUserRequest("Emma Davis", "emma", "123456"),
+					new CreateUserRequest("Frank Miller", "frank", "123456"),
+					new CreateUserRequest("Grace Taylor", "grace", "123456"),
+					new CreateUserRequest("Henry Anderson", "henry", "123456"),
+					new CreateUserRequest("Isabella Thomas", "isabella", "123456"),
+					new CreateUserRequest("Jack Moore", "jack", "123456"),
+					new CreateUserRequest("Karen Martin", "karen", "123456"),
+					new CreateUserRequest("Liam Jackson", "liam", "123456"),
+					new CreateUserRequest("Mia White", "mia", "123456"),
+					new CreateUserRequest("Noah Harris", "noah", "123456"),
+					new CreateUserRequest("Olivia Clark", "olivia", "123456"),
+					new CreateUserRequest("Peter Lewis", "peter", "123456"),
+					new CreateUserRequest("Queen Walker", "queen", "123456"),
+					new CreateUserRequest("Ryan Hall", "ryan", "123456"),
+					new CreateUserRequest("Sophia Allen", "sophia", "123456"),
+					new CreateUserRequest("Thomas Young", "thomas", "123456"),
+					new CreateUserRequest("Uma King", "uma", "123456"),
+					new CreateUserRequest("Victor Scott", "victor", "123456"),
+					new CreateUserRequest("William Green", "william", "123456"),
+					new CreateUserRequest("Xavier Baker", "xavier", "123456"),
+					new CreateUserRequest("Zoe Adams", "zoe", "123456")
+			).forEach(userService::saveUser);
 
-			userService.saveUser(new AppUser(null, "Peter Lewis", "peter", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Queen Walker", "queen", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Ryan Hall", "ryan", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Sophia Allen", "sophia", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Thomas Young", "thomas", passwordEncoder.encode("123456"), new ArrayList<>()));
 
-			userService.saveUser(new AppUser(null, "Uma King", "uma", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Victor Scott", "victor", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "William Green", "william", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Xavier Baker", "xavier", passwordEncoder.encode("123456"), new ArrayList<>()));
-			userService.saveUser(new AppUser(null, "Zoe Adams", "zoe", passwordEncoder.encode("123456"), new ArrayList<>()));
+			assign(userService, "alice", "ROLE_ADMIN");
+			assign(userService, "alice", "ROLE_MANAGER");
 
-			userService.assignRoleToUser("alice", "ROLE_ADMIN");
-			userService.assignRoleToUser("alice", "ROLE_MANAGER");
+			assign(userService, "bob", "ROLE_ADMIN");
+			assign(userService, "bob", "ROLE_EDITOR");
 
-			userService.assignRoleToUser("bob", "ROLE_ADMIN");
-			userService.assignRoleToUser("bob", "ROLE_EDITOR");
+			assign(userService, "charlie", "ROLE_MANAGER");
+			assign(userService, "charlie", "ROLE_USER");
 
-			userService.assignRoleToUser("charlie", "ROLE_MANAGER");
-			userService.assignRoleToUser("charlie", "ROLE_USER");
+			assign(userService, "david", "ROLE_MANAGER");
+			assign(userService, "david", "ROLE_MODERATOR");
 
-			userService.assignRoleToUser("david", "ROLE_MANAGER");
-			userService.assignRoleToUser("david", "ROLE_MODERATOR");
+			assign(userService, "emma", "ROLE_EDITOR");
+			assign(userService, "frank", "ROLE_EDITOR");
+			assign(userService, "grace", "ROLE_EDITOR");
 
-			userService.assignRoleToUser("emma", "ROLE_EDITOR");
-			userService.assignRoleToUser("frank", "ROLE_EDITOR");
-			userService.assignRoleToUser("grace", "ROLE_EDITOR");
+			assign(userService, "henry", "ROLE_MODERATOR");
+			assign(userService, "isabella", "ROLE_MODERATOR");
+			assign(userService, "jack", "ROLE_MODERATOR");
 
-			userService.assignRoleToUser("henry", "ROLE_MODERATOR");
-			userService.assignRoleToUser("isabella", "ROLE_MODERATOR");
-			userService.assignRoleToUser("jack", "ROLE_MODERATOR");
+			assign(userService, "karen", "ROLE_USER");
+			assign(userService, "karen", "ROLE_EDITOR");
 
-			userService.assignRoleToUser("karen", "ROLE_USER");
-			userService.assignRoleToUser("karen", "ROLE_EDITOR");
+			assign(userService, "liam", "ROLE_USER");
+			assign(userService, "liam", "ROLE_MANAGER");
 
-			userService.assignRoleToUser("liam", "ROLE_USER");
-			userService.assignRoleToUser("liam", "ROLE_MANAGER");
+			assign(userService, "mia", "ROLE_USER");
+			assign(userService, "mia", "ROLE_MODERATOR");
 
-			userService.assignRoleToUser("mia", "ROLE_USER");
-			userService.assignRoleToUser("mia", "ROLE_MODERATOR");
+			assign(userService, "noah", "ROLE_EDITOR");
+			assign(userService, "noah", "ROLE_MODERATOR");
 
-			userService.assignRoleToUser("noah", "ROLE_EDITOR");
-			userService.assignRoleToUser("noah", "ROLE_MODERATOR");
+			assign(userService, "olivia", "ROLE_MANAGER");
+			assign(userService, "olivia", "ROLE_EDITOR");
 
-			userService.assignRoleToUser("olivia", "ROLE_MANAGER");
-			userService.assignRoleToUser("olivia", "ROLE_EDITOR");
+			List.of(
+					"peter", "queen", "ryan", "sophia", "thomas",
+					"uma", "victor", "william", "xavier", "zoe"
+			).forEach(username -> assign(userService, username, "ROLE_USER"));
 
-			userService.assignRoleToUser("peter", "ROLE_USER");
-			userService.assignRoleToUser("queen", "ROLE_USER");
-			userService.assignRoleToUser("ryan", "ROLE_USER");
-			userService.assignRoleToUser("sophia", "ROLE_USER");
-			userService.assignRoleToUser("thomas", "ROLE_USER");
-			userService.assignRoleToUser("uma", "ROLE_USER");
-			userService.assignRoleToUser("victor", "ROLE_USER");
-			userService.assignRoleToUser("william", "ROLE_USER");
-			userService.assignRoleToUser("xavier", "ROLE_USER");
-			userService.assignRoleToUser("zoe", "ROLE_USER");
-
-			userService.assignRoleToUser("alice", "ROLE_EDITOR");
-			userService.assignRoleToUser("olivia", "ROLE_USER");
-			userService.assignRoleToUser("noah", "ROLE_USER");
-
+			assign(userService, "alice", "ROLE_EDITOR");
+			assign(userService, "olivia", "ROLE_USER");
+			assign(userService, "noah", "ROLE_USER");
 		};
+	}
+
+	private static void assign(UserServices service, String username, String role) {
+		service.assignRoleToUser(username, role);
 	}
 }
