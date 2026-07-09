@@ -34,7 +34,13 @@ public class SecurityConfig{
                                 "/login",
                                 "/error"
                         ).permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/api/resourses/users").hasAnyRole(
+                                "ADMIN", "USER", "MANAGER", "EDITOR", "MODERATOR"
+                        )
+                        .requestMatchers("/api/resourses/roles").hasAnyRole(
+                                "ADMIN", "MANAGER"
+                        )
+                        .anyRequest().hasRole("ADMIN")
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
