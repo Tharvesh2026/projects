@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>i.Core — My Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+    <link rel="stylesheet" href="/assets/icore.css">
+
+    <style>
+        .profile-banner {
+            height: 96px;
+            background: linear-gradient(135deg, #312E81 0%, #4338CA 55%, #818CF8 100%);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            position: relative;
+        }
+
+        .profile-banner-dots {
+            position: absolute; inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,.12) 1px, transparent 1px);
+            background-size: 22px 22px;
+            border-radius: inherit;
+        }
+
+        .profile-avatar-wrap {
+            position: absolute;
+            bottom: -30px;
+            left: 24px;
+        }
+
+        .profile-avatar {
+            width: 62px; height: 62px;
+            border-radius: 50%;
+            background: #EEF2FF;
+            color: #4338CA;
+            font-size: 22px;
+            font-weight: 600;
+            display: flex; align-items: center; justify-content: center;
+            border: 3px solid var(--surface);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .profile-tabs {
+            display: flex;
+            gap: 2px;
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+            margin-bottom: 22px;
+        }
+
+        .profile-tab {
+            display: flex; align-items: center; gap: 6px;
+            padding: 10px 14px;
+            font-size: 13.5px;
+            color: var(--text-3);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: color .15s, border-color .15s;
+            background: none; border-top: none; border-left: none; border-right: none;
+            font-family: var(--font);
+        }
+
+        .profile-tab.active {
+            color: var(--brand);
+            border-bottom-color: var(--brand);
+            font-weight: 500;
+        }
+
+        .profile-tab:hover:not(.active) { color: var(--text-2); }
+
+        .profile-panel { display: none; }
+        .profile-panel.active { display: block; }
+
+        .strength-bar {
+            height: 5px;
+            border-radius: 3px;
+            background: var(--border);
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .strength-fill {
+            height: 100%;
+            border-radius: 3px;
+            width: 0%;
+            transition: width .3s, background .3s;
+        }
+    </style>
+</head>
+<body>
+
+<div class="ic-shell">
+
+    <div th:replace="~{navbar :: sidebar('profile')}"></div>
+
+    <main class="ic-main">
+
+        <!-- Topbar -->
+        <div class="ic-topbar">
+            <div class="ic-topbar-left">
+                <div class="ic-breadcrumb">
+                    <span>i.Core</span>
+                    <span class="ic-breadcrumb-sep">/</span>
+                    <span>My Profile</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="ic-content">
+
+            <!-- Profile header card -->
+            <div class="ic-card" style="margin-bottom: 20px; overflow: hidden;">
+
+                <div class="profile-banner">
+                    <div class="profile-banner-dots"></div>
+                    <div class="profile-avatar-wrap">
+                        <div class="profile-avatar" id="avatarDisplay" th:text="${#strings.substring(username, 0, 1).toUpperCase()}">
+                            U
+                        </div>
+                    </div>
+                </div>
+
+                <div style="padding: 44px 24px 20px;">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <div style="font-size:18px; font-weight:600; color:var(--text-1);" th:text="${username}">
+                                User Name
+                            </div>
+                            <div style="font-size:13px; color:var(--text-3); margin-top:3px;">
+                                <span th:text="${email}">user@domain.com</span>
+                            </div>
+                            <div style="margin-top:10px; display:flex; gap:7px; flex-wrap:wrap;">
+                                <span class="ic-tag tag-admin">
+                                    <i class="ti ti-shield" style="font-size:12px;"></i>
+                                    <span th:text="${roles}">ROLE_USER</span>
+                                </span>
+                                <span class="ic-tag tag-active">
+                                    <i class="ti ti-circle-check" style="font-size:12px;"></i>
+                                    <span>Active</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <div style="padding:8px 16px; background:var(--surface-2); border-radius:var(--radius-sm); text-align:center;">
+                                <div style="font-size:10px; color:var(--text-3); margin-bottom:2px;">Auth Provider</div>
+                                <div style="font-family:var(--mono); font-size:13px; font-weight:500;" th:text="${provider}">
+                                    LOCAL
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab nav -->
+                <div class="profile-tabs">
+                    <button class="profile-tab active" onclick="switchTab('info', this)">
+                        <i class="ti ti-user"></i> Account
+                    </button>
+                    <button class="profile-tab" onclick="switchTab('edit', this)">
+                        <i class="ti ti-edit"></i> Edit profile
+                    </button>
+                    <button class="profile-tab" onclick="switchTab('password', this)">
+                        <i class="ti ti-lock"></i> Change password
+                    </button>
+                </div>
+
+                <!-- TAB: Account info -->
+                <div id="tab-info" class="profile-panel active" style="padding: 0 24px 24px;">
+                    <div class="ic-grid-2">
+                        <div>
+                            <div style="font-size:12px; font-weight:500; color:var(--text-3); text-transform:uppercase; letter-spacing:.06em; margin-bottom:10px;">
+                                Personal information
+                            </div>
+                            <div class="ic-info-row">
+                                <span class="ic-info-label">Full name</span>
+                                <span class="ic-info-value" th:text="${username}">User</span>
+                            </div>
+                            <div class="ic-info-row">
+                                <span class="ic-info-label">Email address</span>
+                                <span class="ic-info-value" th:text="${email}">user@domain.com</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="font-size:12px; font-weight:500; color:var(--text-3); text-transform:uppercase; letter-spacing:.06em; margin-bottom:10px;">
+                                Access & permissions
+                            </div>
+                            <div class="ic-info-row">
+                                <span class="ic-info-label">Assigned Roles</span>
+                                <span class="ic-tag tag-admin" th:text="${roles}">ROLE_USER</span>
+                            </div>
+                            <div class="ic-info-row">
+                                <span class="ic-info-label">Access Level</span>
+                                <span style="font-size:12px; color:var(--text-2);" th:text="${provider == 'LOCAL' ? 'Local Credentials Access' : 'Third-Party Authenticated (Google/GitHub)'}">Access Mode</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Edit profile -->
+                <div id="tab-edit" class="profile-panel" style="padding: 0 24px 24px;">
+                    <div style="max-width: 520px;">
+                        <div style="font-size:12px; color:var(--text-3); margin-bottom:18px;">
+                            Profile modification options (view-only on simulation).
+                        </div>
+                        <div class="ic-form-group">
+                            <label class="ic-label">Full name</label>
+                            <input type="text" class="ic-input" th:value="${username}" disabled>
+                        </div>
+                        <div class="ic-form-group">
+                            <label class="ic-label">Email address</label>
+                            <input type="email" class="ic-input" th:value="${email}" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Change password -->
+                <div id="tab-password" class="profile-panel" style="padding: 0 24px 24px;">
+                    <div style="max-width: 520px;">
+                        <div style="font-size:12px; color:var(--text-3); margin-bottom:18px;">
+                            Choose a strong password. It must be at least 6 characters long.
+                        </div>
+                        <div class="ic-form-group">
+                            <label class="ic-label">Current password</label>
+                            <input type="password" class="ic-input" placeholder="••••••••" disabled>
+                        </div>
+                        <div class="ic-form-group">
+                            <label class="ic-label">New password</label>
+                            <input type="password" class="ic-input" placeholder="At least 6 characters" disabled>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script>
+    function switchTab(name, clickedBtn) {
+        document.querySelectorAll('.profile-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.profile-tab').forEach(b => b.classList.remove('active'));
+        document.getElementById('tab-' + name).classList.add('active');
+        if (clickedBtn) clickedBtn.classList.add('active');
+    }
+</script>
+
+</body>
+</html>

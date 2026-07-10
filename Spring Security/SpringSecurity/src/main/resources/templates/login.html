@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(47,54,64,1) 0%, rgba(24,27,32,1) 100%);
+        }
+
+        .login-card {
+            background: #ffffff;
+            width: 380px;
+            max-width: 90%;
+            padding: 40px 36px;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+        }
+
+        .login-card h1 {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #2f3640;
+            margin-bottom: 6px;
+        }
+
+        .login-card p.subtitle {
+            color: #7f8fa6;
+            font-size: 0.85em;
+            margin-bottom: 28px;
+        }
+
+        .alert {
+            background: #fdecea;
+            color: #c0392b;
+            border: 1px solid #f5b7b1;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.82em;
+            margin-bottom: 20px;
+        }
+
+        .alert.success {
+            background: #eafaf1;
+            color: #1e8449;
+            border-color: #a9dfbf;
+        }@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root{
+            --brand:#4F46E5;
+            --brand-dark:#3730A3;
+            --brand-light:#EEF2FF;
+
+            --bg:#F8F9FC;
+            --surface:#FFFFFF;
+            --surface-2:#F3F4F8;
+
+            --border:#E4E7EF;
+            --border-mid:#CBD0DC;
+
+            --text-1:#111827;
+            --text-2:#4B5563;
+            --text-3:#9CA3AF;
+
+            --green:#16A34A;
+            --green-bg:#DCFCE7;
+
+            --red:#DC2626;
+            --red-bg:#FEE2E2;
+
+            --radius:10px;
+            --radius-lg:14px;
+
+            --shadow:
+                    0 4px 12px rgba(0,0,0,.08),
+                    0 1px 3px rgba(0,0,0,.05);
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Inter',sans-serif;
+        }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:var(--bg);
+            color:var(--text-1);
+        }
+
+        .login-card{
+            width:390px;
+            max-width:92%;
+            background:var(--surface);
+            border:1px solid var(--border);
+            border-radius:var(--radius-lg);
+            box-shadow:var(--shadow);
+            padding:36px;
+        }
+
+        .login-card h1{
+            font-size:24px;
+            font-weight:600;
+            color:var(--text-1);
+            margin-bottom:6px;
+        }
+
+        .subtitle{
+            color:var(--text-3);
+            font-size:13px;
+            margin-bottom:28px;
+        }
+
+        .form-group{
+            margin-bottom:16px;
+        }
+
+        .form-group label{
+            display:block;
+            font-size:12px;
+            font-weight:500;
+            color:var(--text-2);
+            margin-bottom:6px;
+        }
+
+        .form-group input{
+            width:100%;
+            padding:10px 12px;
+            border:1px solid var(--border-mid);
+            border-radius:6px;
+            font-size:14px;
+            background:var(--surface);
+            transition:.15s;
+        }
+
+        .form-group input:focus{
+            outline:none;
+            border-color:var(--brand);
+            box-shadow:0 0 0 3px rgba(79,70,229,.12);
+        }
+
+        .submit-btn{
+            width:100%;
+            padding:11px;
+            border:none;
+            border-radius:6px;
+            background:var(--brand);
+            color:#fff;
+            font-size:14px;
+            font-weight:600;
+            cursor:pointer;
+            transition:.15s;
+        }
+
+        .submit-btn:hover{
+            background:var(--brand-dark);
+        }
+
+        .alert{
+            margin-bottom:18px;
+            padding:11px 14px;
+            border-radius:6px;
+            font-size:13px;
+        }
+
+        .alert{
+            background:var(--red-bg);
+            color:#991B1B;
+            border:1px solid #FECACA;
+        }
+
+        .alert.success{
+            background:var(--green-bg);
+            color:#166534;
+            border:1px solid #BBF7D0;
+        }
+
+        .divider{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            margin:24px 0;
+            color:var(--text-3);
+            font-size:12px;
+        }
+
+        .divider::before,
+        .divider::after{
+            content:"";
+            flex:1;
+            height:1px;
+            background:var(--border);
+        }
+
+        .oauth-buttons{
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+        }
+
+        .oauth-btn{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:10px;
+            padding:11px;
+            border:1px solid var(--border-mid);
+            border-radius:6px;
+            background:#fff;
+            color:var(--text-1);
+            text-decoration:none;
+            font-size:13px;
+            font-weight:500;
+            transition:.15s;
+        }
+
+        .oauth-btn:hover{
+            background:var(--surface-2);
+            border-color:var(--border-mid);
+        }
+
+        .oauth-btn svg{
+            width:18px;
+            height:18px;
+        }
+
+        .footer-note{
+            margin-top:22px;
+            text-align:center;
+            color:var(--text-3);
+            font-size:12px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8em;
+            font-weight: 500;
+            color: #576375;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #dcdde1;
+            border-radius: 8px;
+            font-size: 0.95em;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #e67e22;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 13px;
+            background-color: #e67e22;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: #d35400;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 0.78em;
+            color: #a4b0be;
+            margin-top: 22px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 24px 0;
+            color: #a4b0be;
+            font-size: 0.78em;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #dcdde1;
+        }
+
+        .divider:not(:empty)::before {
+            margin-right: 12px;
+        }
+
+        .divider:not(:empty)::after {
+            margin-left: 12px;
+        }
+
+        .oauth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .oauth-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 11px;
+            border: 1.5px solid #dcdde1;
+            border-radius: 8px;
+            background-color: #ffffff;
+            color: #2f3640;
+            font-size: 0.9em;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .oauth-btn:hover {
+            background-color: #f5f6fa;
+            border-color: #b2bec3;
+        }
+
+        .oauth-btn svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .oauth-btn.github:hover {
+            border-color: #2f3640;
+        }
+
+        .oauth-btn.google:hover {
+            border-color: #4285F4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <h1>Welcome back</h1>
+    <p class="subtitle">Sign in to continue to your account</p>
+
+    <div class="alert" th:if="${param.error}">
+        Invalid username or password. Please try again.
+    </div>
+
+    <div class="alert success" th:if="${param.logout}">
+        You have been logged out successfully.
+    </div>
+
+    <form th:action="@{/login}" method="post">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required autofocus>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+
+        <button type="submit" class="submit-btn">Sign in</button>
+    </form>
+
+    <div class="divider">or continue with</div>
+
+    <div class="oauth-buttons">
+        <a th:href="@{/oauth2/authorization/github}" class="oauth-btn github">
+            <svg viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+                0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+                -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28
+                -.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12
+                0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82
+                .44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54
+                1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+            Continue with GitHub
+        </a>
+
+        <a th:href="@{/oauth2/authorization/google}" class="oauth-btn google">
+            <svg viewBox="0 0 18 18">
+                <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84c-.21 1.13-.84 2.09-1.8 2.73v2.27h2.91c1.7-1.57 2.69-3.88 2.69-6.64z"/>
+                <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.91-2.27c-.81.54-1.84.86-3.05.86-2.34 0-4.33-1.58-5.04-3.71H.96v2.34C2.44 15.98 5.48 18 9 18z"/>
+                <path fill="#FBBC05" d="M3.96 10.7c-.18-.54-.28-1.11-.28-1.7s.1-1.16.28-1.7V4.96H.96A8.996 8.996 0 0 0 0 9c0 1.45.35 2.83.96 4.04l3-2.34z"/>
+                <path fill="#EA4335" d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l3 2.34C4.67 5.16 6.66 3.58 9 3.58z"/>
+            </svg>
+            Continue with Google
+        </a>
+    </div>
+
+    <p class="footer-note">Protected by Spring Security</p>
+</div>
+
+</body>
+</html>

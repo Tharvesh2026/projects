@@ -1,0 +1,71 @@
+<aside th:fragment="sidebar(activeTab)" class="ic-sidebar">
+
+    <!-- Logo -->
+    <div class="ic-sidebar-logo">
+        <div class="ic-logo-mark">
+            <i class="ti ti-cloud"></i>
+        </div>
+        <div>
+            <div class="ic-logo-text">Account Manager</div>
+            <div class="ic-logo-ver">tharbytes.io</div>
+        </div>
+    </div>
+
+    <!-- User pill -->
+    <div style="padding: 12px 10px;">
+        <div style="display:flex; align-items:center; gap:9px; padding: 8px 10px;
+                    background: var(--surface-2); border-radius: var(--radius-sm);">
+            <div class="ic-avatar av-purple" style="font-size:12px;" th:text="${#strings.substring(username, 0, 1).toUpperCase()}">
+                U
+            </div>
+            <div style="overflow:hidden;">
+                <div style="font-size:13px; font-weight:500; color:var(--text-1);
+                            white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"
+                     th:text="${username}">
+                    Guest
+                </div>
+                <div style="font-size:11px; color:var(--text-3);" th:text="${roles}">
+                    ROLE_USER
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main nav -->
+    <div class="ic-nav-section">Main</div>
+
+    <a href="/" class="ic-nav-item" th:classappend="${activeTab == 'dashboard' ? 'active' : ''}">
+        <i class="ti ti-layout-dashboard"></i> Dashboard
+    </a>
+
+    <a href="/profile" class="ic-nav-item" th:classappend="${activeTab == 'profile' ? 'active' : ''}">
+        <i class="ti ti-user"></i> Profile
+    </a>
+
+    <a href="/users" class="ic-nav-item" th:classappend="${activeTab == 'users' ? 'active' : ''}">
+        <i class="ti ti-users"></i> Users
+    </a>
+
+    <a href="/roles" class="ic-nav-item" th:classappend="${activeTab == 'roles' ? 'active' : ''}">
+        <i class="ti ti-shield-lock"></i> Roles
+    </a>
+
+    <!-- System nav -->
+    <div class="ic-nav-section">System</div>
+
+    <a href="/settings" class="ic-nav-item" th:classappend="${activeTab == 'settings' ? 'active' : ''}">
+        <i class="ti ti-settings"></i> Settings
+    </a>
+
+    <!-- Footer -->
+    <div class="ic-sidebar-footer">
+        <form action="/logout" method="post" style="margin:0;">
+            <button type="submit" class="ic-nav-item danger"
+                    style="width:100%; border:none; background:none; cursor:pointer; text-align:left; font-size:13.5px;"
+                    onclick="return confirm('Sign out of i.Core?')">
+                <i class="ti ti-logout"></i> Sign out
+            </button>
+        </form>
+    </div>
+
+</aside>
