@@ -1,5 +1,5 @@
 /* ============================================================
-   i.Core — Cloud Identity Management Portal
+   tharbytes.io — Cloud Identity Management Portal
    Shared Stylesheet  |  v1.2.0-STABLE
    ============================================================ */
 
@@ -149,7 +149,7 @@ button, input, select, textarea { font-family: inherit; }
 
 .ic-logo-mark {
   width: 34px; height: 34px;
-  background: var(--brand);
+  background: linear-gradient(135deg, #FFDF22 0%, #F68B1E 55%, #E62A76 100%);
   border-radius: var(--radius-sm);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;

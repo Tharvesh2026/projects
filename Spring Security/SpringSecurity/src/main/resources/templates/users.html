@@ -1,154 +1,168 @@
 <!DOCTYPE html>
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>i.Core — Users</title>
+    <title>tharbytes.io — Users</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
     <link rel="stylesheet" href="/assets/icore.css">
 </head>
+
 <body>
 
-<div class="ic-shell">
+    <div class="ic-shell">
 
-    <div th:replace="~{navbar :: sidebar('users')}"></div>
+        <div th:replace="~{navbar :: sidebar('users')}"></div>
 
-    <main class="ic-main">
+        <main class="ic-main">
 
-        <!-- Topbar -->
-        <div class="ic-topbar">
-            <div class="ic-breadcrumb">
-                <span>i.Core</span>
-                <span class="ic-breadcrumb-sep">/</span>
-                <span>Users</span>
-            </div>
-        </div>
-
-        <div class="ic-content">
-
-            <div class="ic-page-header">
-                <div>
-                    <div class="ic-page-title">User management</div>
-                    <div class="ic-page-sub">Manage registered users, roles and account access.</div>
+            <!-- Topbar -->
+            <div class="ic-topbar">
+                <div class="ic-breadcrumb">
+                    <span>tharbytes.io</span>
+                    <span class="ic-breadcrumb-sep">/</span>
+                    <span>Users</span>
                 </div>
             </div>
 
-            <!-- Stat cards -->
-            <div class="ic-grid-3" style="margin-bottom: 20px;">
-                <div class="ic-metric">
-                    <div class="ic-metric-label">
-                        <i class="ti ti-users" style="font-size:14px;"></i> Total users
+            <div class="ic-content">
+
+                <div class="ic-page-header">
+                    <div>
+                        <div class="ic-page-title">User management</div>
+                        <div class="ic-page-sub">Manage registered users, roles and account access.</div>
                     </div>
-                    <div class="ic-metric-value" th:text="${#lists.size(users)}">0</div>
-                    <div class="ic-metric-sub">Registered accounts</div>
                 </div>
 
-                <div class="ic-metric">
-                    <div class="ic-metric-label">
-                        <i class="ti ti-circle-check" style="font-size:14px;color:var(--green);"></i> Active accounts
+                <!-- Stat cards -->
+                <div class="ic-grid-3" style="margin-bottom: 20px;">
+                    <div class="ic-metric">
+                        <div class="ic-metric-label">
+                            <i class="ti ti-users" style="font-size:14px;"></i> Total users
+                        </div>
+                        <div class="ic-metric-value" th:text="${#lists.size(users)}">0</div>
+                        <div class="ic-metric-sub">Registered accounts</div>
                     </div>
-                    <div class="ic-metric-value" style="color:var(--green);" th:text="${#lists.size(users)}">0</div>
-                    <div class="ic-metric-sub">Currently enabled</div>
-                </div>
 
-                <div class="ic-metric">
-                    <div class="ic-metric-label">
-                        <i class="ti ti-shield-check" style="font-size:14px;color:var(--brand);"></i> System Admins
+                    <div class="ic-metric">
+                        <div class="ic-metric-label">
+                            <i class="ti ti-circle-check" style="font-size:14px;color:var(--green);"></i> Active
+                            accounts
+                        </div>
+                        <div class="ic-metric-value" style="color:var(--green);" th:text="${#lists.size(users)}">0</div>
+                        <div class="ic-metric-sub">Currently enabled</div>
                     </div>
-                    <div class="ic-metric-value" style="color:var(--brand);">3</div>
-                    <div class="ic-metric-sub">SYS_ADMIN access level</div>
-                </div>
-            </div>
 
-            <!-- Search -->
-            <div style="margin-bottom:14px;">
-                <div class="ic-search">
-                    <i class="ti ti-search"></i>
-                    <input type="text" id="searchUser" placeholder="Search by name, username or email…">
+                    <div class="ic-metric">
+                        <div class="ic-metric-label">
+                            <i class="ti ti-shield-check" style="font-size:14px;color:var(--brand);"></i> System Admins
+                        </div>
+                        <div class="ic-metric-value" style="color:var(--brand);">3</div>
+                        <div class="ic-metric-sub">SYS_ADMIN access level</div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Table -->
-            <div class="ic-table-wrap">
-                <div style="overflow-x:auto;">
-                    <table class="ic-table" id="usersTable">
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Email</th>
-                                <th>Provider</th>
-                                <th>Roles</th>
-                                <th>ID</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="user : ${users}">
-                                <td>
-                                    <div style="display:flex; align-items:center; gap:10px;">
-                                        <div class="ic-avatar av-purple" th:text="${#strings.substring(user.name, 0, 1).toUpperCase()}">
-                                            U
-                                        </div>
-                                        <div>
-                                            <div style="font-weight:500; color:var(--text-1); font-size:13.5px;" th:text="${user.name}">
-                                                John Doe
+                <!-- Search -->
+                <div style="margin-bottom:14px;">
+                    <div class="ic-search">
+                        <i class="ti ti-search"></i>
+                        <input type="text" id="searchUser" placeholder="Search by name, username or email…">
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="ic-table-wrap">
+                    <div style="overflow-x:auto;">
+                        <table class="ic-table" id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Email</th>
+                                    <th>Provider</th>
+                                    <th>Roles</th>
+                                    <th>ID</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="user : ${users}">
+                                    <td>
+                                        <div style="display:flex; align-items:center; gap:10px;">
+                                            <div class="ic-avatar av-purple"
+                                                th:text="${#strings.substring(user.name, 0, 1).toUpperCase()}">
+                                                U
                                             </div>
-                                            <div style="font-size:12px; color:var(--text-3);" th:text="'@' + ${user.rawUsername != null ? user.rawUsername : 'oauth_user'}">
-                                                @johndoe
+                                            <div>
+                                                <div style="font-weight:500; color:var(--text-1); font-size:13.5px;"
+                                                    th:text="${user.name}">
+                                                    John Doe
+                                                </div>
+                                                <div style="font-size:12px; color:var(--text-3);"
+                                                    th:text="'@' + ${user.rawUsername != null ? user.rawUsername : 'oauth_user'}">
+                                                    @johndoe
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td style="color:var(--text-2); font-size:13px;" th:text="${user.email}">user@example.com</td>
-                                <td>
-                                    <span class="ic-tag tag-user" th:text="${user.provider != null ? user.provider : 'LOCAL'}">
-                                        LOCAL
-                                    </span>
-                                </td>
-                                <td>
-                                    <span th:each="role : ${user.roles}" class="ic-tag tag-admin" style="margin-right: 4px;" th:text="${role.name}">
-                                        ROLE_USER
-                                    </span>
-                                </td>
-                                <td>
-                                    <span style="font-family:var(--mono); font-size:12px; color:var(--text-3);" th:text="'#' + ${user.id}">
-                                        #1
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="ic-tag tag-active">
-                                        <i class="ti ti-circle-check" style="font-size:13px;"></i>
-                                        Active
-                                    </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    </td>
+                                    <td style="color:var(--text-2); font-size:13px;" th:text="${user.email}">
+                                        user@example.com</td>
+                                    <td>
+                                        <span class="ic-tag tag-user"
+                                            th:text="${user.provider != null ? user.provider : 'LOCAL'}">
+                                            LOCAL
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span th:each="role : ${user.roles}" class="ic-tag tag-admin"
+                                            style="margin-right: 4px;" th:text="${role.name}">
+                                            ROLE_USER
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span style="font-family:var(--mono); font-size:12px; color:var(--text-3);"
+                                            th:text="'#' + ${user.id}">
+                                            #1
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="ic-tag tag-active">
+                                            <i class="ti ti-circle-check" style="font-size:13px;"></i>
+                                            Active
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+
+                <div style="margin-top:12px; font-size:12px; color:var(--text-3);"
+                    th:text="'Showing ' + ${#lists.size(users)} + ' registered users'">
+                    Showing 0 registered users
+                </div>
+
             </div>
+        </main>
+    </div>
 
-            <div style="margin-top:12px; font-size:12px; color:var(--text-3);" th:text="'Showing ' + ${#lists.size(users)} + ' registered users'">
-                Showing 0 registered users
-            </div>
+    <script>
+        const searchInput = document.getElementById("searchUser");
+        const table = document.getElementById("usersTable");
 
-        </div>
-    </main>
-</div>
-
-<script>
-    const searchInput = document.getElementById("searchUser");
-    const table = document.getElementById("usersTable");
-
-    searchInput.addEventListener("keyup", function () {
-        const q = this.value.toLowerCase();
-        table.querySelectorAll("tbody tr").forEach(function(row) {
-            row.style.display = row.innerText.toLowerCase().includes(q) ? "" : "none";
+        searchInput.addEventListener("keyup", function () {
+            const q = this.value.toLowerCase();
+            table.querySelectorAll("tbody tr").forEach(function (row) {
+                row.style.display = row.innerText.toLowerCase().includes(q) ? "" : "none";
+            });
         });
-    });
-</script>
+    </script>
 
 </body>
+
 </html>

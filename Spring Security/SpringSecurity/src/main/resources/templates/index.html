@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>i.Core — Dashboard</title>
+    <title>tharbytes.io — Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
     <link rel="stylesheet" href="/assets/icore.css">
 
@@ -56,7 +59,7 @@
             border-radius: var(--radius);
             padding: 20px;
             font-family: var(--mono);
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
         }
 
         .console-header {
@@ -81,9 +84,17 @@
             border-radius: 50%;
         }
 
-        .console-dot.red { background-color: var(--red); }
-        .console-dot.yellow { background-color: var(--amber); }
-        .console-dot.green { background-color: var(--green); }
+        .console-dot.red {
+            background-color: var(--red);
+        }
+
+        .console-dot.yellow {
+            background-color: var(--amber);
+        }
+
+        .console-dot.green {
+            background-color: var(--green);
+        }
 
         .console-screen {
             min-height: 120px;
@@ -111,168 +122,175 @@
         }
     </style>
 </head>
+
 <body>
 
-<div class="ic-shell">
+    <div class="ic-shell">
 
-    <div th:replace="~{navbar :: sidebar('dashboard')}"></div>
+        <div th:replace="~{navbar :: sidebar('dashboard')}"></div>
 
-    <main class="ic-main">
+        <main class="ic-main">
 
-        <!-- Topbar -->
-        <div class="ic-topbar">
-            <div class="ic-topbar-left">
-                <div class="ic-breadcrumb">
-                    <span>i.Core</span>
-                    <span class="ic-breadcrumb-sep">/</span>
-                    <span>Dashboard</span>
+            <!-- Topbar -->
+            <div class="ic-topbar">
+                <div class="ic-topbar-left">
+                    <div class="ic-breadcrumb">
+                        <span>tharbytes.io</span>
+                        <span class="ic-breadcrumb-sep">/</span>
+                        <span>Dashboard</span>
+                    </div>
                 </div>
-            </div>
-            <div class="ic-topbar-right">
-                <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-3);">
-                    <span class="ic-dot ic-dot-green"></span> All systems operational
-                </span>
-            </div>
-        </div>
-
-        <div class="ic-content">
-
-            <!-- Page header -->
-            <div class="ic-page-header">
-                <div>
-                    <div class="ic-page-title" th:text="'Welcome back, ' + ${username}">
-                        Welcome back, User
-                    </div>
-                    <div class="ic-page-sub">
-                        Here's your current RBAC security profile and session metadata.
-                    </div>
+                <div class="ic-topbar-right">
+                    <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-3);">
+                        <span class="ic-dot ic-dot-green"></span> All systems operational
+                    </span>
                 </div>
             </div>
 
-            <!-- Profile Summary Card -->
-            <div class="ic-card ic-card-padded" style="margin-bottom: 20px;">
-                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
-                    <div style="display:flex; align-items:center; gap:14px;">
-                        <div class="ic-avatar ic-avatar-lg av-purple" th:text="${#strings.substring(username, 0, 1).toUpperCase()}">
-                            U
-                        </div>
-                        <div>
-                            <div style="font-size:16px; font-weight:600; color:var(--text-1);" th:text="${username}">
-                                User Name
-                            </div>
-                            <div style="font-size:13px; color:var(--text-3); margin-top:2px;">
-                                <span th:text="${email}">user@domain.com</span>
-                            </div>
-                            <div style="margin-top:6px; display: flex; gap: 8px;">
-                                <span class="ic-tag tag-admin" th:text="${roles}">ROLE_USER</span>
-                                <span class="ic-tag tag-user" th:text="'Provider: ' + ${provider}">LOCAL</span>
-                            </div>
-                        </div>
-                    </div>
+            <div class="ic-content">
 
-                    <div style="display:flex; gap:10px; align-items:center;">
-                        <div style="text-align:right;">
-                            <div style="font-size:11px; color:var(--text-3);">Status</div>
-                            <span class="ic-tag tag-active" style="font-size:12px; margin-top:3px; display:inline-flex;">
-                                <i class="ti ti-circle-check" style="font-size:13px;"></i>
-                                Active
-                            </span>
+                <!-- Page header -->
+                <div class="ic-page-header">
+                    <div>
+                        <div class="ic-page-title" th:text="'Welcome back, ' + ${username}">
+                            Welcome back, User
+                        </div>
+                        <div class="ic-page-sub">
+                            Here's your current RBAC security profile and session metadata.
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Testing Section -->
-            <div style="margin-bottom: 24px;">
-                <div style="font-size:14px; font-weight:600; color:var(--text-1); margin-bottom:12px;
+                <!-- Profile Summary Card -->
+                <div class="ic-card ic-card-padded" style="margin-bottom: 20px;">
+                    <div
+                        style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+                        <div style="display:flex; align-items:center; gap:14px;">
+                            <div class="ic-avatar ic-avatar-lg av-purple"
+                                th:text="${#strings.substring(username, 0, 1).toUpperCase()}">
+                                U
+                            </div>
+                            <div>
+                                <div style="font-size:16px; font-weight:600; color:var(--text-1);"
+                                    th:text="${username}">
+                                    User Name
+                                </div>
+                                <div style="font-size:13px; color:var(--text-3); margin-top:2px;">
+                                    <span th:text="${email}">user@domain.com</span>
+                                </div>
+                                <div style="margin-top:6px; display: flex; gap: 8px;">
+                                    <span class="ic-tag tag-admin" th:text="${roles}">ROLE_USER</span>
+                                    <span class="ic-tag tag-user" th:text="'Provider: ' + ${provider}">LOCAL</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <div style="text-align:right;">
+                                <div style="font-size:11px; color:var(--text-3);">Status</div>
+                                <span class="ic-tag tag-active"
+                                    style="font-size:12px; margin-top:3px; display:inline-flex;">
+                                    <i class="ti ti-circle-check" style="font-size:13px;"></i>
+                                    Active
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testing Section -->
+                <div style="margin-bottom: 24px;">
+                    <div style="font-size:14px; font-weight:600; color:var(--text-1); margin-bottom:12px;
                             display:flex; align-items:center; gap:6px;">
-                    <i class="ti ti-shield-check" style="font-size:18px; color:var(--brand);"></i>
-                    Interactive RBAC Route Access Validation
-                </div>
-                <div class="ic-grid-4" style="margin-bottom: 20px;">
-                    <button class="test-btn" onclick="testEndpoint('/api/viewer/data')">
-                        <span class="btn-title">Viewer Endpoint</span>
-                        <span class="btn-route">/api/viewer/data</span>
-                        <span class="btn-role">All Users (Viewer+)</span>
-                    </button>
-                    <button class="test-btn" onclick="testEndpoint('/api/admin/data')">
-                        <span class="btn-title">Admin Endpoint</span>
-                        <span class="btn-route">/api/admin/data</span>
-                        <span class="btn-role">Admin, Domain, SYS Admin</span>
-                    </button>
-                    <button class="test-btn" onclick="testEndpoint('/api/domain-admin/data')">
-                        <span class="btn-title">Domain Admin</span>
-                        <span class="btn-route">/api/domain-admin/data</span>
-                        <span class="btn-role">Domain Admin, SYS Admin</span>
-                    </button>
-                    <button class="test-btn" onclick="testEndpoint('/api/sys-admin/data')">
-                        <span class="btn-title">SYS Admin</span>
-                        <span class="btn-route">/api/sys-admin/data</span>
-                        <span class="btn-role">SYS Admin Only</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Real-time Console Log -->
-            <div class="console-container">
-                <div class="console-header">
-                    <div class="console-dot-group">
-                        <div class="console-dot red"></div>
-                        <div class="console-dot yellow"></div>
-                        <div class="console-dot green"></div>
+                        <i class="ti ti-shield-check" style="font-size:18px; color:var(--brand);"></i>
+                        Interactive RBAC Route Access Validation
                     </div>
-                    <span>RBAC ACCESS TERMINAL</span>
-                    <span style="cursor:pointer;" onclick="clearConsole()">Clear</span>
+                    <div class="ic-grid-4" style="margin-bottom: 20px;">
+                        <button class="test-btn" onclick="testEndpoint('/api/viewer/data')">
+                            <span class="btn-title">Viewer Endpoint</span>
+                            <span class="btn-route">/api/viewer/data</span>
+                            <span class="btn-role">All Users (Viewer+)</span>
+                        </button>
+                        <button class="test-btn" onclick="testEndpoint('/api/admin/data')">
+                            <span class="btn-title">Admin Endpoint</span>
+                            <span class="btn-route">/api/admin/data</span>
+                            <span class="btn-role">Admin, Domain, SYS Admin</span>
+                        </button>
+                        <button class="test-btn" onclick="testEndpoint('/api/domain-admin/data')">
+                            <span class="btn-title">Domain Admin</span>
+                            <span class="btn-route">/api/domain-admin/data</span>
+                            <span class="btn-role">Domain Admin, SYS Admin</span>
+                        </button>
+                        <button class="test-btn" onclick="testEndpoint('/api/sys-admin/data')">
+                            <span class="btn-title">SYS Admin</span>
+                            <span class="btn-route">/api/sys-admin/data</span>
+                            <span class="btn-role">SYS Admin Only</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="console-screen" id="consoleScreen">
-                    <div class="log-entry info">[SYSTEM] Client secure terminal ready. Click an endpoint above to check authorization.</div>
+
+                <!-- Real-time Console Log -->
+                <div class="console-container">
+                    <div class="console-header">
+                        <div class="console-dot-group">
+                            <div class="console-dot red"></div>
+                            <div class="console-dot yellow"></div>
+                            <div class="console-dot green"></div>
+                        </div>
+                        <span>RBAC ACCESS TERMINAL</span>
+                        <span style="cursor:pointer;" onclick="clearConsole()">Clear</span>
+                    </div>
+                    <div class="console-screen" id="consoleScreen">
+                        <div class="log-entry info">[SYSTEM] Client secure terminal ready. Click an endpoint above to
+                            check authorization.</div>
+                    </div>
                 </div>
+
             </div>
+        </main>
 
-        </div>
-    </main>
+    </div>
 
-</div>
+    <script>
+        function clearConsole() {
+            document.getElementById('consoleScreen').innerHTML = '<div class="log-entry info">[SYSTEM] Console cleared. ready.</div>';
+        }
 
-<script>
-    function clearConsole() {
-        document.getElementById('consoleScreen').innerHTML = '<div class="log-entry info">[SYSTEM] Console cleared. ready.</div>';
-    }
+        function logToConsole(message, type) {
+            const consoleScreen = document.getElementById('consoleScreen');
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.innerHTML = `[${timestamp}] ${message}`;
+            consoleScreen.appendChild(entry);
+            consoleScreen.scrollTop = consoleScreen.scrollHeight;
+        }
 
-    function logToConsole(message, type) {
-        const consoleScreen = document.getElementById('consoleScreen');
-        const timestamp = new Date().toLocaleTimeString();
-        const entry = document.createElement('div');
-        entry.className = `log-entry ${type}`;
-        entry.innerHTML = `[${timestamp}] ${message}`;
-        consoleScreen.appendChild(entry);
-        consoleScreen.scrollTop = consoleScreen.scrollHeight;
-    }
+        function testEndpoint(url) {
+            logToConsole(`Sending GET request to ${url}...`, 'info');
 
-    function testEndpoint(url) {
-        logToConsole(`Sending GET request to ${url}...`, 'info');
-        
-        fetch(url)
-            .then(response => {
-                if (response.ok) {
-                    return response.json().then(data => {
-                        logToConsole(`SUCCESS [Status: ${response.status} OK]`, 'success');
-                        logToConsole(`Response message: "${data.message}"`, 'success');
-                    });
-                } else if (response.status === 403) {
-                    logToConsole(`ACCESS DENIED [Status: ${response.status} Forbidden]`, 'error');
-                    logToConsole(`Reason: Your credentials lack the specific authority required for this path.`, 'error');
-                } else if (response.status === 401) {
-                    logToConsole(`UNAUTHORIZED [Status: ${response.status} Unauthorized]`, 'error');
-                } else {
-                    logToConsole(`ERROR [Status: ${response.status}]`, 'error');
-                }
-            })
-            .catch(error => {
-                logToConsole(`Network Error: ${error.message}`, 'error');
-            });
-    }
-</script>
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json().then(data => {
+                            logToConsole(`SUCCESS [Status: ${response.status} OK]`, 'success');
+                            logToConsole(`Response message: "${data.message}"`, 'success');
+                        });
+                    } else if (response.status === 403) {
+                        logToConsole(`ACCESS DENIED [Status: ${response.status} Forbidden]`, 'error');
+                        logToConsole(`Reason: Your credentials lack the specific authority required for this path.`, 'error');
+                    } else if (response.status === 401) {
+                        logToConsole(`UNAUTHORIZED [Status: ${response.status} Unauthorized]`, 'error');
+                    } else {
+                        logToConsole(`ERROR [Status: ${response.status}]`, 'error');
+                    }
+                })
+                .catch(error => {
+                    logToConsole(`Network Error: ${error.message}`, 'error');
+                });
+        }
+    </script>
 
 </body>
+
 </html>

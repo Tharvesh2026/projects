@@ -1,114 +1,127 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>i.Core — Roles</title>
+    <title>tharbytes.io — Roles</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
     <link rel="stylesheet" href="/assets/icore.css">
 </head>
+
 <body>
 
-<div class="ic-shell">
+    <div class="ic-shell">
 
-    <div th:replace="~{navbar :: sidebar('roles')}"></div>
+        <div th:replace="~{navbar :: sidebar('roles')}"></div>
 
-    <main class="ic-main">
+        <main class="ic-main">
 
-        <!-- Topbar -->
-        <div class="ic-topbar">
-            <div class="ic-breadcrumb">
-                <span>i.Core</span>
-                <span class="ic-breadcrumb-sep">/</span>
-                <span>Roles</span>
+            <!-- Topbar -->
+            <div class="ic-topbar">
+                <div class="ic-breadcrumb">
+                    <span>tharbytes.io</span>
+                    <span class="ic-breadcrumb-sep">/</span>
+                    <span>Roles</span>
+                </div>
             </div>
-        </div>
 
-        <div class="ic-content">
+            <div class="ic-content">
 
-            <div class="ic-page-header">
-                <div>
-                    <div class="ic-page-title">Role management</div>
-                    <div class="ic-page-sub">
-                        Create custom roles and manage permission groups.
+                <div class="ic-page-header">
+                    <div>
+                        <div class="ic-page-title">Role management</div>
+                        <div class="ic-page-sub">
+                            Create custom roles and manage permission groups.
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Role Simulator Info Card -->
-            <div class="ic-card ic-card-padded" style="margin-bottom: 20px;">
-                <div style="font-size:14px; font-weight:500; color:var(--text-1); margin-bottom:6px;
+                <!-- Role Simulator Info Card -->
+                <div class="ic-card ic-card-padded" style="margin-bottom: 20px;">
+                    <div style="font-size:14px; font-weight:500; color:var(--text-1); margin-bottom:6px;
                             display:flex; align-items:center; gap:7px;">
-                    <i class="ti ti-info-circle" style="font-size:18px; color:var(--brand);"></i>
-                    Role Assignment Rules
+                        <i class="ti ti-info-circle" style="font-size:18px; color:var(--brand);"></i>
+                        Role Assignment Rules
+                    </div>
+                    <div style="font-size:13px; color:var(--text-2); line-height: 1.6;">
+                        Security roles are configured statically inside the database. Google/GitHub OAuth logins
+                        automatically default to
+                        <code
+                            style="background:var(--surface-2);padding:1px 5px;border-radius:4px;font-family:var(--mono);">ROLE_VIEWER</code>,
+                        while local DB accounts match their seeded administrative permissions (Viewer, Admin, Domain
+                        Admin, or SYS Admin).
+                    </div>
                 </div>
-                <div style="font-size:13px; color:var(--text-2); line-height: 1.6;">
-                    Security roles are configured statically inside the database. Google/GitHub OAuth logins automatically default to 
-                    <code style="background:var(--surface-2);padding:1px 5px;border-radius:4px;font-family:var(--mono);">ROLE_VIEWER</code>, 
-                    while local DB accounts match their seeded administrative permissions (Viewer, Admin, Domain Admin, or SYS Admin).
-                </div>
-            </div>
 
-            <!-- Roles table -->
-            <div class="ic-table-wrap">
-                <div style="overflow-x:auto;">
-                    <table class="ic-table">
-                        <thead>
-                            <tr>
-                                <th>Role</th>
-                                <th>ID</th>
-                                <th>Status</th>
-                                <th>Permissions Group</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="role : ${allRoles}">
-                                <td>
-                                    <div style="display:flex; align-items:center; gap:9px;">
-                                        <div style="width:30px; height:30px; border-radius:8px;
+                <!-- Roles table -->
+                <div class="ic-table-wrap">
+                    <div style="overflow-x:auto;">
+                        <table class="ic-table">
+                            <thead>
+                                <tr>
+                                    <th>Role</th>
+                                    <th>ID</th>
+                                    <th>Status</th>
+                                    <th>Permissions Group</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="role : ${allRoles}">
+                                    <td>
+                                        <div style="display:flex; align-items:center; gap:9px;">
+                                            <div style="width:30px; height:30px; border-radius:8px;
                                                     background:var(--brand-light);
                                                     display:flex; align-items:center; justify-content:center;">
-                                            <i class="ti ti-shield-lock" style="font-size:15px; color:var(--brand);"></i>
-                                        </div>
-                                        <div>
-                                            <div style="font-weight:600; color:var(--text-1); font-size:13.5px;
+                                                <i class="ti ti-shield-lock"
+                                                    style="font-size:15px; color:var(--brand);"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-weight:600; color:var(--text-1); font-size:13.5px;
                                                         font-family:var(--mono);" th:text="${role.name}">
-                                                ROLE_USER
+                                                    ROLE_USER
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span style="font-family:var(--mono); font-size:12px; color:var(--text-3);" th:text="'#' + ${role.id}">
-                                        #1
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="ic-tag tag-active">
-                                        <i class="ti ti-circle-check" style="font-size:13px;"></i>
-                                        ACTIVE
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="ic-tag" th:classappend="${#strings.contains(role.name, 'SYS_ADMIN') ? 'tag-admin' : (#strings.contains(role.name, 'ADMIN') ? 'tag-manager' : 'tag-user')}" th:text="${role.name == 'ROLE_SYS_ADMIN' ? 'All Permissions (Super Admin)' : (role.name == 'ROLE_DOMAIN_ADMIN' ? 'Domain Level Administrative' : (role.name == 'ROLE_ADMIN' ? 'Managerial Actions' : 'Read-Only Access'))}">
-                                        Default Access
-                                    </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    </td>
+                                    <td>
+                                        <span style="font-family:var(--mono); font-size:12px; color:var(--text-3);"
+                                            th:text="'#' + ${role.id}">
+                                            #1
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="ic-tag tag-active">
+                                            <i class="ti ti-circle-check" style="font-size:13px;"></i>
+                                            ACTIVE
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="ic-tag"
+                                            th:classappend="${#strings.contains(role.name, 'SYS_ADMIN') ? 'tag-admin' : (#strings.contains(role.name, 'ADMIN') ? 'tag-manager' : 'tag-user')}"
+                                            th:text="${role.name == 'ROLE_SYS_ADMIN' ? 'All Permissions (Super Admin)' : (role.name == 'ROLE_DOMAIN_ADMIN' ? 'Domain Level Administrative' : (role.name == 'ROLE_ADMIN' ? 'Managerial Actions' : 'Read-Only Access'))}">
+                                            Default Access
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-            <div style="margin-top:12px; font-size:12px; color:var(--text-3);" th:text="'Showing ' + ${#lists.size(allRoles)} + ' configured roles'">
-                Showing 0 configured roles
-            </div>
+                <div style="margin-top:12px; font-size:12px; color:var(--text-3);"
+                    th:text="'Showing ' + ${#lists.size(allRoles)} + ' configured roles'">
+                    Showing 0 configured roles
+                </div>
 
-        </div>
-    </main>
-</div>
+            </div>
+        </main>
+    </div>
 
 </body>
+
 </html>

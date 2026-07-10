@@ -15,13 +15,13 @@
     <div style="padding: 12px 10px;">
         <div style="display:flex; align-items:center; gap:9px; padding: 8px 10px;
                     background: var(--surface-2); border-radius: var(--radius-sm);">
-            <div class="ic-avatar av-purple" style="font-size:12px;" th:text="${#strings.substring(username, 0, 1).toUpperCase()}">
+            <div class="ic-avatar av-purple" style="font-size:12px;"
+                th:text="${#strings.substring(username, 0, 1).toUpperCase()}">
                 U
             </div>
             <div style="overflow:hidden;">
                 <div style="font-size:13px; font-weight:500; color:var(--text-1);
-                            white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"
-                     th:text="${username}">
+                            white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" th:text="${username}">
                     Guest
                 </div>
                 <div style="font-size:11px; color:var(--text-3);" th:text="${roles}">
@@ -61,8 +61,8 @@
     <div class="ic-sidebar-footer">
         <form action="/logout" method="post" style="margin:0;">
             <button type="submit" class="ic-nav-item danger"
-                    style="width:100%; border:none; background:none; cursor:pointer; text-align:left; font-size:13.5px;"
-                    onclick="return confirm('Sign out of i.Core?')">
+                style="width:100%; border:none; background:none; cursor:pointer; text-align:left; font-size:13.5px;"
+                onclick="return confirm('Sign out of tharbytes.io?')">
                 <i class="ti ti-logout"></i> Sign out
             </button>
         </form>
