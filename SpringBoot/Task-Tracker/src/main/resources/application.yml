@@ -1,0 +1,25 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: tharvbytes-tasks
+  security:
+    oauth2:
+      client:
+        registration:
+          icore:
+            client-id: tharvbytes-demo-app
+            client-secret: "Tharvesh@2005."
+            client-name: I.Core OIDC
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:9000/login/oauth2/code/icore"
+            scope:
+              - openid
+              - profile
+              - email
+        provider:
+          icore:
+            issuer-uri: http://localhost:8080
+            # Spring Security automatically retrieves the JWK Set, authorization,
+            # token, and userinfo endpoints using OIDC Discovery via this issuer-uri.
