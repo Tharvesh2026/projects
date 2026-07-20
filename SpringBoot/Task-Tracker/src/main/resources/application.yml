@@ -1,5 +1,6 @@
 server:
   port: 9000
+  address: 0.0.0.0
 
 spring:
   application:
@@ -9,11 +10,11 @@ spring:
       client:
         registration:
           icore:
-            client-id: tharvbytes-demo-app
+            client-id: tharvbytes-task-app
             client-secret: "Tharvesh@2005."
             client-name: I.Core OIDC
             authorization-grant-type: authorization_code
-            redirect-uri: "http://127.0.0.1:9000/login/oauth2/code/icore"
+            redirect-uri: "{baseUrl}/login/oauth2/code/icore"
             scope:
               - openid
               - profile
