@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Registration Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-2: #334155;
+            --brand: #6366f1;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --green: #10b981;
+            --amber: #f59e0b;
+            --border: rgba(255,255,255,0.1);
+        }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            padding: 24px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+        .title {
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn {
+            background: var(--brand);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .card-code {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--brand);
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 6px 0;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-sysadmin { background: rgba(99,102,241,0.2); color: #818cf8; }
+        .badge-admin { background: rgba(16,185,129,0.2); color: #34d399; }
+        .badge-user { background: rgba(245,158,11,0.2); color: #fbbf24; }
+        .badge-guest { background: rgba(148,163,184,0.2); color: #cbd5e1; }
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="title">
+        <i class="ti ti-books" style="color:var(--brand)"></i> Course Registration Portal
+    </div>
+    <div>
+        <span sec:authorize="isAuthenticated()">
+            <span style="font-size:13px; color:var(--text-muted); margin-right:12px;">
+                Logged in as <strong th:text="${userName != null ? userName : userEmail}">User</strong>
+                <span class="badge"
+                      th:classappend="${userRole == 'SYS_ADMIN'} ? 'badge-sysadmin' : (${userRole == 'ADMIN'} ? 'badge-admin' : 'badge-user')"
+                      th:text="${userRole != null ? userRole : 'USER'}">ROLE</span>
+            </span>
+            <a th:href="@{/logout}" class="btn btn-outline" style="font-size:12px;">Sign out</a>
+        </span>
+        <span sec:authorize="isAnonymous()">
+            <span class="badge badge-guest" style="margin-right:8px;">GUEST</span>
+            <a th:href="@{/oauth2/authorization/icore}" class="btn"><i class="ti ti-login"></i> Login with i.Core</a>
+        </span>
+    </div>
+</div>
+
+<!-- Guest & Public Courses View -->
+<div class="section-title">
+    <i class="ti ti-list-details"></i> Available Courses (Public View)
+</div>
+
+<div class="grid">
+    <div class="card" th:each="c : ${courses}">
+        <div class="card-code" th:text="${c.code}">CS101</div>
+        <div class="card-title" th:text="${c.name}">Intro to CS</div>
+        <div style="font-size:12px; color:var(--text-muted);" th:text="${c.description}">Description</div>
+    </div>
+    <div th:if="${#lists.isEmpty(courses)}" style="color:var(--text-muted); font-size:13px; grid-column: 1/-1;">
+        No courses registered yet.
+    </div>
+</div>
+
+<!-- Role Matrix Info -->
+<div style="background:var(--surface); border:1px solid var(--border); padding:16px; border-radius:8px; margin-bottom:24px;">
+    <div class="section-title"><i class="ti ti-shield-check"></i> Role Group Authorization Matrix</div>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:12px; font-size:12px;">
+        <div><span class="badge badge-sysadmin">SYS_ADMIN</span> Can manage all (Full CRUD + Verify)</div>
+        <div><span class="badge badge-admin">ADMIN</span> Can verify all course registrations</div>
+        <div><span class="badge badge-user">USER</span> Can register/enroll in courses</div>
+        <div><span class="badge badge-guest">GUEST</span> Can view public course listings</div>
+    </div>
+</div>
+
+<!-- USER / ADMIN / SYS_ADMIN Action Panel -->
+<div sec:authorize="hasAnyRole('USER', 'ADMIN', 'SYS_ADMIN')" style="background:var(--surface); border:1px solid var(--border); padding:16px; border-radius:8px; margin-bottom:24px;">
+    <div class="section-title"><i class="ti ti-user-plus"></i> Student Course Registration (USER / ADMIN / SYS_ADMIN)</div>
+    <form action="/api/v1/enrollments" method="post" style="display:flex; gap:12px; align-items:center;">
+        <input type="number" name="rollNo" placeholder="Student Roll No (e.g. 101)" required style="padding:8px; background:var(--bg); border:1px solid var(--border); color:white; border-radius:4px;">
+        <input type="text" name="courseCode" placeholder="Course Code (e.g. CS101)" required style="padding:8px; background:var(--bg); border:1px solid var(--border); color:white; border-radius:4px; font-family:'JetBrains Mono';">
+        <button type="submit" class="btn">Register Course</button>
+    </form>
+</div>
+
+<!-- ADMIN & SYS_ADMIN Verification Panel -->
+<div sec:authorize="hasAnyRole('ADMIN', 'SYS_ADMIN')" style="background:var(--surface); border:1px solid var(--brand); padding:16px; border-radius:8px; margin-bottom:24px;">
+    <div class="section-title" style="color:var(--brand);"><i class="ti ti-checkup-list"></i> Verify Course Registrations (ADMIN / SYS_ADMIN Only)</div>
+    <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:12px;">
+        Use <code>PUT /api/v1/enrollments/verify/{enrollmentId}?status=VERIFIED</code> to confirm student course registrations.
+    </div>
+</div>
+
+<!-- SYS_ADMIN Management Panel -->
+<div sec:authorize="hasRole('SYS_ADMIN')" style="background:var(--surface); border:1px solid #818cf8; padding:16px; border-radius:8px;">
+    <div class="section-title" style="color:#818cf8;"><i class="ti ti-settings-cog"></i> SYS_ADMIN Full Control (Create Courses / Manage All)</div>
+    <form action="/api/v1/courses" method="post" style="display:grid; grid-template-columns: 1fr 2fr 1fr; gap:12px; align-items:center;">
+        <input type="text" name="code" placeholder="Course Code (e.g. CS201)" required style="padding:8px; background:var(--bg); border:1px solid var(--border); color:white; border-radius:4px; font-family:'JetBrains Mono';">
+        <input type="text" name="name" placeholder="Course Title" required style="padding:8px; background:var(--bg); border:1px solid var(--border); color:white; border-radius:4px;">
+        <button type="submit" class="btn" style="background:#818cf8;">Create Course</button>
+    </form>
+</div>
+
+</body>
+</html>

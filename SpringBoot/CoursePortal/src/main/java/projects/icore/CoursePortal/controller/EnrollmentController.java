@@ -56,4 +56,10 @@ public class EnrollmentController {
 
         return enrollments;
     }
+
+    @PutMapping("/verify/{id}")
+    public EnrollmentResponse verifyEnrollment(@PathVariable Long id, @RequestParam(required = false, defaultValue = "VERIFIED") String status) {
+        log.info("PUT /api/v1/enrollments/verify/{} - Verify enrollment request. Status={}", id, status);
+        return enrollmentService.verifyEnrollment(id, status);
+    }
 }

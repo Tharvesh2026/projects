@@ -14,7 +14,8 @@ public class EnrollmentMapper {
         return new EnrollmentResponse(
                 enrollment.getId(),
                 enrollment.getRollNo(),
-                enrollment.getCourseCode()
+                enrollment.getCourseCode(),
+                enrollment.getStatus()
         );
     }
 }

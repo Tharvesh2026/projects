@@ -91,4 +91,15 @@ public class EnrollmentService {
                 .map(enrollmentMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+    public EnrollmentResponse verifyEnrollment(Long enrollmentId, String status) {
+        log.info("Verifying enrollment id={} with status={}", enrollmentId, status);
+        Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Enrollment not found with id: " + enrollmentId));
+
+        enrollment.setStatus(status != null ? status : "VERIFIED");
+        Enrollment saved = enrollmentRepository.save(enrollment);
+        log.info("Enrollment id={} verified successfully as {}", enrollmentId, enrollment.getStatus());
+        return enrollmentMapper.toResponse(saved);
+    }
 }

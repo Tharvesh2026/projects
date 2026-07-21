@@ -17,4 +17,7 @@ public class Enrollment {
 
     private Integer rollNo;
     private String courseCode;
+
+    @Builder.Default
+    private String status = "PENDING_VERIFICATION";
 }
