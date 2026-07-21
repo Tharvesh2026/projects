@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Registered Courses — CoursePortal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+    <style>
+        :root {
+            --bg: #0b0f19;
+            --surface-1: #131b2e;
+            --surface-2: #1e293b;
+            --brand-primary: #8b5cf6;
+            --brand-gradient: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --border-purple: rgba(139, 92, 246, 0.2);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --shadow-purple: 0 8px 32px rgba(139, 92, 246, 0.15);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg);
+            background-image: radial-gradient(at 10% 10%, rgba(139, 92, 246, 0.12) 0px, transparent 50%);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            padding: 24px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(19, 27, 46, 0.75); backdrop-filter: blur(16px);
+            border: 1px solid var(--border-purple); padding: 16px 24px; border-radius: var(--radius-lg); margin-bottom: 32px;
+        }
+        .brand-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text-main); }
+        .brand-icon { width: 40px; height: 40px; background: var(--brand-gradient); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; }
+        .brand-title { font-size: 18px; font-weight: 800; }
+        .brand-subtitle { font-size: 11px; color: #c4b5fd; font-weight: 600; }
+        .nav-links { display: flex; gap: 12px; }
+        .nav-link { color: var(--text-sub); text-decoration: none; font-size: 13.5px; font-weight: 600; padding: 8px 14px; border-radius: var(--radius-sm); transition: all 0.2s; }
+        .nav-link:hover, .nav-link.active { color: white; background: rgba(139, 92, 246, 0.15); border: 1px solid var(--border-purple); }
+        .user-panel { display: flex; align-items: center; gap: 12px; }
+        .btn { background: var(--brand-gradient); color: white; border: none; padding: 10px 18px; border-radius: var(--radius-md); font-weight: 600; font-size: 13.5px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-secondary { background: var(--surface-2); border: 1px solid var(--border-subtle); color: var(--text-main); }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .badge-sysadmin { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.4); }
+        .badge-admin { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+        .badge-user { background: rgba(245, 158, 11, 0.2); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.4); }
+
+        .panel { background: var(--surface-1); border: 1px solid var(--border-purple); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; }
+        .panel-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        
+        .table { width: 100%; border-collapse: collapse; margin-top: 12px; text-align: left; }
+        .table th, .table td { padding: 14px 16px; border-bottom: 1px solid var(--border-subtle); font-size: 13.5px; }
+        .table th { color: var(--text-sub); font-weight: 600; text-transform: uppercase; font-size: 11.5px; letter-spacing: 0.5px; }
+        .tag-status { padding: 4px 8px; border-radius: 6px; font-size: 11.5px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+        .tag-verified { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .tag-pending { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <!-- Flash Alerts -->
+    <div th:if="${successMessage}" style="background: rgba(16,185,129,0.15); border: 1px solid #10b981; color: #34d399; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 13.5px;">
+        <i class="ti ti-circle-check"></i> <span th:text="${successMessage}">Success</span>
+    </div>
+    <div th:if="${errorMessage}" style="background: rgba(239,68,68,0.15); border: 1px solid #ef4444; color: #f87171; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 13.5px;">
+        <i class="ti ti-alert-triangle"></i> <span th:text="${errorMessage}">Error</span>
+    </div>
+
+    <!-- Student Enrollment Panel -->
+    <div class="panel">
+        <div class="panel-title"><i class="ti ti-bookmarks" style="color:var(--brand-primary);"></i> My Course Registrations</div>
+        
+        <form action="/my-courses" method="get" style="display:flex; gap:12px; margin-bottom:20px; align-items:center;">
+            <label style="font-size:13px; color:var(--text-sub);">Lookup Roll No:</label>
+            <input type="number" name="rollNo" th:value="${studentRollNo}" placeholder="Roll No (e.g. 101)" style="padding:8px 12px; background:var(--bg); border:1px solid var(--border-purple); color:white; border-radius:var(--radius-sm);">
+            <button type="submit" class="btn btn-sm"><i class="ti ti-search"></i> Fetch Enrollments</button>
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Registration ID</th>
+                    <th>Student Roll No</th>
+                    <th>Course Code</th>
+                    <th>Verification Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="e : ${enrollments}">
+                    <td style="font-family:'JetBrains Mono'; color:#c4b5fd;" th:text="${'#ENR-' + e.id}">#ENR-1</td>
+                    <td th:text="${e.rollNo}">101</td>
+                    <td><strong style="font-family:'JetBrains Mono'; color:white;" th:text="${e.courseCode}">CS101</strong></td>
+                    <td>
+                        <span class="tag-status" th:classappend="${'VERIFIED'.equalsIgnoreCase(e.status)} ? 'tag-verified' : 'tag-pending'" th:text="${e.status}">PENDING_VERIFICATION</span>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(enrollments)}">
+                    <td colspan="4" style="text-align:center; color:var(--text-sub); padding:24px;">No enrollments found for Roll No <strong th:text="${studentRollNo}">101</strong>. Register below!</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Enroll Form Card -->
+    <div class="panel">
+        <div class="panel-title"><i class="ti ti-plus" style="color:var(--brand-primary);"></i> Enroll in New Course</div>
+        <form action="/web/enroll" method="post" style="display:grid; grid-template-columns: 1fr 1fr auto; gap:12px;">
+            <input type="number" name="rollNo" th:value="${studentRollNo}" placeholder="Student Roll No (e.g. 101)" required style="padding:10px 14px; background:var(--bg); border:1px solid var(--border-purple); color:white; border-radius:var(--radius-md);">
+            <input type="text" name="courseCode" placeholder="Course Code (e.g. CS101)" required style="padding:10px 14px; background:var(--bg); border:1px solid var(--border-purple); color:white; border-radius:var(--radius-md); font-family:'JetBrains Mono';">
+            <button type="submit" class="btn"><i class="ti ti-send"></i> Submit Registration</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

@@ -37,12 +37,18 @@ public class SecurityConfig {
                 // Guest & Other Roles -> Can view courses
                 .requestMatchers(HttpMethod.GET, "/api/v1/courses/**", "/courses/**", "/", "/css/**", "/js/**", "/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
+                // Web Dashboard Routes
+                .requestMatchers("/my-courses", "/web/enroll").hasAnyRole("USER", "ADMIN", "SYS_ADMIN")
+                .requestMatchers("/admin/dashboard", "/admin/verify").hasAnyRole("ADMIN", "SYS_ADMIN")
+                .requestMatchers("/sysadmin/dashboard", "/sysadmin/create-course").hasRole("SYS_ADMIN")
+                .requestMatchers("/profile", "/settings").authenticated()
+
                 // Users -> Can register/enroll in courses
                 .requestMatchers(HttpMethod.POST, "/api/v1/enrollments/**", "/enrollments/**").hasAnyRole("USER", "ADMIN", "SYS_ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/v1/enrollments/student/**").hasAnyRole("USER", "ADMIN", "SYS_ADMIN")
 
                 // Admin -> Can able to verify all enrollments
-                .requestMatchers("/api/v1/enrollments/verify/**", "/api/v1/enrollments/course/**").hasAnyRole("ADMIN", "SYS_ADMIN")
+                .requestMatchers("/api/v1/enrollments/verify/**", "/api/v1/enrollments/course/**", "/api/v1/enrollments").hasAnyRole("ADMIN", "SYS_ADMIN")
 
                 // SYS Admin -> Can manage all (Create, Edit, Delete courses; Manage students)
                 .requestMatchers(HttpMethod.POST, "/api/v1/courses/**").hasRole("SYS_ADMIN")

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYS Admin Control Panel — CoursePortal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+    <style>
+        :root {
+            --bg: #0b0f19;
+            --surface-1: #131b2e;
+            --surface-2: #1e293b;
+            --brand-primary: #8b5cf6;
+            --brand-gradient: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --border-purple: rgba(139, 92, 246, 0.4);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg);
+            background-image: radial-gradient(at 90% 10%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            padding: 24px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(19, 27, 46, 0.75); backdrop-filter: blur(16px);
+            border: 1px solid var(--border-purple); padding: 16px 24px; border-radius: var(--radius-lg); margin-bottom: 32px;
+        }
+        .brand-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text-main); }
+        .brand-icon { width: 40px; height: 40px; background: var(--brand-gradient); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; }
+        .brand-title { font-size: 18px; font-weight: 800; }
+        .brand-subtitle { font-size: 11px; color: #c4b5fd; font-weight: 600; }
+        .nav-links { display: flex; gap: 12px; }
+        .nav-link { color: var(--text-sub); text-decoration: none; font-size: 13.5px; font-weight: 600; padding: 8px 14px; border-radius: var(--radius-sm); }
+        .nav-link:hover, .nav-link.active { color: white; background: rgba(139, 92, 246, 0.15); border: 1px solid var(--border-purple); }
+        .user-panel { display: flex; align-items: center; gap: 12px; }
+        .btn { background: var(--brand-gradient); color: white; border: none; padding: 10px 18px; border-radius: var(--radius-md); font-weight: 600; font-size: 13.5px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-secondary { background: var(--surface-2); border: 1px solid var(--border-subtle); color: var(--text-main); }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+        .badge-sysadmin { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.4); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+
+        .grid-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: var(--surface-1); border: 1px solid var(--border-purple); border-radius: var(--radius-lg); padding: 20px; text-align: center; }
+        .stat-val { font-size: 28px; font-weight: 800; color: #c4b5fd; }
+        .stat-lbl { font-size: 12px; color: var(--text-sub); text-transform: uppercase; margin-top: 4px; }
+
+        .panel { background: var(--surface-1); border: 1px solid var(--border-purple); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; }
+        .panel-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; color: #c4b5fd; }
+        .form-grid { display: grid; grid-template-columns: 1fr 2fr auto; gap: 12px; }
+        .form-control { background: var(--bg); border: 1px solid var(--border-purple); border-radius: var(--radius-md); padding: 10px 14px; color: white; font-family: inherit; }
+        .table { width: 100%; border-collapse: collapse; margin-top: 12px; text-align: left; }
+        .table th, .table td { padding: 12px 14px; border-bottom: 1px solid var(--border-subtle); font-size: 13px; }
+        .table th { color: var(--text-sub); font-size: 11px; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <div th:if="${successMessage}" style="background: rgba(16,185,129,0.15); border: 1px solid #10b981; color: #34d399; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 13.5px;">
+        <i class="ti ti-circle-check"></i> <span th:text="${successMessage}">Success</span>
+    </div>
+
+    <!-- System Stats -->
+    <div class="grid-stats">
+        <div class="stat-card">
+            <div class="stat-val" th:text="${#lists.size(courses)}">0</div>
+            <div class="stat-lbl">Active Courses</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-val" th:text="${#lists.size(enrollments)}">0</div>
+            <div class="stat-lbl">Total Registrations</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-val" th:text="${#lists.size(students)}">0</div>
+            <div class="stat-lbl">Enrolled Students</div>
+        </div>
+    </div>
+
+    <!-- Course Creation Panel -->
+    <div class="panel">
+        <div class="panel-title"><i class="ti ti-plus"></i> Create New Course (SYS_ADMIN Only)</div>
+        <form action="/sysadmin/create-course" method="post" class="form-grid">
+            <input type="text" name="code" placeholder="Course Code (e.g. CS301)" required class="form-control" style="font-family:'JetBrains Mono';">
+            <input type="text" name="name" placeholder="Course Name & Overview" required class="form-control">
+            <input type="hidden" name="description" value="Advanced Course Module">
+            <button type="submit" class="btn"><i class="ti ti-check"></i> Create Course</button>
+        </form>
+    </div>
+
+    <!-- Active Courses Overview -->
+    <div class="panel">
+        <div class="panel-title"><i class="ti ti-list"></i> Managed Catalog Courses</div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Course Code</th>
+                    <th>Course Title</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${courses}">
+                    <td style="font-family:'JetBrains Mono'; color:#c4b5fd;" th:text="${c.code}">CS101</td>
+                    <td><strong th:text="${c.name}">Name</strong></td>
+                    <td style="color:var(--text-sub);" th:text="${c.description}">Desc</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

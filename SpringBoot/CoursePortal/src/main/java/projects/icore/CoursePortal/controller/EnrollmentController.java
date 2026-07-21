@@ -62,4 +62,10 @@ public class EnrollmentController {
         log.info("PUT /api/v1/enrollments/verify/{} - Verify enrollment request. Status={}", id, status);
         return enrollmentService.verifyEnrollment(id, status);
     }
+
+    @GetMapping
+    public List<EnrollmentResponse> getAllEnrollments() {
+        log.info("GET /api/v1/enrollments - Fetch all enrollments request received");
+        return enrollmentService.getAllEnrollments();
+    }
 }

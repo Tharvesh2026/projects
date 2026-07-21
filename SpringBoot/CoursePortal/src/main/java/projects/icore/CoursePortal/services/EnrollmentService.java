@@ -102,4 +102,10 @@ public class EnrollmentService {
         log.info("Enrollment id={} verified successfully as {}", enrollmentId, enrollment.getStatus());
         return enrollmentMapper.toResponse(saved);
     }
+
+    public List<EnrollmentResponse> getAllEnrollments() {
+        return enrollmentRepository.findAll().stream()
+                .map(enrollmentMapper::toResponse)
+                .collect(Collectors.toList());
+    }
 }
