@@ -16,6 +16,7 @@ public class TharvbytesTasksApplication {
     }
 
 
+
     @Bean
 CommandLineRunner test(ClientRegistrationRepository repo) {
     return args -> {
