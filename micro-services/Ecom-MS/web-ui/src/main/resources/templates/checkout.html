@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: html}">
+<head>
+    <title>Checkout</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <form action="/order" method="post">
+            <h1 style="margin-bottom: 2rem;">Checkout</h1>
+            
+            <div style="background-color: var(--card-bg); padding: 2rem; border-radius: 12px; border: 1px solid var(--border);">
+                <h2>Payment details</h2>
+                
+                <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 1234 1234 1234" required>
+                </div>
+                
+                <div style="display: flex; gap: 1.5rem;">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="expiry">Expiry</label>
+                        <input type="text" id="expiry" name="expiry" class="short-input" placeholder="MM/YY" required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <!-- Proximity: label is close to input -->
+                        <label for="cvc">CVC</label>
+                        <!-- Adaptive input length: short field for short input -->
+                        <input type="text" id="cvc" name="cvc" class="short-input" placeholder="123" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name">Name on card</label>
+                    <input type="text" id="name" name="name" placeholder="John Doe" required>
+                </div>
+                
+                <!-- Thumb Zone friendly CTA -->
+                <button type="submit" style="width: 100%; margin-top: 1rem;">Pay Now</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

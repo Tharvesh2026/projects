@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: html}">
+<head>
+    <title>Products</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <!-- Empty State Example -->
+        <div th:if="${products == null or products.empty}" class="empty-state">
+            <!-- Simulated image from playbook -->
+            <div style="font-size: 4rem; color: var(--border); margin-bottom: 1rem;">&#128230;</div>
+            <h2>No products available</h2>
+            <p>We are currently updating our inventory. Please check back later to see our new minimal collection.</p>
+            <a th:href="@{/}" class="btn">Return Home</a>
+        </div>
+
+        <div th:if="${products != null and !products.empty}" class="card-grid">
+            <div class="card" th:each="product : ${products}">
+                <h3 th:text="${product.name}">Product Name</h3>
+                <!-- Visual Hierarchy: Price is prominent -->
+                <div class="price" th:text="${'$' + product.price}">$0.00</div>
+                <p th:text="${product.description}" style="flex-grow: 1;">Product Description</p>
+                <a th:href="@{/checkout(productId=${product.id})}" class="btn" style="width: 100%;">Buy Now</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
