@@ -1,0 +1,3 @@
+com\example\iaasconsole\IaasConsoleApplicationTests.class
+com\example\iaasconsole\service\DomainSyncServiceTest.class
+com\example\iaasconsole\security\CloudStackSignatureServiceTest.class

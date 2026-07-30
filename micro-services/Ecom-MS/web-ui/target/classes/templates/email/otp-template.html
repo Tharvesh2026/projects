@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Your OTP Code</title>
+</head>
+<body style="font-family: 'Inter', 'Roboto', sans-serif; background-color: #F9F9F9; margin: 0; padding: 2rem;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: #FFFFFF; border: 1px solid #E0E0E0; border-radius: 12px; padding: 3rem; text-align: center;">
+        <h1 style="color: #141B12; font-size: 1.5rem; margin-top: 0;">Welcome to Minimal Store!</h1>
+        <p style="color: #494D48; font-size: 1rem; line-height: 1.6; margin-bottom: 2rem;">
+            Hi <span th:text="${name}">There</span>, <br><br>
+            Please use the verification code below to complete your registration.
+        </p>
+        
+        <div style="background-color: #F9F9F9; border: 1px solid #E0E0E0; border-radius: 8px; padding: 1.5rem; display: inline-block;">
+            <h2 th:text="${otp}" style="margin: 0; font-size: 2.5rem; letter-spacing: 6px; color: #141B12;">000000</h2>
+        </div>
+
+        <p style="color: #494D48; font-size: 0.875rem; margin-top: 2rem;">
+            If you did not request this, please ignore this email.
+        </p>
+    </div>
+</body>
+</html>

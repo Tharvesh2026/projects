@@ -1,0 +1,33 @@
+server:
+  port: 9000
+  address: 0.0.0.0
+
+spring:
+  application:
+    name: tharvbytes-tasks
+  security:
+    oauth2:
+      client:
+        registration:
+          icore:
+            client-id: tharvbytes-demo-app
+            client-secret: "ic_sec_oMRBmJr7h2UD6FlMmqGMyLuYxVSHiymc"
+            client-name: I.Core OIDC
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/icore"
+            scope:
+              - openid
+              - profile
+              - email
+        provider:
+          icore:
+            authorization-uri: http://localhost:8080/oauth2/authorize
+            token-uri: http://localhost:8080/oauth2/token
+            user-info-uri: http://localhost:8080/userinfo
+            jwk-set-uri: http://localhost:8080/oauth2/jwks
+            user-name-attribute: sub
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: TRACE

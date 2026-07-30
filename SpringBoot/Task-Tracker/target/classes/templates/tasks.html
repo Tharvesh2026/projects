@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tharvbytes Tasks - Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0b0f19 0%, #111827 50%, #1e1b4b 100%);
+            --card-bg: rgba(17, 24, 39, 0.8);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --success: #10b981;
+            --success-glow: rgba(16, 185, 129, 0.15);
+            --danger: #ef4444;
+            --danger-glow: rgba(239, 68, 68, 0.15);
+            --warning: #f59e0b;
+            --purple: #8b5cf6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            overflow-y: auto;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Header Style */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            padding: 1.25rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .logo-title h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            background: linear-gradient(to right, #ffffff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-title p {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background: var(--danger);
+            color: white;
+            box-shadow: 0 0 15px var(--danger-glow);
+            transform: translateY(-1px);
+        }
+
+        /* Error Notification Banner */
+        .error-banner {
+            background: var(--danger-glow);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideInDown 0.3s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .error-icon {
+            font-size: 1.25rem;
+            color: var(--danger);
+        }
+
+        /* Main Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 350px 1fr;
+            }
+        }
+
+        /* Cards general styling */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Profile Card Styling */
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .info-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            word-break: break-all;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .badge-role {
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: #c084fc;
+        }
+
+        .badge-permission {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+            margin-right: 0.35rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .permissions-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 0.25rem;
+        }
+
+        /* Tasks Card Styling */
+        .add-task-form {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .task-input {
+            flex: 1;
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .task-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+            background: rgba(31, 41, 55, 0.8);
+        }
+
+        .add-btn {
+            background: var(--primary);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .add-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-radius: 10px;
+            background: rgba(31, 41, 55, 0.3);
+            border: 1px solid var(--card-border);
+            transition: all 0.2s ease;
+        }
+
+        .task-item:hover {
+            background: rgba(31, 41, 55, 0.5);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .task-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+        }
+
+        .task-status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--warning);
+        }
+
+        .task-item.completed .task-status-indicator {
+            background: var(--success);
+            box-shadow: 0 0 8px var(--success-glow);
+        }
+
+        .task-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .task-item.completed .task-title {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+
+        .task-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-form {
+            display: inline;
+        }
+
+        .btn-action {
+            background: transparent;
+            border: none;
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-complete {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .btn-complete:hover {
+            background: var(--success);
+            color: white;
+            box-shadow: 0 0 10px var(--success-glow);
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        .btn-delete:hover {
+            background: var(--danger);
+            color: white;
+            box-shadow: 0 0 10px var(--danger-glow);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border: 1px dashed var(--card-border);
+            border-radius: 10px;
+        }
+
+        /* Demo Notice Banner */
+        .demo-footer {
+            margin-top: auto;
+            padding-top: 2rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .demo-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .demo-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Header -->
+        <header>
+            <div class="logo-section">
+                <div class="logo-icon">T</div>
+                <div class="logo-title">
+                    <h1>Tharvbytes Tasks</h1>
+                    <p>SSO OAuth2/OIDC Demo App</p>
+                </div>
+            </div>
+            <div>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="logout-btn">Log Out</button>
+                </form>
+            </div>
+        </header>
+
+        <!-- Access Denied Banner / Alerts -->
+        <div th:if="${error}" class="error-banner">
+            <span class="error-icon">⚠️</span>
+            <span th:text="${error}">An error occurred.</span>
+        </div>
+
+        <!-- Dashboard Body Grid -->
+        <div class="dashboard-grid">
+            
+            <!-- Left Panel: User Profile / OIDC Claims -->
+            <div class="card">
+                <div class="card-title">
+                    <span>👤</span> OIDC Identity Profile
+                </div>
+                <div class="profile-info">
+                    
+                    <div class="info-group">
+                        <span class="info-label">Issuer</span>
+                        <span class="info-value" style="font-size: 0.8rem; font-family: monospace; color: #a5b4fc;">http://localhost:8080</span>
+                    </div>
+
+                    <div class="info-group">
+                        <span class="info-label">Logged In User (Email)</span>
+                        <span class="info-value" th:text="${email}">user@example.com</span>
+                    </div>
+
+                    <div class="info-group">
+                        <span class="info-label">Role Claim ("role")</span>
+                        <div>
+                            <span class="badge badge-role" th:text="${role}">USER</span>
+                        </div>
+                    </div>
+
+                    <div class="info-group">
+                        <span class="info-label">Permissions Claim ("permissions")</span>
+                        <div class="permissions-container" th:if="${not #lists.isEmpty(permissions)}">
+                            <span th:each="perm : ${permissions}" class="badge badge-permission" th:text="${perm}">USER_READ</span>
+                        </div>
+                        <div th:if="${#lists.isEmpty(permissions)}" class="info-value" style="font-style: italic; color: var(--text-secondary);">
+                            No custom permissions issued.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right Panel: Tasks Manager -->
+            <div class="card">
+                <div class="card-title">
+                    <span>📝</span> Your Tasks
+                </div>
+
+                <!-- Add Task Form -->
+                <form th:action="@{/tasks}" method="post" class="add-task-form">
+                    <input type="text" name="title" placeholder="What needs to be done?" class="task-input" required autocomplete="off" />
+                    <button type="submit" class="add-btn">Add Task</button>
+                </form>
+
+                <!-- Tasks List -->
+                <div class="task-list">
+                    
+                    <div th:each="task : ${tasks}" class="task-item" th:classappend="${task.done} ? 'completed' : ''">
+                        <div class="task-content">
+                            <div class="task-status-indicator"></div>
+                            <span class="task-title" th:text="${task.title}">Task Title</span>
+                        </div>
+                        
+                        <div class="task-actions">
+                            <!-- Toggle Complete (only show if not already completed) -->
+                            <form th:if="${not task.done}" th:action="@{/tasks/{id}/complete(id=${task.id})}" method="post" class="action-form">
+                                <button type="submit" class="btn-action btn-complete">Done</button>
+                            </form>
+                            
+                            <!-- Delete Task (always visible, gates TASK_DELETE authority) -->
+                            <form th:action="@{/tasks/{id}/delete(id=${task.id})}" method="post" class="action-form">
+                                <button type="submit" class="btn-action btn-delete">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div th:if="${#lists.isEmpty(tasks)}" class="empty-state">
+                        You're all caught up! Create a new task above.
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="demo-footer">
+            <p>Built with Spring Boot 3.3 & Spring Security 6 for pairs testing.</p>
+            <p>Authentication client-id: <code>tharvbytes-task-app</code> &bull; Authorized Redirect URI: <code>http://127.0.0.1:9000/login/oauth2/code/icore</code></p>
+        </footer>
+
+    </div>
+</body>
+</html>

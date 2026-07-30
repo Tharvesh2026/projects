@@ -1,0 +1,5 @@
+server\micro\webui\WebController$ProductPageResponse.class
+server\micro\webui\WebUiApplication.class
+server\micro\webui\WebController$Product.class
+server\micro\webui\WebController$User.class
+server\micro\webui\WebController.class

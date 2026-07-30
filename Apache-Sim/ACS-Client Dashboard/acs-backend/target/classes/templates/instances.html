@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout('Virtual Machines', ~{::div})}">
+<body>
+    <div>
+        <!-- Instances Actions -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div style="display: flex; gap: 1rem;">
+                <input type="text" class="form-control" placeholder="Search instances..." style="width: 300px; background: rgba(26,29,44,0.4);" />
+                <button class="btn btn-secondary">Filter</button>
+            </div>
+            <button class="btn btn-primary" data-modal-target="deployInstanceModal">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Deploy Instance
+            </button>
+        </div>
+
+        <!-- Instances Table -->
+        <div class="glass-card">
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>State</th>
+                            <th>IP Address</th>
+                            <th>Zone</th>
+                            <th>Service Offering</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Placeholder rows until backend is fully wired -->
+                        <tr>
+                            <td style="font-weight: 500;">web-server-01</td>
+                            <td><span class="badge badge-running">Running</span></td>
+                            <td style="font-family: monospace;">192.168.1.104</td>
+                            <td>Advanced Zone 1</td>
+                            <td>Small Instance (1 vCPU, 1GB)</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Stop</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 500;">db-cluster-node-1</td>
+                            <td><span class="badge badge-stopped">Stopped</span></td>
+                            <td style="font-family: monospace;">192.168.1.105</td>
+                            <td>Advanced Zone 1</td>
+                            <td>Medium Instance (2 vCPU, 4GB)</td>
+                            <td>
+                                <button class="btn btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Start</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Deploy Instance Modal -->
+        <div class="modal-overlay" id="deployInstanceModal">
+            <div class="modal-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h3>Deploy Virtual Machine</h3>
+                    <button class="btn" style="padding: 0.5rem; background: transparent; border: none; color: var(--text-secondary);" data-modal-close>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+                
+                <form action="/instances/deploy" method="post">
+                    <div class="form-group">
+                        <label>Instance Name</label>
+                        <input type="text" class="form-control" name="name" required placeholder="e.g., app-server-01" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Template (OS)</label>
+                        <select class="form-control" name="templateId" required>
+                            <option value="1">Ubuntu 22.04 LTS (64-bit)</option>
+                            <option value="2">CentOS 8 Stream</option>
+                            <option value="3">Windows Server 2022</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Compute Offering</label>
+                        <select class="form-control" name="serviceOfferingId" required>
+                            <option value="1">Micro (1 vCPU, 512MB RAM)</option>
+                            <option value="2">Small (1 vCPU, 1GB RAM)</option>
+                            <option value="3">Medium (2 vCPU, 4GB RAM)</option>
+                        </select>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+                        <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+                        <button type="submit" class="btn btn-primary">Deploy</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

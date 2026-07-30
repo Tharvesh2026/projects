@@ -1,0 +1,6 @@
+dev\tharvbytes\tasks\config\HttpCookieOAuth2AuthorizationRequestRepository.class
+dev\tharvbytes\tasks\config\SecurityConfig.class
+dev\tharvbytes\tasks\service\TaskService.class
+dev\tharvbytes\tasks\model\Task.class
+dev\tharvbytes\tasks\TharvbytesTasksApplication.class
+dev\tharvbytes\tasks\controller\TaskController.class

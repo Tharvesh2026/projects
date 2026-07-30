@@ -1,0 +1,28 @@
+-------------------------------------------------------------------------------
+Test set: com.example.iaasconsole.SimulatorApiTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 10.36 s <<< FAILURE! -- in com.example.iaasconsole.SimulatorApiTest
+com.example.iaasconsole.SimulatorApiTest.fetchData -- Time elapsed: 0.632 s <<< ERROR!
+java.lang.IllegalArgumentException: URI with undefined scheme
+	at java.net.http/jdk.internal.net.http.common.Utils.newIAE(Utils.java:394)
+	at java.net.http/jdk.internal.net.http.HttpRequestBuilderImpl.checkURI(HttpRequestBuilderImpl.java:81)
+	at java.net.http/jdk.internal.net.http.HttpRequestBuilderImpl.uri(HttpRequestBuilderImpl.java:73)
+	at java.net.http/jdk.internal.net.http.HttpRequestBuilderImpl.uri(HttpRequestBuilderImpl.java:45)
+	at org.springframework.http.client.JdkClientHttpRequest.buildRequest(JdkClientHttpRequest.java:167)
+	at org.springframework.http.client.JdkClientHttpRequest.executeInternal(JdkClientHttpRequest.java:117)
+	at org.springframework.http.client.AbstractStreamingClientHttpRequest.executeInternal(AbstractStreamingClientHttpRequest.java:87)
+	at org.springframework.http.client.AbstractClientHttpRequest.execute(AbstractClientHttpRequest.java:80)
+	at org.springframework.http.client.AbstractBufferingClientHttpRequest.executeWithRequestAndBody(AbstractBufferingClientHttpRequest.java:89)
+	at org.springframework.http.client.InterceptingClientHttpRequest$EndOfChainRequestExecution.execute(InterceptingClientHttpRequest.java:102)
+	at com.example.iaasconsole.security.CloudStackAuthInterceptor.intercept(CloudStackAuthInterceptor.java:31)
+	at org.springframework.http.client.ClientHttpRequestInterceptor.lambda$apply$0(ClientHttpRequestInterceptor.java:89)
+	at org.springframework.http.client.InterceptingClientHttpRequest.executeInternal(InterceptingClientHttpRequest.java:73)
+	at org.springframework.http.client.AbstractBufferingClientHttpRequest.executeInternal(AbstractBufferingClientHttpRequest.java:50)
+	at org.springframework.http.client.AbstractClientHttpRequest.execute(AbstractClientHttpRequest.java:80)
+	at org.springframework.web.client.DefaultRestClient$DefaultRequestBodyUriSpec.exchangeInternal(DefaultRestClient.java:614)
+	at org.springframework.web.client.DefaultRestClient$DefaultRequestBodyUriSpec.exchange(DefaultRestClient.java:572)
+	at org.springframework.web.client.RestClient$RequestHeadersSpec.exchange(RestClient.java:747)
+	at org.springframework.web.client.DefaultRestClient$DefaultResponseSpec.executeAndExtract(DefaultRestClient.java:924)
+	at org.springframework.web.client.DefaultRestClient$DefaultResponseSpec.body(DefaultRestClient.java:833)
+	at com.example.iaasconsole.SimulatorApiTest.fetchData(SimulatorApiTest.java:17)
+
