@@ -1,205 +1,107 @@
-# Project
+# Projects (RBAC-With-Security)
 
-This repository is a personal learning monorepo that contains multiple Java, Servlet, JSP, MySQL, and Spring/Spring Boot practice projects.
+A personal learning monorepo of Java, Servlet/JSP, MySQL, and Spring/Spring Boot practice projects. This branch builds on `main` with additional Spring Boot projects and an earlier snapshot of the IAM system, focused on role-based access control (RBAC) and security experiments.
 
-The main goal of this repository is to learn backend development step by step by building real working projects instead of only following theory.
+> [!IMPORTANT]
+> Some of live url may not be work due to free trial of VPS
 
 ---
 
 ## Repository Structure
 
 ```text
-Project
-├── session
-│   ├── SQL-Query
-│   ├── src
-│   └── target
-│
-└── SpringBoot
-    ├── getStarted
-    └── javaBasedConfig
+projects
+├── MyToDo                     # Spring Boot ToDo app with JWT auth
+├── Spring Security
+│   └── SpringSecurity         # Spring Security (HTTP Basic) demo
+├── SpringBoot
+│   ├── CoursePortal           # Student/course/enrollment REST API
+│   ├── JpaMapping             # JPA entity relationship practice
+│   ├── MailSender              # Spring Boot email sending service
+│   ├── SSBoot                 # Spring stereotype annotations demo
+│   ├── Student                # Student/course REST API (JPA)
+│   ├── Task-Tracker           # Task tracker with OAuth2 login
+│   ├── getStarted             # Spring Core / IoC basics
+│   └── javaBasedConfig        # Java-based Spring configuration
+├── icore                      # IAM system (Servlet/JSP + MySQL)
+└── session                    # Earlier snapshot of the IAM system
 ```
 
 ---
 
 ## Projects
 
-### 1. session
+### 1. MyToDo
 
-`session` is a Java Servlet/JSP based Identity & Access Management learning project.
+Spring Boot REST API for managing to-do items with JWT authentication, Spring Data JPA, DTO/mapper layering, and global exception handling.
 
-It includes:
+### 2. Spring Security / SpringSecurity
 
-* User Registration
-* User Login
-* User Logout
-* Session Management
-* Remember Me Cookie
-* CSRF Protection
-* Password Hashing
-* User Management
-* Role Management
-* Permission-Based Access Control
-* REST APIs
-* JSP Frontend Pages
-* MySQL Database Integration
-* Development and Production Environment Support
+Minimal Spring Boot project practicing HTTP Basic authentication.
 
-Live URL:
+### 3. SpringBoot/CoursePortal
 
-```text
-https://cloud.imtharvesh.me/session
-```
+REST API for a course/student enrollment portal, with student profile, enrollment, and portal-statistics services.
 
-Current release line:
+### 4. SpringBoot/JpaMapping
 
-```text
-IdentityCore v1.2.0-alpha
-```
+Practice project for JPA entity relationships (Student ↔ Course) with DTOs and layered service/repository design.
 
----
+### 5. SpringBoot/MailSender
 
-### 2. SpringBoot/getStarted
+A small Spring Boot service for sending emails (`SimpleMailService`, `MailController`).
 
-This project contains basic Spring Core and Spring Boot learning examples.
+### 6. SpringBoot/SSBoot
 
-Covered concepts include:
+Demonstrates Spring stereotype annotations and a basic login controller.
 
-* Maven project setup
-* ApplicationContext
-* Bean creation
-* XML configuration
-* IoC Container basics
-* Dependency Injection basics
-* Lombok practice
+### 7. SpringBoot/Student
 
----
+REST API for managing students and courses on Spring Data JPA.
 
-### 3. SpringBoot/javaBasedConfig
+### 8. SpringBoot/Task-Tracker
 
-This project is used to practice Java-based Spring configuration.
+A task-tracking application with OAuth2-based login (`HttpCookieOAuth2AuthorizationRequestRepository`, `SecurityConfig`), task model, service, and controller.
 
-Covered concepts include:
+### 9. SpringBoot/getStarted & SpringBoot/javaBasedConfig
 
-* Java Configuration
-* `@Configuration`
-* `@Bean`
-* Object creation through Spring container
-* Moving from XML configuration to annotation-based configuration
+Spring Core basics and Java-based Spring configuration practice (see `main` branch for details).
 
----
+### 10. icore — i.Core v1.2.0-ALPHA
 
-## Current Focus
+Servlet/JSP + JDBC + MySQL Identity & Access Management (IAM) system with:
 
-The current active project is:
+* Registration, session-based login/logout, CSRF protection
+* Permission-based authorization (RBAC) — access driven by permissions assigned to roles
+* Dynamic UI rendering based on permissions
+* Role management (create roles, assign/remove permissions)
+* SQL scripts for roles, permissions, and mappings (`icore/SQL-Query`)
 
-```text
-session
-```
+Live demo: `https://cloud.imtharvesh.me/icore`
 
-Main learning focus:
+### 11. session
 
-```text
-Servlet/JSP IAM System
-↓
-Permission-Based Authorization
-↓
-Role Management
-↓
-Spring Boot Migration Preparation
-```
+An earlier working snapshot of the same Servlet/JSP IAM codebase as `icore`, kept on this branch alongside a `deploy.bat` deployment script. Superseded by `icore` going forward.
 
 ---
 
 ## Technology Stack
 
-### Servlet Project
+**Servlet / JSP (icore, session)**
+Java, Jakarta Servlet API, JSP, Maven, MySQL, Jackson, BCrypt, Log4j2, Apache Tomcat
 
-* Java 25
-* Jakarta Servlet API
-* JSP
-* Maven
-* MySQL
-* Jackson
-* BCrypt
-* Log4j2
-* Apache Tomcat 11
-
-### Spring Learning Projects
-
-* Java
-* Maven
-* Spring Core
-* Spring Boot basics
-* Lombok
+**Spring Boot projects**
+Java, Maven, Spring Boot, Spring Data JPA, Spring Security, OAuth2, JWT, H2/MySQL, Lombok, springdoc-openapi
 
 ---
 
 ## Repository Note
 
-This is a learning monorepo.
-
-It may include:
-
-* Source files
-* Compiled class files
-* WAR files
-* Target folders
-* Local IDE files
-* Practice code
-* Trial projects
-
-The repository is intentionally kept as plug-and-play for learning and deployment testing.
-
-Current `.gitignore` mainly ignores:
-
-```text
-.temp
-temp
-```
-
----
-
-## Release History
-
-### I.A.M v1.0.0-beta
-
-Initial authentication and session management foundation.
-
-### IdentityCore v1.1.0
-
-Stable Servlet/JSP IAM foundation with authentication, user management, APIs, security, and environment support.
-
-### IdentityCore v1.2.0-alpha
-
-RBAC and permission-based authorization foundation.
-
-Includes:
-
-* roles table
-* permissions table
-* role_permissions mapping
-* role_id migration
-* PermissionValidator
-* permission-based AuthFilter
-* dynamic UI access control
-
----
-
-## Upcoming Plans
-
-* Complete custom role creation
-* Complete role permission management
-* Add role status management
-* Improve audit logging
-* Clean frontend and API route separation
-* Prepare Spring Boot v2.0.0 migration
-* Add service layer in Spring Boot version
+This is a learning monorepo — it may contain compiled classes, target folders, local IDE files, and in-progress/practice code alongside working applications. Each sub-project has its own `pom.xml`/build files and can be built and run independently with Maven.
 
 ---
 
 ## Author
 
-Tharvesh Muhaideen A
-
+**Tharvesh Muhaideen A**
 Learning by building real backend projects.
