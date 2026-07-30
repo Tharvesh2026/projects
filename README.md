@@ -2,6 +2,9 @@
 
 A personal learning monorepo of Java, Servlet/JSP, MySQL, and Spring/Spring Boot practice projects. The goal is to learn backend development by building real, working applications rather than only following theory.
 
+> [!IMPORTANT]
+> Some of the Live URL may not at some time due to free trial of VPS.
+
 ---
 
 ## Repository Structure
