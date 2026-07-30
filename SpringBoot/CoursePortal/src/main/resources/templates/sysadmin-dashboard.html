@@ -7,7 +7,7 @@
     <title>SYS Admin Control Panel — CoursePortal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
     <style>
         :root {
             --bg: #0b0f19;
@@ -71,7 +71,7 @@
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
     <div th:if="${successMessage}" style="background: rgba(16,185,129,0.15); border: 1px solid #10b981; color: #34d399; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 13.5px;">
-        <i class="ti ti-circle-check"></i> <span th:text="${successMessage}">Success</span>
+        <i class="mdi mdi-check-circle"></i> <span th:text="${successMessage}">Success</span>
     </div>
 
     <!-- System Stats -->
@@ -92,18 +92,18 @@
 
     <!-- Course Creation Panel -->
     <div class="panel">
-        <div class="panel-title"><i class="ti ti-plus"></i> Create New Course (SYS_ADMIN Only)</div>
+        <div class="panel-title"><i class="mdi mdi-plus"></i> Create New Course (SYS_ADMIN Only)</div>
         <form action="/sysadmin/create-course" method="post" class="form-grid">
             <input type="text" name="code" placeholder="Course Code (e.g. CS301)" required class="form-control" style="font-family:'JetBrains Mono';">
             <input type="text" name="name" placeholder="Course Name & Overview" required class="form-control">
             <input type="hidden" name="description" value="Advanced Course Module">
-            <button type="submit" class="btn"><i class="ti ti-check"></i> Create Course</button>
+            <button type="submit" class="btn"><i class="mdi mdi-check"></i> Create Course</button>
         </form>
     </div>
 
     <!-- Active Courses Overview -->
     <div class="panel">
-        <div class="panel-title"><i class="ti ti-list"></i> Managed Catalog Courses</div>
+        <div class="panel-title"><i class="mdi mdi-format-list-bulleted"></i> Managed Catalog Courses</div>
         <table class="table">
             <thead>
                 <tr>
@@ -125,3 +125,4 @@
 
 </body>
 </html>
+

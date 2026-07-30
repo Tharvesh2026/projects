@@ -7,7 +7,7 @@
     <title>Admin Verification Panel — CoursePortal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
     <style>
         :root {
             --bg: #0b0f19;
@@ -71,11 +71,11 @@
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
     <div th:if="${successMessage}" style="background: rgba(16,185,129,0.15); border: 1px solid #10b981; color: #34d399; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 13.5px;">
-        <i class="ti ti-circle-check"></i> <span th:text="${successMessage}">Success</span>
+        <i class="mdi mdi-check-circle"></i> <span th:text="${successMessage}">Success</span>
     </div>
 
     <div class="panel">
-        <div class="panel-title"><i class="ti ti-shield-check"></i> Admin Course Verification Dashboard</div>
+        <div class="panel-title"><i class="mdi mdi-shield-check"></i> Admin Course Verification Dashboard</div>
         <div style="font-size:13px; color:var(--text-sub); margin-bottom:16px;">
             Admins have authorization to verify student course registrations across all enrolled subjects.
         </div>
@@ -101,8 +101,8 @@
                     <td>
                         <form action="/admin/verify" method="post" style="display:inline-flex; gap:6px;">
                             <input type="hidden" name="id" th:value="${e.id}"/>
-                            <button type="submit" name="status" value="VERIFIED" class="btn btn-success btn-sm"><i class="ti ti-check"></i> Approve & Verify</button>
-                            <button type="submit" name="status" value="REJECTED" class="btn btn-secondary btn-sm" style="color:#f87171;"><i class="ti ti-x"></i> Reject</button>
+                            <button type="submit" name="status" value="VERIFIED" class="btn btn-success btn-sm"><i class="mdi mdi-check"></i> Approve & Verify</button>
+                            <button type="submit" name="status" value="REJECTED" class="btn btn-secondary btn-sm" style="color:#f87171;"><i class="mdi mdi-close"></i> Reject</button>
                         </form>
                     </td>
                 </tr>
@@ -116,3 +116,4 @@
 
 </body>
 </html>
+

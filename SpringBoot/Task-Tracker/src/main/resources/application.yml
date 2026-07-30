@@ -25,6 +25,7 @@ spring:
             token-uri: http://localhost:8080/oauth2/token
             user-info-uri: http://localhost:8080/userinfo
             jwk-set-uri: http://localhost:8080/oauth2/jwks
+            user-name-attribute: sub
 
 logging:
   level:

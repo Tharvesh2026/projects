@@ -7,7 +7,7 @@
     <title>My Registered Courses — CoursePortal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
     <style>
         :root {
             --bg: #0b0f19;
@@ -73,20 +73,20 @@
 
     <!-- Flash Alerts -->
     <div th:if="${successMessage}" style="background: rgba(16,185,129,0.15); border: 1px solid #10b981; color: #34d399; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 13.5px;">
-        <i class="ti ti-circle-check"></i> <span th:text="${successMessage}">Success</span>
+        <i class="mdi mdi-check-circle"></i> <span th:text="${successMessage}">Success</span>
     </div>
     <div th:if="${errorMessage}" style="background: rgba(239,68,68,0.15); border: 1px solid #ef4444; color: #f87171; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 13.5px;">
-        <i class="ti ti-alert-triangle"></i> <span th:text="${errorMessage}">Error</span>
+        <i class="mdi mdi-alert"></i> <span th:text="${errorMessage}">Error</span>
     </div>
 
     <!-- Student Enrollment Panel -->
     <div class="panel">
-        <div class="panel-title"><i class="ti ti-bookmarks" style="color:var(--brand-primary);"></i> My Course Registrations</div>
+        <div class="panel-title"><i class="mdi mdi-bookmark-multiple" style="color:var(--brand-primary);"></i> My Course Registrations</div>
         
         <form action="/my-courses" method="get" style="display:flex; gap:12px; margin-bottom:20px; align-items:center;">
             <label style="font-size:13px; color:var(--text-sub);">Lookup Roll No:</label>
             <input type="number" name="rollNo" th:value="${studentRollNo}" placeholder="Roll No (e.g. 101)" style="padding:8px 12px; background:var(--bg); border:1px solid var(--border-purple); color:white; border-radius:var(--radius-sm);">
-            <button type="submit" class="btn btn-sm"><i class="ti ti-search"></i> Fetch Enrollments</button>
+            <button type="submit" class="btn btn-sm"><i class="mdi mdi-magnify"></i> Fetch Enrollments</button>
         </form>
 
         <table class="table">
@@ -116,14 +116,15 @@
 
     <!-- Enroll Form Card -->
     <div class="panel">
-        <div class="panel-title"><i class="ti ti-plus" style="color:var(--brand-primary);"></i> Enroll in New Course</div>
+        <div class="panel-title"><i class="mdi mdi-plus" style="color:var(--brand-primary);"></i> Enroll in New Course</div>
         <form action="/web/enroll" method="post" style="display:grid; grid-template-columns: 1fr 1fr auto; gap:12px;">
             <input type="number" name="rollNo" th:value="${studentRollNo}" placeholder="Student Roll No (e.g. 101)" required style="padding:10px 14px; background:var(--bg); border:1px solid var(--border-purple); color:white; border-radius:var(--radius-md);">
             <input type="text" name="courseCode" placeholder="Course Code (e.g. CS101)" required style="padding:10px 14px; background:var(--bg); border:1px solid var(--border-purple); color:white; border-radius:var(--radius-md); font-family:'JetBrains Mono';">
-            <button type="submit" class="btn"><i class="ti ti-send"></i> Submit Registration</button>
+            <button type="submit" class="btn"><i class="mdi mdi-send"></i> Submit Registration</button>
         </form>
     </div>
 </div>
 
 </body>
 </html>
+

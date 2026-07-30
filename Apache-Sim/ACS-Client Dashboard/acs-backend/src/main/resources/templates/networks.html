@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout('Networks', ~{::div})}">
+<body>
+    <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div style="display: flex; gap: 1rem;">
+                <input type="text" class="form-control" placeholder="Search networks..." style="width: 300px; background: rgba(26,29,44,0.4);" />
+            </div>
+            <button class="btn btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Add Network
+            </button>
+        </div>
+
+        <div class="glass-card">
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>CIDR</th>
+                            <th>VLAN/VNI</th>
+                            <th>Zone</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight: 500;">GuestNetwork-1</td>
+                            <td>Isolated</td>
+                            <td style="font-family: monospace;">10.1.1.0/24</td>
+                            <td>1204</td>
+                            <td>Advanced Zone 1</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Configure</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 500;">Shared-Public-Net</td>
+                            <td>Shared</td>
+                            <td style="font-family: monospace;">192.168.100.0/24</td>
+                            <td>Untagged</td>
+                            <td>Advanced Zone 1</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Configure</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
