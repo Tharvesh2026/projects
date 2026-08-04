@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Access | Open Source API Server</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0a0b0d;
+            --surface: #15171b;
+            --border: rgba(245,246,248,0.08);
+            --border-strong: rgba(245,246,248,0.2);
+            --silver: #b7bec8;
+            --white: #f5f6f8;
+            --blue: #3e8eff;
+            --blue-glow: rgba(62,142,255,0.35);
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--silver);
+            font-family: var(--font-body);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .grain {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            opacity: 0.04; mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 420px;
+            padding: 40px;
+            background: linear-gradient(160deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 24px 48px -12px rgba(0,0,0,0.5);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-header h1 {
+            font-family: var(--font-display);
+            color: var(--white);
+            font-size: 24px;
+            margin: 0 0 8px 0;
+        }
+
+        .login-header p {
+            font-size: 14px;
+            margin: 0;
+            color: var(--silver);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--silver);
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-strong);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-size: 15px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(62,142,255,0.15);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(180deg, #4c98ff, #2f6fe0);
+            color: #060708;
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 15px;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.25) inset, 0 8px 24px -8px var(--blue-glow);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.3) inset, 0 14px 32px -8px rgba(62,142,255,0.5);
+        }
+        
+        .info-text {
+            text-align: center;
+            font-size: 12px;
+            color: #7d838d;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="grain"></div>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>Database Access</h1>
+            <p>Secure connection to the H2 instance.</p>
+        </div>
+
+        <form action="/h2-console/login.do" method="POST">
+            <!-- Hardcoded JDBC Config for H2 -->
+            <input type="hidden" name="language" value="en">
+            <input type="hidden" name="setting" value="Generic H2 (Embedded)">
+            <input type="hidden" name="name" value="Generic H2 (Embedded)">
+            <input type="hidden" name="driver" value="org.h2.Driver">
+            <input type="hidden" name="url" value="jdbc:h2:mem:apidb">
+            <input type="hidden" name="user" value="sa">
+
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-input" placeholder="Enter database password" required autofocus>
+            </div>
+
+            <button type="submit" class="btn-submit">Connect to Database</button>
+        </form>
+
+        <div class="info-text">
+            Connection is restricted to authorized origins only.
+        </div>
+    </div>
+</body>
+</html>
