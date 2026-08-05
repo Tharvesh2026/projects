@@ -99,7 +99,7 @@ button{ font-family: inherit; }
 .section-inner{
   max-width: var(--container);
   margin: 0 auto;
-  padding: 140px 32px;
+  padding: 80px 32px;
 }
 .center{ text-align:center; margin-left:auto; margin-right:auto; }
 
@@ -233,7 +233,7 @@ button{ font-family: inherit; }
   position: relative;
   min-height: 100vh;
   display:flex; align-items:center;
-  padding: 160px 32px 120px;
+  padding: 120px 32px 60px;
   overflow: hidden;
   background:
     radial-gradient(ellipse 80% 60% at 50% 0%, rgba(62,142,255,.10), transparent 60%),
@@ -593,56 +593,31 @@ button{ font-family: inherit; }
     </div>
   </section>
 
-  <!-- ============ VISION ============ -->
+  <!-- ============ VISION / FEATURES ============ -->
   <section class="vision" id="vision">
-    <div class="vision-inner">
+    <div class="vision-inner" style="max-width: var(--container); margin: 0 auto; padding: 80px 32px; text-align: center;">
       <p class="eyebrow reveal center"><span class="dot"></span>Core Features</p>
-      <h2 class="vision-statement reveal">
-        Built with <span class="grad-text">Spring Boot 3</span>, powered by H2, and secured with JWT.
+      <h2 class="vision-statement reveal" style="margin-bottom: 48px;">
+        Why <span class="grad-text">Open Source API Server</span> outperforms the rest.
       </h2>
-      <div class="vision-line" aria-hidden="true"></div>
-    </div>
-  </section>
-
-  <!-- ============ CREATOR ============ -->
-  <section class="creator" id="creator" style="padding: 100px 0;">
-    <div class="section-inner">
-      <p class="eyebrow reveal center"><span class="dot"></span>About the Creator</p>
       
-      <div class="creator-card reveal" style="max-width: 700px; margin: 40px auto; background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 48px; text-align: center; position: relative; overflow: hidden; box-shadow: 0 24px 48px rgba(0,0,0,0.4);">
+      <div class="features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; text-align: left;">
         
-        <div style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at top, var(--blue-glow), transparent 60%); opacity: 0.2; pointer-events: none;"></div>
-
-        <img src="https://cdn.jsdelivr.net/gh/Tharvesh2026/Web-Source@refs/heads/main/profile.jpg" alt="Tharvesh Muhaideen" style="position: relative; z-index: 2; width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--border); box-shadow: 0 0 0 4px var(--bg); margin-bottom: 24px; object-fit: cover;">
-        
-        <h3 style="font-family: var(--font-display); font-size: 28px; color: var(--white); margin: 0 0 8px 0; position: relative; z-index: 2;">Tharvesh Muhaideen A</h3>
-        <p style="font-size: 15px; color: var(--blue); margin: 0 0 24px 0; font-weight: 500; position: relative; z-index: 2;">Program Analyst | Creator of Tharvbytes.dev</p>
-
-        <p style="color: var(--silver); line-height: 1.6; margin-bottom: 16px; position: relative; z-index: 2;">
-          I'm Tharvesh, a Program Analyst who loves exploring technology, building solutions, and sharing knowledge with the developer community.
-        </p>
-
-        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin: 24px 0; position: relative; z-index: 2;">
-          <strong style="color: var(--white); display: block; margin-bottom: 8px; font-size: 16px;">𝐊𝐧𝐨𝐰 𝐚 𝐥𝐢𝐭𝐭𝐥𝐞 𝐚𝐛𝐨𝐮𝐭 𝐞𝐯𝐞𝐫𝐲𝐭𝐡𝐢𝐧𝐠.</strong>
-          <span style="color: var(--silver); font-size: 14px;">A place where we can learn new things, build interesting projects, and share ideas together.</span>
+        <div class="feature-card reveal" style="background: var(--surface); padding: 32px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <h3 style="color: var(--blue); margin-bottom: 12px; font-size: 20px;">0ms Setup Time</h3>
+          <p style="color: var(--silver); font-size: 15px;">Unlike Firebase or Supabase which require account creation, config keys, and dashboard setups, our server runs instantly locally. Just run the jar and start fetching data.</p>
         </div>
 
-        <p style="color: var(--silver); line-height: 1.6; margin-bottom: 32px; font-size: 14px; position: relative; z-index: 2;">
-          Through my content, I share programming tutorials, Spring Boot projects, development tips, technology insights, and things I learn along the way.
-        </p>
-
-        <a href="https://www.youtube.com/@tharveshmuhaideen" target="_blank" style="position: relative; z-index: 2; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 40px; padding: 12px 28px; background: var(--white); color: var(--bg); font-family: var(--font-body); font-size: 15px; font-weight: 600; border-radius: 100px; text-decoration: none; transition: transform 0.2s;">
-          Join The Community
-        </a>
-
-        <div class="social-links" style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; position: relative; z-index: 2;">
-          <a href="https://dev.to/tharvbytes" target="_blank" style="transition: transform 0.2s; display: block;"><img src="https://cdn.jsdelivr.net/gh/Tharvesh2026/Web-Source@refs/heads/main/dev.png" style="width: 36px; height: 36px; border-radius: 8px;"></a>
-          <a href="https://medium.com/@tharveshmuhaideen" target="_blank" style="transition: transform 0.2s; display: block;"><img src="https://cdn.jsdelivr.net/gh/Tharvesh2026/Web-Source@refs/heads/main/medium.png" style="width: 36px; height: 36px; border-radius: 8px;"></a>
-          <a href="https://www.youtube.com/@tharveshmuhaideen" target="_blank" style="transition: transform 0.2s; display: block;"><img src="https://cdn.jsdelivr.net/gh/Tharvesh2026/Web-Source@refs/heads/main/youtube.png" style="width: 36px; height: 36px; border-radius: 8px;"></a>
-          <a href="https://linkedin.com/in/tharvesh2005" target="_blank" style="transition: transform 0.2s; display: block;"><img src="https://cdn.jsdelivr.net/gh/Tharvesh2026/Web-Source@refs/heads/main/linkedin.png" style="width: 36px; height: 36px; border-radius: 8px;"></a>
-          <a href="https://github.com/tharvesh2026" target="_blank" style="transition: transform 0.2s; display: block;"><img src="https://cdn.jsdelivr.net/gh/Tharvesh2026/Web-Source@refs/heads/main/github.png" style="width: 36px; height: 36px; border-radius: 8px;"></a>
-          <a href="https://www.google.com/search?q=tharvesh+muhiadeen" target="_blank" style="transition: transform 0.2s; display: block;"><img src="https://cdn.jsdelivr.net/gh/Tharvesh2026/Web-Source@refs/heads/main/google.png" style="width: 36px; height: 36px; border-radius: 8px;"></a>
+        <div class="feature-card reveal" style="background: var(--surface); padding: 32px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <h3 style="color: var(--blue); margin-bottom: 12px; font-size: 20px;">Stateful Relationships</h3>
+          <p style="color: var(--silver); font-size: 15px;">Other mock APIs like JSONPlaceholder are stateless and static. Our H2-powered backend processes actual relations (e.g., users to posts, carts to products) and persists state during your session.</p>
         </div>
+
+        <div class="feature-card reveal" style="background: var(--surface); padding: 32px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <h3 style="color: var(--blue); margin-bottom: 12px; font-size: 20px;">Built-in JWT Auth</h3>
+          <p style="color: var(--silver); font-size: 15px;">Testing authentication flows on mock platforms is notoriously hard. We provide out-of-the-box endpoints for registration, login, and secured routes with real JWT validation.</p>
+        </div>
+
       </div>
     </div>
   </section>
@@ -650,14 +625,32 @@ button{ font-family: inherit; }
 </main>
 
 <footer class="site-footer">
-  <div class="footer-inner">
+  <div class="footer-inner" style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
     <span class="logo-mark small">OPENAPI</span>
-    <p>&copy; <span id="year"></span> Open Source API Server. Fully open source.</p>
+    
+    <div class="social-links" style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+      <a href="https://dev.to/tharvbytes" target="_blank" style="transition: transform 0.2s;"><img src="https://cdn.jsdelivr.net/gh/Tharvesh2026/Web-Source@refs/heads/main/dev.png" style="width: 24px; height: 24px; border-radius: 4px;"></a>
+      <a href="https://medium.com/@tharveshmuhaideen" target="_blank" style="transition: transform 0.2s;"><img src="https://cdn.jsdelivr.net/gh/Tharvesh2026/Web-Source@refs/heads/main/medium.png" style="width: 24px; height: 24px; border-radius: 4px;"></a>
+      <a href="https://www.youtube.com/@tharveshmuhaideen" target="_blank" style="transition: transform 0.2s;"><img src="https://cdn.jsdelivr.net/gh/Tharvesh2026/Web-Source@refs/heads/main/youtube.png" style="width: 24px; height: 24px; border-radius: 4px;"></a>
+      <a href="https://linkedin.com/in/tharvesh2005" target="_blank" style="transition: transform 0.2s;"><img src="https://cdn.jsdelivr.net/gh/Tharvesh2026/Web-Source@refs/heads/main/linkedin.png" style="width: 24px; height: 24px; border-radius: 4px;"></a>
+      <a href="https://github.com/tharvesh2026" target="_blank" style="transition: transform 0.2s;"><img src="https://cdn.jsdelivr.net/gh/Tharvesh2026/Web-Source@refs/heads/main/github.png" style="width: 24px; height: 24px; border-radius: 4px;"></a>
+      <a href="https://www.google.com/search?q=tharvesh+muhiadeen" target="_blank" style="transition: transform 0.2s;"><img src="https://cdn.jsdelivr.net/gh/Tharvesh2026/Web-Source@refs/heads/main/google.png" style="width: 24px; height: 24px; border-radius: 4px;"></a>
+    </div>
+
+    <p style="margin: 0;">&copy; <span id="year"></span> Open Source API Server. Fully open source.</p>
     <div class="footer-links">
       <a href="#top">Back to top</a>
     </div>
   </div>
 </footer>
+
+<!-- Ad Popup -->
+<div id="adPopup" style="position: fixed; bottom: 24px; right: 24px; z-index: 9999; background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 24px; max-width: 320px; box-shadow: 0 12px 24px rgba(0,0,0,0.5); transform: translateY(150%); opacity: 0; transition: transform 0.4s var(--ease), opacity 0.4s var(--ease);">
+  <h3 style="font-size: 16px; margin-bottom: 16px; line-height: 1.4;">Would you like to contribute & join the community?</h3>
+  <a href="https://forms.gle/tFCRiW6m6y3m5TpF7" target="_blank" class="btn btn-primary" style="display: block; width: 100%; text-align: center; margin-bottom: 12px;" onclick="closePopup()">Grab Limited seats</a>
+  <button class="btn btn-ghost" style="display: block; width: 100%; text-align: center; margin-bottom: 16px; cursor: pointer;" onclick="closePopup()">Close</button>
+  <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--silver-dim); cursor: pointer;"><input type="checkbox" id="adOptOut"> Don't show again</label>
+</div>
 
 <script>
   /* =========================================================
@@ -667,6 +660,31 @@ button{ font-family: inherit; }
   "use strict";
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- Ad Popup ---------- */
+  const adPopup = document.getElementById("adPopup");
+  const optOutCheckbox = document.getElementById("adOptOut");
+  let adInterval;
+
+  function showPopup() {
+    if (localStorage.getItem("hideAd") === "true") return;
+    adPopup.style.transform = "translateY(0)";
+    adPopup.style.opacity = "1";
+  }
+
+  window.closePopup = () => {
+    adPopup.style.transform = "translateY(150%)";
+    adPopup.style.opacity = "0";
+    if (optOutCheckbox.checked) {
+      localStorage.setItem("hideAd", "true");
+      clearInterval(adInterval);
+    }
+  };
+
+  if (localStorage.getItem("hideAd") !== "true") {
+    adInterval = setInterval(showPopup, 60000);
+    setTimeout(showPopup, 5000); // show once early for preview
+  }
 
   /* ---------- Footer year ---------- */
   const yearEl = document.getElementById("year");

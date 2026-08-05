@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "app_user")
+@Table(name = "openserverapi_users")
 @Getter
 @Setter
 @NoArgsConstructor

@@ -82,7 +82,7 @@ public class SecurityConfig {
                             String host = context.getRequest().getServerName();
                             String forwardedHost = context.getRequest().getHeader("X-Forwarded-Host");
                             String actualHost = forwardedHost != null ? forwardedHost : host;
-                            boolean allowed = "localhost".equals(actualHost) || "127.0.0.1".equals(actualHost) || "openserverapi.onrender.com".equals(actualHost);
+                            boolean allowed = "localhost".equals(actualHost) || "127.0.0.1".equals(actualHost) || "*.onrender.com".equals(actualHost);
                             return new org.springframework.security.authorization.AuthorizationDecision(allowed);
                         })
                         // Public read-only browsing for beginners: GET on todos/posts/comments/products is open
