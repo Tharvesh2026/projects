@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Search')}"></head>
+<body>
+<div class="app-shell">
+    <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+
+    <main class="main">
+        <div class="breadcrumb">
+            <a th:href="@{/drive}">Drive</a>
+            <span class="sep">/</span>
+            <span class="current" th:text="'Search: ' + ${query}">Search</span>
+        </div>
+
+        <div th:if="${#lists.isEmpty(folderResults)} and ${#lists.isEmpty(fileResults)}" class="empty-state">
+            No results for "<span th:text="${query}">query</span>".
+        </div>
+
+        <div th:unless="${#lists.isEmpty(folderResults)}">
+            <div class="section-label">Folders</div>
+            <div class="item-grid">
+                <div class="item-card folder" th:each="folder : ${folderResults}">
+                    <div class="icon">folder</div>
+                    <a class="name" th:href="@{'/drive/folder/' + ${folder.id}}" th:text="${folder.name}">Folder</a>
+                </div>
+            </div>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(fileResults)}">
+            <div class="section-label">Files</div>
+            <div class="item-grid">
+                <div class="item-card file" th:each="file : ${fileResults}">
+                    <div class="icon" th:text="${file.format ?: file.resourceType}">file</div>
+                    <span class="name" th:text="${file.name}">file.pdf</span>
+                    <div class="item-actions">
+                        <a th:href="@{'/drive/file/' + ${file.id} + '/download'}">download</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

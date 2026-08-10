@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Shared file')}"></head>
+<body>
+<div class="share-shell">
+    <main class="main">
+        <div class="brand"><span class="tab-icon"></span> Filed</div>
+        <p class="share-note">Someone shared a file with you.</p>
+
+        <div class="item-card file" style="max-width:320px;">
+            <div class="icon" th:text="${sharedFile.format ?: sharedFile.resourceType}">file</div>
+            <span class="name" th:text="${sharedFile.name}">file.pdf</span>
+            <div class="meta" th:if="${sharedFile.bytes != null}"
+                 th:text="${#numbers.formatInteger(sharedFile.bytes / 1024, 1)} + ' KB'">size</div>
+            <div class="item-actions">
+                <a class="btn btn-primary" th:href="@{'/share/' + ${token} + '/file/' + ${sharedFile.id} + '/download'}">Download</a>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

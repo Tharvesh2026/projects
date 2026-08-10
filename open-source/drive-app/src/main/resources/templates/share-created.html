@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Link created')}"></head>
+<body>
+<div class="app-shell">
+    <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+
+    <main class="main">
+        <h2>Share link ready</h2>
+        <p class="share-note">Anyone with this link can view <strong th:text="${itemName}">item</strong> — no account needed.</p>
+
+        <div class="share-link-box">
+            <input type="text" th:value="${shareUrl}" id="shareUrlInput" readonly onclick="this.select()"/>
+            <button class="btn" onclick="navigator.clipboard.writeText(document.getElementById('shareUrlInput').value)">Copy</button>
+        </div>
+
+        <p><a th:href="@{/drive}">&larr; Back to Drive</a></p>
+    </main>
+</div>
+</body>
+</html>

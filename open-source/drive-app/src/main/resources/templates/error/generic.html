@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Error')}"></head>
+<body>
+<div class="error-shell">
+    <div class="code" th:text="'ERROR ' + ${status}">ERROR</div>
+    <h1 th:text="${message}">Something went wrong</h1>
+    <a th:href="@{/drive}">&larr; Back to Drive</a>
+</div>
+</body>
+</html>

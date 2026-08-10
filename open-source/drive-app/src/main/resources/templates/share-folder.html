@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Shared folder')}"></head>
+<body>
+<div class="share-shell">
+    <main class="main">
+        <div class="brand"><span class="tab-icon"></span> Filed</div>
+        <p class="share-note">Someone shared a folder with you — browsing
+            <strong th:text="${currentFolder.name}">folder</strong>.</p>
+
+        <div th:if="${#lists.isEmpty(subfolders)} and ${#lists.isEmpty(files)}" class="empty-state">
+            This folder is empty.
+        </div>
+
+        <div th:unless="${#lists.isEmpty(subfolders)}">
+            <div class="section-label">Folders</div>
+            <div class="item-grid">
+                <div class="item-card folder" th:each="folder : ${subfolders}">
+                    <div class="icon">folder</div>
+                    <a class="name" th:href="@{'/share/' + ${token} + '/folder/' + ${folder.id}}" th:text="${folder.name}">Folder</a>
+                </div>
+            </div>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(files)}">
+            <div class="section-label">Files</div>
+            <div class="item-grid">
+                <div class="item-card file" th:each="file : ${files}">
+                    <div class="icon" th:text="${file.format ?: file.resourceType}">file</div>
+                    <span class="name" th:text="${file.name}">file.pdf</span>
+                    <div class="item-actions">
+                        <a th:href="@{'/share/' + ${token} + '/file/' + ${file.id} + '/download'}">download</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>
